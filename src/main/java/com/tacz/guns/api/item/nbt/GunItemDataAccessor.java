@@ -43,13 +43,13 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default boolean useDummyAmmo(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        return nbt.contains(GUN_DUMMY_AMMO, Tag.TAG_INT);
+        return nbt.contains(GUN_DUMMY_AMMO);
     }
 
     @Override
     default int getDummyAmmoAmount(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        return Math.max(0, nbt.getInt(GUN_DUMMY_AMMO));
+        return Math.max(0, nbt.getInt(GUN_DUMMY_AMMO).orElse(0));
     }
 
     @Override
@@ -77,13 +77,13 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default boolean hasMaxDummyAmmo(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        return nbt.contains(GUN_MAX_DUMMY_AMMO, Tag.TAG_INT);
+        return nbt.contains(GUN_MAX_DUMMY_AMMO);
     }
 
     @Override
     default int getMaxDummyAmmoAmount(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        return Math.max(0, nbt.getInt(GUN_MAX_DUMMY_AMMO));
+        return Math.max(0, nbt.getInt(GUN_MAX_DUMMY_AMMO).orElse(0));
     }
 
     @Override
@@ -96,8 +96,8 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default boolean hasAttachmentLock(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_ATTACHMENT_LOCK, Tag.TAG_BYTE)) {
-            return nbt.getBoolean(GUN_ATTACHMENT_LOCK);
+        if (nbt.contains(GUN_ATTACHMENT_LOCK)) {
+            return nbt.getBoolean(GUN_ATTACHMENT_LOCK).orElse(false);
         }
         return false;
     }
@@ -113,8 +113,8 @@ public interface GunItemDataAccessor extends IGun {
     @Nonnull
     default ResourceLocation getGunId(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_ID_TAG, Tag.TAG_STRING)) {
-            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(GUN_ID_TAG));
+        if (nbt.contains(GUN_ID_TAG)) {
+            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(GUN_ID_TAG).get());
             return Objects.requireNonNullElse(gunId, DefaultAssets.EMPTY_GUN_ID);
         }
         return DefaultAssets.EMPTY_GUN_ID;
@@ -133,8 +133,8 @@ public interface GunItemDataAccessor extends IGun {
     @NotNull
     default ResourceLocation getGunDisplayId(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_DISPLAY_ID_TAG, Tag.TAG_STRING)) {
-            ResourceLocation gunDisplayId = ResourceLocation.tryParse(nbt.getString(GUN_DISPLAY_ID_TAG));
+        if (nbt.contains(GUN_DISPLAY_ID_TAG)) {
+            ResourceLocation gunDisplayId = ResourceLocation.tryParse(nbt.getString(GUN_DISPLAY_ID_TAG).get());
             return Objects.requireNonNullElse(gunDisplayId, DefaultAssets.DEFAULT_GUN_DISPLAY_ID);
         }
         return DefaultAssets.DEFAULT_GUN_DISPLAY_ID;
@@ -152,8 +152,8 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default int getLevel(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_EXP_TAG, Tag.TAG_INT)) {
-            return getLevel(nbt.getInt(GUN_EXP_TAG));
+        if (nbt.contains(GUN_EXP_TAG)) {
+            return getLevel(nbt.getInt(GUN_EXP_TAG).orElse(0));
         }
         return 0;
     }
@@ -161,8 +161,8 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default int getExp(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_EXP_TAG, Tag.TAG_INT)) {
-            return nbt.getInt(GUN_EXP_TAG);
+        if (nbt.contains(GUN_EXP_TAG)) {
+            return nbt.getInt(GUN_EXP_TAG).orElse(0);
         }
         return 0;
     }
@@ -192,8 +192,8 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default FireMode getFireMode(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_FIRE_MODE_TAG, Tag.TAG_STRING)) {
-            return FireMode.valueOf(nbt.getString(GUN_FIRE_MODE_TAG));
+        if (nbt.contains(GUN_FIRE_MODE_TAG)) {
+            return FireMode.valueOf(nbt.getString(GUN_FIRE_MODE_TAG).get());
         }
         return FireMode.UNKNOWN;
     }
@@ -212,8 +212,8 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default int getCurrentAmmoCount(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_CURRENT_AMMO_COUNT_TAG, Tag.TAG_INT)) {
-            return nbt.getInt(GUN_CURRENT_AMMO_COUNT_TAG);
+        if (nbt.contains(GUN_CURRENT_AMMO_COUNT_TAG)) {
+            return nbt.getInt(GUN_CURRENT_AMMO_COUNT_TAG).orElse(0);
         }
         return 0;
     }
@@ -241,12 +241,12 @@ public interface GunItemDataAccessor extends IGun {
         }
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         String key = GUN_ATTACHMENT_BASE + type.name();
-        if (!nbt.contains(key, Tag.TAG_COMPOUND)) return null;
-        CompoundTag stack = nbt.getCompound(key);
-        if (!stack.contains("components", Tag.TAG_COMPOUND)) return null;
-        CompoundTag components = stack.getCompound("components");
+        if (!nbt.contains(key)) return null;
+        CompoundTag stack = nbt.getCompound(key).get();
+        if (!stack.contains("components")) return null;
+        CompoundTag components = stack.getCompound("components").get();
         if (!components.contains(DataComponents.CUSTOM_DATA.toString())) return null;
-        return components.getCompound(DataComponents.CUSTOM_DATA.toString());
+        return components.getCompound(DataComponents.CUSTOM_DATA.toString()).get();
     }
 
     @Override
@@ -256,10 +256,10 @@ public interface GunItemDataAccessor extends IGun {
         }
         gun.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(tag -> {
             String key = GUN_ATTACHMENT_BASE + type.name();
-            if (!tag.contains(key, Tag.TAG_COMPOUND)) return;
-            CompoundTag stack = tag.getCompound(key);
-            if (!stack.contains("components", Tag.TAG_COMPOUND)) return;
-            CompoundTag components = stack.getCompound("components");
+            if (!tag.contains(key)) return;
+            CompoundTag stack = tag.getCompound(key).get();
+            if (!stack.contains("components")) return;
+            CompoundTag components = stack.getCompound("components").get();
             if (!components.contains(DataComponents.CUSTOM_DATA.toString())) return;
             components.put(DataComponents.CUSTOM_DATA.toString(), attachmentTag);
         }));
@@ -290,8 +290,8 @@ public interface GunItemDataAccessor extends IGun {
         }
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         String key = GUN_ATTACHMENT_BASE + type.name();
-        if (nbt.contains(key, Tag.TAG_COMPOUND)) {
-            return ItemStack.CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), nbt.getCompound(key)).result().orElse(ItemStack.EMPTY);
+        if (nbt.contains(key)) {
+            return ItemStack.CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), nbt.getCompound(key).get()).result().orElse(ItemStack.EMPTY);
         }
         return ItemStack.EMPTY;
     }
@@ -381,8 +381,8 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default boolean hasBulletInBarrel(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(GUN_HAS_BULLET_IN_BARREL, Tag.TAG_BYTE)) {
-            return nbt.getBoolean(GUN_HAS_BULLET_IN_BARREL);
+        if (nbt.contains(GUN_HAS_BULLET_IN_BARREL)) {
+            return nbt.getBoolean(GUN_HAS_BULLET_IN_BARREL).get();
         }
         return false;
     }
@@ -397,7 +397,7 @@ public interface GunItemDataAccessor extends IGun {
     @Override
     default boolean hasCustomLaserColor(ItemStack gun) {
         CompoundTag nbt = gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        return nbt.contains(LASER_COLOR_TAG, Tag.TAG_INT);
+        return nbt.contains(LASER_COLOR_TAG);
     }
 
     @Override
@@ -406,7 +406,7 @@ public interface GunItemDataAccessor extends IGun {
         if (!hasCustomLaserColor(gun)) {
             return 0xFF0000;
         }
-        return nbt.getInt(LASER_COLOR_TAG);
+        return nbt.getInt(LASER_COLOR_TAG).get();
     }
 
     @Override
@@ -421,12 +421,12 @@ public interface GunItemDataAccessor extends IGun {
      */
     @Override
     default boolean hasHeatData(ItemStack gun) {
-        return gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains(GUN_OVERHEAT_TAG, Tag.TAG_FLOAT);
+        return gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains(GUN_OVERHEAT_TAG);
     }
 
     @Override
     default boolean isOverheatLocked(ItemStack gun) {
-        return gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean(GUN_OVERHEAT_LOCK_TAG);
+        return gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean(GUN_OVERHEAT_LOCK_TAG).get();
     }
 
     @Override
@@ -438,7 +438,7 @@ public interface GunItemDataAccessor extends IGun {
 
     @Override
     default float getHeatAmount(ItemStack gun) {
-        if(hasHeatData(gun)) return gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getFloat(GUN_OVERHEAT_TAG);
+        if(hasHeatData(gun)) return gun.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getFloat(GUN_OVERHEAT_TAG).get();
         return 0f;
     }
 

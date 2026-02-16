@@ -5,22 +5,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.config.client.RenderConfig;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
-public class KillAmountOverlay implements LayeredDraw.Layer {
+public class KillAmountOverlay {
     private static long killTimestamp = -1L;
     private static int killAmount = 0;
 
-    @Override
-    public void render(GuiGraphics graphics, DeltaTracker delta) {
-        int width = graphics.guiWidth();
-        int height = graphics.guiHeight();
+    public static void render(GuiGraphics graphics, float partialTick, int width, int height) {
         if (!RenderConfig.KILL_AMOUNT_ENABLE.get()) {
             return;
         }

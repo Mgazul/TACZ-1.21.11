@@ -1,7 +1,5 @@
 package com.tacz.guns.client.event;
 
-import com.github.exopandora.shouldersurfing.api.client.IShoulderSurfingCamera;
-import com.github.exopandora.shouldersurfing.api.client.ShoulderSurfing;
 import com.tacz.guns.GunMod;
 import com.tacz.guns.api.DefaultAssets;
 import com.tacz.guns.api.TimelessAPI;
@@ -18,7 +16,6 @@ import com.tacz.guns.api.modifier.ParameterizedCachePair;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import com.tacz.guns.client.resource.GunDisplayInstance;
 import com.tacz.guns.client.resource.index.ClientGunIndex;
-import com.tacz.guns.compat.shouldersurfing.ShoulderSurfingCompat;
 import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.resource.modifier.AttachmentCacheProperty;
 import com.tacz.guns.resource.modifier.custom.RecoilModifier;
@@ -189,7 +186,7 @@ public class CameraSetupEvent {
             // 获取所有配件对摄像机后坐力的修改
             ParameterizedCachePair<Float, Float> attachmentRecoilModifier = cacheProperty.getCache(RecoilModifier.ID);
             IClientPlayerGunOperator clientPlayerGunOperator = IClientPlayerGunOperator.fromLocalPlayer(player);
-            float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+            float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
             float aimingProgress = clientPlayerGunOperator.getClientAimingProgress(partialTicks);
             float zoom = iGun.getAimingZoom(mainHandItem);
             float aimingRecoilModifier = 1 - aimingProgress + aimingProgress / (float) Math.min(Math.sqrt(zoom), 1.5);
@@ -214,22 +211,12 @@ public class CameraSetupEvent {
         long timeTotal = System.currentTimeMillis() - shootTimeStamp;
         if (pitchSplineFunction != null && pitchSplineFunction.isValidPoint(timeTotal)) {
             double value = pitchSplineFunction.value(timeTotal);
-            if (ShoulderSurfingCompat.isInstalled() && ShoulderSurfing.getInstance().isShoulderSurfing()) {
-                IShoulderSurfingCamera camera = ShoulderSurfing.getInstance().getCamera();
-                camera.setXRot(camera.getXRot() - (float) (value - xRotO));
-            } else {
-                player.setXRot(player.getXRot() - (float) (value - xRotO));
-            }
+            player.setXRot(player.getXRot() - (float) (value - xRotO));
             xRotO = value;
         }
         if (yawSplineFunction != null && yawSplineFunction.isValidPoint(timeTotal)) {
             double value = yawSplineFunction.value(timeTotal);
-            if (ShoulderSurfingCompat.isInstalled() && ShoulderSurfing.getInstance().isShoulderSurfing()) {
-                IShoulderSurfingCamera camera = ShoulderSurfing.getInstance().getCamera();
-                camera.setYRot(camera.getYRot() - (float) (value - yRotO));
-            } else {
-                player.setYRot(player.getYRot() - (float) (value - yRotO));
-            }
+            player.setYRot(player.getYRot() - (float) (value - yRotO));
             yRotO = value;
         }
     }

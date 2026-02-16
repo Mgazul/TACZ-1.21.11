@@ -7,7 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class ReloadResourceEvent {
     public static final ResourceLocation BLOCK_ATLAS_TEXTURE = ResourceLocation.parse("textures/atlas/blocks.png");
 

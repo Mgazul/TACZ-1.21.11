@@ -18,7 +18,7 @@ import net.neoforged.neoforge.client.event.RenderLivingEvent;
 @EventBusSubscriber(value = Dist.CLIENT)
 public class RenderHeadShotAABB {
     @SubscribeEvent
-    public static void onRenderEntity(RenderLivingEvent.Post<?, ?> event) {
+    public static void onRenderEntity(RenderLivingEvent.Post<?, ?, ?> event) {
         boolean canRender = Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes();
         if (!canRender) {
             return;

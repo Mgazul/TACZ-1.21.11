@@ -5,11 +5,9 @@ import com.tacz.guns.client.input.InteractKey;
 import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.config.util.InteractKeyConfigRead;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,12 +18,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.apache.commons.lang3.StringUtils;
 
-public class InteractKeyTextOverlay implements LayeredDraw.Layer {
+public class InteractKeyTextOverlay {
 
-    @Override
-    public void render(GuiGraphics graphics, DeltaTracker delta) {
-        int width = graphics.guiWidth();
-        int height = graphics.guiHeight();
+    public static void render(GuiGraphics graphics, float partialTick, int width, int height) {
         if (RenderConfig.DISABLE_INTERACT_HUD_TEXT.get()) {
             return;
         }

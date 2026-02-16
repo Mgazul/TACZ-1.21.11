@@ -6,10 +6,6 @@ import net.minecraft.world.entity.player.Player;
 
 @SuppressWarnings("unused")
 public record LuaEntityAccessor(LivingEntity entity) {
-    public void sendSystemMessage(Component message) {
-        entity.sendSystemMessage(message);
-    }
-
     public void sendActionBar(Component message) {
         if (entity instanceof Player player) {
             player.displayClientMessage(message, true);
@@ -20,8 +16,8 @@ public record LuaEntityAccessor(LivingEntity entity) {
         return entity.getHealth();
     }
 
-    public boolean hurt(float amount) {
-        return entity.hurt(entity.level().damageSources().generic(), amount);
+    public void hurt(float amount) {
+        entity.hurt(entity.level().damageSources().generic(), amount);
     }
 
     public Component literal(String text) {

@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-@SuppressWarnings("All")
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements IGunOperator, KnockBackModifier {
     private final @Unique LivingEntity tacz$shooter = (LivingEntity) (Object) this;

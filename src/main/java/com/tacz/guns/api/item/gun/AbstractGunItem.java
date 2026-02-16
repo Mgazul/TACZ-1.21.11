@@ -16,11 +16,11 @@ import com.tacz.guns.resource.pojo.data.gun.FeedType;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import com.tacz.guns.util.AllowAttachmentTagMatcher;
 import com.tacz.guns.util.AttachmentDataUtils;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -145,10 +145,10 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
             return getDummyAmmoAmount(gunItem) > 0;
         }
         // 检查背包内的弹药数量
-        return Optional.ofNullable(shooter.getCapability(Capabilities.ItemHandler.ENTITY, null)).map(cap -> {
+        return Optional.ofNullable(shooter.getCapability(Capabilities.Item.ENTITY, null)).map(cap -> {
             // 背包检查
-            for (int i = 0; i < cap.getSlots(); i++) {
-                ItemStack checkAmmoStack = cap.getStackInSlot(i);
+            for (int i = 0; i < cap.size(); i++) {
+                ItemStack checkAmmoStack = cap.getResource(i).toStack();
                 if (checkAmmoStack.getItem() instanceof IAmmo iAmmo && iAmmo.isAmmoOfGun(gunItem, checkAmmoStack)) {
                     return true;
                 }
@@ -356,7 +356,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
      */
     @SuppressWarnings("removal")
     @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand  hand) {
         return true;
     }
 
@@ -427,10 +427,10 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
             return getDummyAmmoAmount(gun) > 0;
         }
         // 检查背包内的弹药数量
-        return Optional.ofNullable(shooter.getCapability(Capabilities.ItemHandler.ENTITY, null)).map(cap -> {
+        return Optional.ofNullable(shooter.getCapability(Capabilities.Item.ENTITY, null)).map(cap -> {
             // 背包检查
-            for (int i = 0; i < cap.getSlots(); i++) {
-                ItemStack checkAmmoStack = cap.getStackInSlot(i);
+            for (int i = 0; i < cap.size(); i++) {
+                ItemStack checkAmmoStack = cap.getResource(i).toStack();
                 if (checkAmmoStack.getItem() instanceof IAmmo iAmmo && iAmmo.isAmmoOfGun(gun, checkAmmoStack)) {
                     return true;
                 }

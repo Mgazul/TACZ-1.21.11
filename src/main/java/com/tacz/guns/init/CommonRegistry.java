@@ -9,7 +9,7 @@ import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public final class CommonRegistry {
     private static boolean LOAD_COMPLETE = false;
 

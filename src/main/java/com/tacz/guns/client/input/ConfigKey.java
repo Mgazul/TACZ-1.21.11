@@ -2,7 +2,6 @@ package com.tacz.guns.client.input;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.client.gui.compat.ClothConfigScreen;
-import com.tacz.guns.compat.cloth.MenuIntegration;
 import com.tacz.guns.init.CompatRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
@@ -41,15 +40,11 @@ public class ConfigKey {
             if (player == null || player.isSpectator()) {
                 return;
             }
-            if (!ModList.get().isLoaded(CompatRegistry.CLOTH_CONFIG)) {
-                ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, ClothConfigScreen.CLOTH_CONFIG_URL);
-                HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("gui.tacz.cloth_config_warning.download"));
-                MutableComponent component = Component.translatable("gui.tacz.cloth_config_warning.tips").withStyle(style ->
-                        style.applyFormat(ChatFormatting.BLUE).applyFormat(ChatFormatting.UNDERLINE).withClickEvent(clickEvent).withHoverEvent(hoverEvent));
-                player.sendSystemMessage(component);
-            } else {
-                CompatRegistry.checkModLoad(CompatRegistry.CLOTH_CONFIG, () -> Minecraft.getInstance().setScreen(MenuIntegration.getConfigScreen(null)));
-            }
+            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, ClothConfigScreen.CLOTH_CONFIG_URL);
+            HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("gui.tacz.cloth_config_warning.download"));
+            MutableComponent component = Component.translatable("gui.tacz.cloth_config_warning.tips").withStyle(style ->
+                    style.applyFormat(ChatFormatting.BLUE).applyFormat(ChatFormatting.UNDERLINE).withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+            player.sendSystemMessage(component);
         }
     }
 }

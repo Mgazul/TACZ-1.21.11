@@ -9,11 +9,8 @@ import com.tacz.guns.client.model.BedrockAmmoModel;
 import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
 import com.tacz.guns.client.resource.pojo.TransformScale;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -26,13 +23,10 @@ import java.util.List;
 import static net.minecraft.world.item.ItemDisplayContext.GUI;
 
 
-public class AmmoItemRenderer extends BlockEntityWithoutLevelRenderer {
-    public static AmmoItemRenderer INSTANCE;
+public class AmmoItemRenderer {
+    public static final AmmoItemRenderer INSTANCE = new AmmoItemRenderer();
     private static final SlotModel SLOT_AMMO_MODEL = new SlotModel();
 
-    public AmmoItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
-        super(pBlockEntityRenderDispatcher, pEntityModelSet);
-    }
 
     private static void applyPositioningNodeTransform(List<BedrockPart> nodePath, PoseStack poseStack, Vector3f scale) {
         if (nodePath == null) {
@@ -57,7 +51,6 @@ public class AmmoItemRenderer extends BlockEntityWithoutLevelRenderer {
         poseStack.translate(0, -1.5, 0);
     }
 
-    @Override
     public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemDisplayContext transformType, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         if (!(stack.getItem() instanceof IAmmo iAmmo)) {
             return;

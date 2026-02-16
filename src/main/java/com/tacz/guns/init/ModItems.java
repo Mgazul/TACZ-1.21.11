@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(GunMod.MOD_ID);
 

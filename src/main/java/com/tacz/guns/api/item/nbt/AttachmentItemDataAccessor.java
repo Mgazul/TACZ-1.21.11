@@ -21,7 +21,7 @@ public interface AttachmentItemDataAccessor extends IAttachment {
 
     // 仅检查给定的 CompoundTag 是否具有配件 ID ，不校验其是否存在
     static boolean isAttachmentLike(CompoundTag tag) {
-        return tag.contains(ATTACHMENT_ID_TAG, Tag.TAG_STRING);
+        return tag.contains(ATTACHMENT_ID_TAG);
     }
 
     @Nonnull
@@ -30,7 +30,7 @@ public interface AttachmentItemDataAccessor extends IAttachment {
             return DefaultAssets.EMPTY_ATTACHMENT_ID;
         }
         if (isAttachmentLike(nbt)) {
-            ResourceLocation attachmentId = ResourceLocation.tryParse(nbt.getString(ATTACHMENT_ID_TAG));
+            ResourceLocation attachmentId = ResourceLocation.tryParse(nbt.getString(ATTACHMENT_ID_TAG).get());
             return Objects.requireNonNullElse(attachmentId, DefaultAssets.EMPTY_ATTACHMENT_ID);
         }
         return DefaultAssets.EMPTY_ATTACHMENT_ID;
@@ -40,8 +40,8 @@ public interface AttachmentItemDataAccessor extends IAttachment {
         if (nbt == null) {
             return 0;
         }
-        if (nbt.contains(ZOOM_NUMBER_TAG, Tag.TAG_INT)) {
-            return nbt.getInt(ZOOM_NUMBER_TAG);
+        if (nbt.contains(ZOOM_NUMBER_TAG)) {
+            return nbt.getIntOr(ZOOM_NUMBER_TAG, 0);
         }
         return 0;
     }
@@ -74,8 +74,8 @@ public interface AttachmentItemDataAccessor extends IAttachment {
     @Nullable
     default ResourceLocation getSkinId(ItemStack attachmentStack) {
         CompoundTag nbt = attachmentStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(SKIN_ID_TAG, Tag.TAG_STRING)) {
-            return ResourceLocation.tryParse(nbt.getString(SKIN_ID_TAG));
+        if (nbt.contains(SKIN_ID_TAG)) {
+            return ResourceLocation.tryParse(nbt.getString(SKIN_ID_TAG).get());
         }
         return null;
     }
@@ -107,7 +107,7 @@ public interface AttachmentItemDataAccessor extends IAttachment {
     @Override
     default boolean hasCustomLaserColor(ItemStack attachmentStack) {
         CompoundTag nbt = attachmentStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        return nbt.contains(LASER_COLOR_TAG, Tag.TAG_INT);
+        return nbt.contains(LASER_COLOR_TAG);
     }
 
     @Override
@@ -116,7 +116,7 @@ public interface AttachmentItemDataAccessor extends IAttachment {
         if (!hasCustomLaserColor(attachmentStack)) {
             return 0xFF0000;
         }
-        return nbt.getInt(LASER_COLOR_TAG);
+        return nbt.getInt(LASER_COLOR_TAG).get();
     }
 
     @Override

@@ -62,17 +62,6 @@ public class AmmoItem extends Item implements AmmoItemDataAccessor {
         return stacks;
     }
 
-    @SuppressWarnings("removal")
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return AmmoItemRenderer.INSTANCE;
-            }
-        });
-    }
-
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag isAdvanced) {
         ResourceLocation ammoId = this.getAmmoId(stack);

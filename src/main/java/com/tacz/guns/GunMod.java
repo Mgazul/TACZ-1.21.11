@@ -35,7 +35,7 @@ public class GunMod {
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.spec);
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.spec);
 
-        Dist side = FMLLoader.getDist();
+        Dist side = FMLLoader.getCurrent().getDist();
         GunPackLoader.INSTANCE.packType = side.isClient() ? PackType.CLIENT_RESOURCES : PackType.SERVER_DATA;
 
         CapabilityRegistry.ATTACHMENT_TYPES.register(bus);
@@ -51,7 +51,6 @@ public class GunMod {
         ModSounds.SOUNDS.register(bus);
         ModParticles.PARTICLE_TYPES.register(bus);
         ModAttributes.ATTRIBUTES.register(bus);
-        ModPainting.PAINTINGS.register(bus);
 
         registerDefaultExtraGunPack();
         AttachmentPropertyManager.registerModifier();

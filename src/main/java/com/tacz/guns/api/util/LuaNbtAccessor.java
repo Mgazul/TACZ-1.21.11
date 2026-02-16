@@ -26,43 +26,39 @@ public record LuaNbtAccessor(CompoundTag nbt) {
         return nbt.contains(key);
     }
 
-    public boolean contains(String key, int type) {
-        return nbt.contains(key, type);
-    }
-
     public LuaNbtAccessor newCompoundTag() {
         return new LuaNbtAccessor(new CompoundTag());
     }
 
     public int getInt(String key) {
-        return nbt.getInt(key);
+        return nbt.getInt(key).get();
     }
 
     public double getDouble(String key) {
-        return nbt.getDouble(key);
+        return nbt.getDouble(key).get();
     }
 
     public float getFloat(String key) {
-        return nbt.getFloat(key);
+        return nbt.getFloat(key).get();
     }
 
     public long getLong(String key) {
-        return nbt.getLong(key);
+        return nbt.getLong(key).get();
     }
 
     public String getString(String key) {
-        return nbt.getString(key);
+        return nbt.getString(key).get();
     }
 
     public boolean getBoolean(CompoundTag nbt, String key) {
-        return nbt.getBoolean(key);
+        return nbt.getBoolean(key).get();
     }
 
     public LuaNbtAccessor getCompound(String key) {
-        if (!nbt.contains(key, Tag.TAG_COMPOUND)) {
+        if (!nbt.contains(key)) {
             return null;
         }
-        return from(nbt.getCompound(key));
+        return from(nbt.getCompound(key).get());
     }
 
     public void putInt(String key, int value) {

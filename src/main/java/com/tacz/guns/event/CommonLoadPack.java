@@ -6,7 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@EventBusSubscriber(value = Dist.DEDICATED_SERVER, modid = GunMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.DEDICATED_SERVER, modid = GunMod.MOD_ID)
 public class CommonLoadPack {
     @SubscribeEvent
     public static void loadGunPack(FMLCommonSetupEvent commonSetupEvent) {

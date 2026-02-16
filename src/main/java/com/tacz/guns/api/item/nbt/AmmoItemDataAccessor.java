@@ -24,8 +24,8 @@ public interface AmmoItemDataAccessor extends IAmmo {
     @Nonnull
     default ResourceLocation getAmmoId(ItemStack ammo) {
         CompoundTag nbt = ammo.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(AMMO_ID_TAG, Tag.TAG_STRING)) {
-            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(AMMO_ID_TAG));
+        if (nbt.contains(AMMO_ID_TAG)) {
+            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(AMMO_ID_TAG).get());
             return Objects.requireNonNullElse(gunId, DefaultAssets.EMPTY_AMMO_ID);
         }
         return DefaultAssets.EMPTY_AMMO_ID;

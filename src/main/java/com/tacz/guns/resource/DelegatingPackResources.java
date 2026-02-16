@@ -7,7 +7,7 @@ import net.minecraft.server.packs.AbstractPackResources;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.resources.IoSupplier;
@@ -41,11 +41,10 @@ public class DelegatingPackResources extends AbstractPackResources implements Pa
         return ImmutableMap.copyOf(map);
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    public <T> T getMetadataSection(MetadataSectionSerializer<T> deserializer) throws IOException {
-        return deserializer.getMetadataSectionName().equals("pack") ? (T) this.packMeta : null;
+    public <T> T getMetadataSection(MetadataSectionType<T> type) {
+        return PackMetadataSection.CLIENT_TYPE.equals(type) || PackMetadataSection.SERVER_TYPE.equals(type) ? (T) this.packMeta : null;
     }
 
     @Override

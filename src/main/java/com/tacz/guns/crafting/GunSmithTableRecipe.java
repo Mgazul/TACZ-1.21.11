@@ -9,7 +9,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
@@ -52,23 +54,23 @@ public class GunSmithTableRecipe implements Recipe<SmithingRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return this.result.getResult().copy();
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<SmithingRecipeInput>> getSerializer() {
         return ModRecipe.GUN_SMITH_TABLE_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<SmithingRecipeInput>> getType() {
         return ModRecipe.GUN_SMITH_TABLE_CRAFTING.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 
     public ItemStack getOutput() {

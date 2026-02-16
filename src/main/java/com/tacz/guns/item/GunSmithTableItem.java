@@ -6,8 +6,6 @@ import com.tacz.guns.api.item.nbt.BlockItemDataAccessor;
 import com.tacz.guns.client.renderer.item.GunSmithTableItemRenderer;
 import com.tacz.guns.client.resource.index.ClientBlockIndex;
 import com.tacz.guns.inventory.tooltip.BlockItemTooltip;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,17 +26,6 @@ import java.util.function.Consumer;
 public class GunSmithTableItem extends BlockItem implements BlockItemDataAccessor {
     public GunSmithTableItem(Block block) {
         super(block, (new Item.Properties()).stacksTo(1));
-    }
-
-    @SuppressWarnings("removal")
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return GunSmithTableItemRenderer.INSTANCE;
-            }
-        });
     }
 
     public static NonNullList<ItemStack> fillItemCategory() {

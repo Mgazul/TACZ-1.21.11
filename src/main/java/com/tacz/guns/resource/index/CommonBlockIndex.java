@@ -27,7 +27,7 @@ public class CommonBlockIndex {
     private static void checkIndex(BlockIndexPOJO block, CommonBlockIndex index) {
         ResourceLocation id = index.pojo.getId();
         Preconditions.checkArgument(block != null, "index object file is empty");
-        if(!(BuiltInRegistries.ITEM.get(id) instanceof BlockItem item)) {
+        if(!(BuiltInRegistries.ITEM.get(id).get().value() instanceof BlockItem item)) {
             throw new IllegalArgumentException("BlockItem not found for " + block.getName());
         }
         index.block = item;

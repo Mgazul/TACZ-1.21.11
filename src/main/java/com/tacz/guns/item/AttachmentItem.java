@@ -9,8 +9,6 @@ import com.tacz.guns.client.renderer.item.AttachmentItemRenderer;
 import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.inventory.tooltip.AttachmentItemTooltip;
 import com.tacz.guns.resource.index.CommonAttachmentIndex;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;

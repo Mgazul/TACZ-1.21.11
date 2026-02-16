@@ -6,6 +6,7 @@ import com.tacz.guns.api.event.common.EntityHurtByGunEvent;
 import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.config.common.OtherConfig;
 import com.tacz.guns.init.ModBlocks;
+import com.tacz.guns.init.ModEntities;
 import com.tacz.guns.init.ModItems;
 import com.tacz.guns.init.ModSounds;
 import com.tacz.guns.network.NetworkHandler;
@@ -35,13 +36,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-import static net.minecraft.world.entity.vehicle.AbstractMinecart.Type.RIDEABLE;
-
 public class TargetMinecart extends AbstractMinecart implements ITargetEntity {
     public static EntityType<TargetMinecart> TYPE = EntityType.Builder.<TargetMinecart>of(TargetMinecart::new, MobCategory.MISC)
             .sized(0.75F, 2.4F)
             .clientTrackingRange(8)
-            .build("target_minecart");
+            .build(ModEntities.TARGET_MINECART.getKey());
 
     private @Nullable ResolvableProfile gameProfile = null;
 
@@ -90,7 +89,7 @@ public class TargetMinecart extends AbstractMinecart implements ITargetEntity {
     }
 
     @Override
-    public boolean canBeRidden() {
+    public boolean couldAcceptPassenger() {
         return false;
     }
 
@@ -143,16 +142,5 @@ public class TargetMinecart extends AbstractMinecart implements ITargetEntity {
     @NotNull
     public BlockState getDefaultDisplayBlockState() {
         return ModBlocks.TARGET.get().defaultBlockState();
-    }
-
-    @NotNull
-    @Override
-    public Type getMinecartType() {
-        return RIDEABLE;
-    }
-
-    @Override
-    public float getMaxCartSpeedOnRail() {
-        return 0.2F;
     }
 }

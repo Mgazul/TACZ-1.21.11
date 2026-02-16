@@ -20,8 +20,8 @@ public interface BlockItemDataAccessor extends IBlock {
     @Nonnull
     default ResourceLocation getBlockId(ItemStack block) {
         CompoundTag nbt = block.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt.contains(BLOCK_ID, Tag.TAG_STRING)) {
-            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(BLOCK_ID));
+        if (nbt.contains(BLOCK_ID)) {
+            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(BLOCK_ID).get());
             return Objects.requireNonNullElse(gunId, DefaultAssets.EMPTY_BLOCK_ID);
         }
         return DefaultAssets.EMPTY_BLOCK_ID;

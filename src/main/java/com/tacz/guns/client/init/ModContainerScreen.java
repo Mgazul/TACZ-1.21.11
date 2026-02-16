@@ -11,7 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.jetbrains.annotations.NotNull;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class ModContainerScreen {
     @SubscribeEvent
     public static void registerMenuScreens(RegisterMenuScreensEvent event) {

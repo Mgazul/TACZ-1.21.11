@@ -14,14 +14,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import com.tacz.guns.resource.pojo.data.block.TabConfig;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GunSmithTableResult {
-    public static final Codec<GunSmithTableResult> CODEC = ExtraCodecs.catchDecoderException(Codec.of(GunSmithTableResult::encode, GunSmithTableResult::decode));
+    public static final Codec<GunSmithTableResult> CODEC = Codec.of(GunSmithTableResult::encode, GunSmithTableResult::decode);
     public static final StreamCodec<RegistryFriendlyByteBuf, GunSmithTableResult> STREAM_CODEC = StreamCodec.composite(
         ItemStack.OPTIONAL_STREAM_CODEC, GunSmithTableResult::getResult,
         ResourceLocation.STREAM_CODEC, GunSmithTableResult::getGroup,
@@ -59,7 +58,7 @@ public class GunSmithTableResult {
                     result = new GunSmithTableResult(itemStack, tabOverride);
                     if (extraTag != null) {
                         result.getResult().update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(tag -> {
-                            for (String key : extraTag.getAllKeys()) {
+                            for (String key : extraTag.keySet()) {
                                 Tag value = extraTag.get(key);
                                 if (value != null) {
                                     tag.put(key, value);

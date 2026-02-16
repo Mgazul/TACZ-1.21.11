@@ -26,7 +26,6 @@ import com.tacz.guns.resource.pojo.data.gun.ExtraDamage;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import com.tacz.guns.resource.pojo.data.gun.Ignite;
 import com.tacz.guns.resource.serialize.*;
-import com.tacz.guns.util.AllowAttachmentTagMatcher;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -37,7 +36,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -97,11 +96,6 @@ public class CommonAssetsManager implements ICommonResourceProvider {
         blockIndex = register(new CommonDataManager<>(DataType.BLOCK_INDEX, CommonBlockIndex.class, GSON, "index/blocks", "BlockIndexLoader"));
 
         listeners.forEach(register);
-        register.accept((barrier, resourceManager, preparationProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
-            return barrier
-                    .wait(Void.TYPE)
-                    .thenRunAsync(AllowAttachmentTagMatcher::resetCache, gameExecutor);
-        });
     }
 
     private <T extends INetworkCacheReloadListener> T register(T listener) {
@@ -222,9 +216,9 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     }
 
     @SubscribeEvent
-    public static void onReload(AddReloadListenerEvent event) {
+    public static void onReload(AddServerReloadListenersEvent event) {
         var commonAssetsManager = new CommonAssetsManager();
-        commonAssetsManager.reloadAndRegister(event::addListener);
+        commonAssetsManager.reloadAndRegister(listener -> event.addListener(listener));
         INSTANCE = commonAssetsManager;
         INSTANCE.recipeManager = event.getServerResources().getRecipeManager();
     }
