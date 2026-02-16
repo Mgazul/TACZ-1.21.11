@@ -10,7 +10,6 @@ import com.tacz.guns.network.message.ServerMessageSyncGunPack;
 import com.tacz.guns.resource.filter.RecipeFilter;
 import com.tacz.guns.resource.index.CommonAmmoIndex;
 import com.tacz.guns.resource.index.CommonAttachmentIndex;
-import com.tacz.guns.resource.index.CommonBlockIndex;
 import com.tacz.guns.resource.index.CommonGunIndex;
 import com.tacz.guns.resource.manager.*;
 import com.tacz.guns.resource.network.CommonNetworkCache;
@@ -55,7 +54,6 @@ public class CommonAssetsManager implements ICommonResourceProvider {
             .registerTypeAdapter(CommonGunIndex.class, new CommonGunIndexSerializer())
             .registerTypeAdapter(CommonAmmoIndex.class, new CommonAmmoIndexSerializer())
             .registerTypeAdapter(CommonAttachmentIndex.class, new CommonAttachmentIndexSerializer())
-            .registerTypeAdapter(CommonBlockIndex.class, new CommonBlockIndexSerializer())
             .create();
 
     private final List<INetworkCacheReloadListener> listeners = new ArrayList<>();
@@ -110,18 +108,6 @@ public class CommonAssetsManager implements ICommonResourceProvider {
 
     @Nullable
     @Override
-    public BlockData getBlockData(Identifier id) {
-        return blockData.getData(id);
-    }
-
-    @Override
-    @Nullable
-    public RecipeFilter getRecipeFilter(Identifier id) {
-        return recipeFilterManager.getFilter(id);
-    }
-
-    @Nullable
-    @Override
     public CommonGunIndex getGunIndex(Identifier gunId) {
         return gunIndex.getData(gunId);
     }
@@ -156,17 +142,6 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     @Override
     public LuaTable getScript(Identifier scriptId) {
         return scriptManager.getScript(scriptId);
-    }
-
-    @Nullable
-    @Override
-    public CommonBlockIndex getBlockIndex(Identifier blockId) {
-        return blockIndex.getData(blockId);
-    }
-
-    @Override
-    public Set<Map.Entry<Identifier, CommonBlockIndex>> getAllBlocks() {
-        return blockIndex.getAllData().entrySet();
     }
 
     @Override
@@ -205,26 +180,6 @@ public class CommonAssetsManager implements ICommonResourceProvider {
         var commonAssetsManager = new CommonAssetsManager();
         commonAssetsManager.reloadAndRegister(listener -> event.addListener(listener));
         INSTANCE = commonAssetsManager;
-        INSTANCE.recipeManager = event.getServerResources().getRecipeManager();
-    }
-
-    public RecipeManager recipeManager;
-
-    /**
-     * 这个事件理论上会在server resource已经完成重载和传输到客户端之前触发<br/>
-     * 尝试根据common data初始化延迟加载的配方
-     * @param event
-     */
-    @SubscribeEvent
-    public static void onReload(TagsUpdatedEvent event) {
-        if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD){
-            if (getInstance() !=null && getInstance().recipeManager != null) {
-                List<GunSmithTableRecipe> recipes = getInstance().recipeManager.getAllRecipesFor(ModRecipe.GUN_SMITH_TABLE_CRAFTING.get()).stream().map(RecipeHolder::value).toList();
-                for (GunSmithTableRecipe recipe : recipes) {
-                    recipe.init(event.getRegistryAccess());
-                }
-            }
-        }
     }
 
 

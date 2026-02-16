@@ -13,12 +13,8 @@ public enum DataType implements StringRepresentable {
     AMMO_INDEX,
     GUN_INDEX,
     ATTACHMENT_INDEX,
-    RECIPES,
-    RECIPE_FILTER,
     ATTACHMENT_TAGS,
-    ALLOW_ATTACHMENT_TAGS,
-    BLOCK_DATA,
-    BLOCK_INDEX;
+    ALLOW_ATTACHMENT_TAGS;
 
     public static final Codec<DataType> CODEC = StringRepresentable.fromEnum(DataType::values);
 

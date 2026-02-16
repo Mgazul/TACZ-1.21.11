@@ -428,7 +428,7 @@ public class ModernKineticGunScriptAPI {
         if (abstractGunItem.useDummyAmmo(itemStack)) {
             return abstractGunItem.findAndExtractDummyAmmo(itemStack, neededAmount);
         } else {
-            return Optional.ofNullable(shooter.getCapability(Capabilities.ItemHandler.ENTITY, null))
+            return Optional.ofNullable(shooter.getCapability(Capabilities.Item.ENTITY, null))
                     .map(cap -> abstractGunItem.findAndExtractInventoryAmmo(cap, itemStack, neededAmount))
                     .orElse(0);
         }
@@ -446,10 +446,10 @@ public class ModernKineticGunScriptAPI {
         if (abstractGunItem.useDummyAmmo(itemStack)) {
             return abstractGunItem.getDummyAmmoAmount(itemStack) > 0;
         }
-        return Optional.ofNullable(shooter.getCapability(Capabilities.ItemHandler.ENTITY, null)).map(cap -> {
+        return Optional.ofNullable(shooter.getCapability(Capabilities.Item.ENTITY, null)).map(cap -> {
             // 背包检查
-            for (int i = 0; i < cap.getSlots(); i++) {
-                ItemStack checkAmmoStack = cap.getStackInSlot(i);
+            for (int i = 0; i < cap.size(); i++) {
+                ItemStack checkAmmoStack = cap.getResource(i).toStack();
                 if (checkAmmoStack.getItem() instanceof IAmmo iAmmo && iAmmo.isAmmoOfGun(itemStack, checkAmmoStack)) {
                     return true;
                 }

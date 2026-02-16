@@ -3,7 +3,6 @@ package com.tacz.guns.client.init;
 import com.tacz.guns.client.renderer.entity.EntityBulletRenderer;
 import com.tacz.guns.client.renderer.entity.TargetMinecartRenderer;
 import com.tacz.guns.entity.EntityKineticBullet;
-import com.tacz.guns.entity.TargetMinecart;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

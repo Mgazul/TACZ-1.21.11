@@ -12,11 +12,9 @@ import com.tacz.guns.client.resource.index.ClientGunIndex;
 import com.tacz.guns.resource.CommonAssetsManager;
 import com.tacz.guns.resource.index.CommonAmmoIndex;
 import com.tacz.guns.resource.index.CommonAttachmentIndex;
-import com.tacz.guns.resource.index.CommonBlockIndex;
 import com.tacz.guns.resource.index.CommonGunIndex;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -90,10 +88,6 @@ public final class TimelessAPI {
         return ClientIndexManager.getAllAttachments();
     }
 
-    public static Optional<CommonBlockIndex> getCommonBlockIndex(Identifier blockId) {
-        return Optional.ofNullable(CommonAssetsManager.get().getBlockIndex(blockId));
-    }
-
     public static Optional<CommonGunIndex> getCommonGunIndex(Identifier gunId) {
         return Optional.ofNullable(CommonAssetsManager.get().getGunIndex(gunId));
     }
@@ -104,10 +98,6 @@ public final class TimelessAPI {
 
     public static Optional<CommonAmmoIndex> getCommonAmmoIndex(Identifier ammoId) {
         return Optional.ofNullable(CommonAssetsManager.get().getAmmoIndex(ammoId));
-    }
-
-    public static Set<Map.Entry<Identifier, CommonBlockIndex>> getAllCommonBlockIndex() {
-        return CommonAssetsManager.get().getAllBlocks();
     }
 
     public static Set<Map.Entry<Identifier, CommonGunIndex>> getAllCommonGunIndex() {

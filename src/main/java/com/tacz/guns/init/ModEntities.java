@@ -2,7 +2,6 @@ package com.tacz.guns.init;
 
 import com.tacz.guns.GunMod;
 import com.tacz.guns.entity.EntityKineticBullet;
-import com.tacz.guns.entity.TargetMinecart;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;

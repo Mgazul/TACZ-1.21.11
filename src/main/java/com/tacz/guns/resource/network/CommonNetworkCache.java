@@ -11,11 +11,9 @@ import com.tacz.guns.resource.ICommonResourceProvider;
 import com.tacz.guns.resource.filter.RecipeFilter;
 import com.tacz.guns.resource.index.CommonAmmoIndex;
 import com.tacz.guns.resource.index.CommonAttachmentIndex;
-import com.tacz.guns.resource.index.CommonBlockIndex;
 import com.tacz.guns.resource.index.CommonGunIndex;
 import com.tacz.guns.resource.modifier.AttachmentPropertyManager;
 import com.tacz.guns.resource.pojo.data.attachment.AttachmentData;
-import com.tacz.guns.resource.pojo.data.block.BlockData;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -32,12 +30,9 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
 
     public Map<Identifier, GunData> gunData = new HashMap<>();
     public Map<Identifier, AttachmentData> attachmentData = new HashMap<>();
-    public Map<Identifier, RecipeFilter> recipeFilter = new HashMap<>();
-    public Map<Identifier, BlockData> blockData = new HashMap<>();
     public Map<Identifier, CommonGunIndex> gunIndex = new HashMap<>();
     public Map<Identifier, CommonAmmoIndex> ammoIndex = new HashMap<>();
     public Map<Identifier, CommonAttachmentIndex> attachmentIndex = new HashMap<>();
-    public Map<Identifier, CommonBlockIndex> blockIndex = new HashMap<>();
     public Map<Identifier, Set<String>> attachmentTags = new HashMap<>();
     public Map<Identifier, Set<String>> allowAttachmentTags = new HashMap<>();
 
@@ -55,18 +50,6 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
 
     @Nullable
     @Override
-    public BlockData getBlockData(Identifier id) {
-        return blockData.get(id);
-    }
-
-    @Nullable
-    @Override
-    public RecipeFilter getRecipeFilter(Identifier id) {
-        return recipeFilter.get(id);
-    }
-
-    @Nullable
-    @Override
     public CommonGunIndex getGunIndex(Identifier id) {
         return gunIndex.get(id);
     }
@@ -79,11 +62,6 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
     @Override
     public @Nullable CommonAttachmentIndex getAttachmentIndex(Identifier attachmentId) {
         return attachmentIndex.get(attachmentId);
-    }
-
-    @Override
-    public @Nullable CommonBlockIndex getBlockIndex(Identifier blockId) {
-        return blockIndex.get(blockId);
     }
 
     @Override
@@ -107,11 +85,6 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
     }
 
     @Override
-    public Set<Map.Entry<Identifier, CommonBlockIndex>> getAllBlocks() {
-        return blockIndex.entrySet();
-    }
-
-    @Override
     public Set<String> getAttachmentTags(Identifier registryName) {
         return attachmentTags.get(registryName);
     }
@@ -127,9 +100,6 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
         gunIndex.clear();
         ammoIndex.clear();
         attachmentIndex.clear();
-        blockIndex.clear();
-        recipeFilter.clear();
-        blockData.clear();
 
         attachmentTags.clear();
         allowAttachmentTags.clear();
@@ -203,9 +173,6 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
                     case ATTACHMENT_DATA -> attachmentData.put(entry.getKey(), parseAttachmentData(entry.getValue()));
                     case ATTACHMENT_INDEX -> attachmentIndex.put(entry.getKey(), parse(entry.getValue(), CommonAttachmentIndex.class));
                     case ATTACHMENT_TAGS -> resolveAttachmentTags(data);
-                    case BLOCK_INDEX -> blockIndex.put(entry.getKey(), parse(entry.getValue(), CommonBlockIndex.class));
-                    case RECIPE_FILTER -> recipeFilter.put(entry.getKey(), parse(entry.getValue(), RecipeFilter.class));
-                    case BLOCK_DATA -> blockData.put(entry.getKey(), parse(entry.getValue(), BlockData.class));
                 }
             } catch (IllegalArgumentException | JsonParseException exception) {
                 GunMod.LOGGER.warn("Failed to parse data from network for {} with id {}", type, entry.getKey(), exception);
