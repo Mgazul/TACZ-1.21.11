@@ -2,6 +2,7 @@ package com.tacz.guns.client.input;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.api.item.IGun;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import com.tacz.guns.config.util.InteractKeyConfigRead;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -29,11 +30,11 @@ public class InteractKey {
             KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_O,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
 
     @SubscribeEvent
     public static void onInteractKeyPress(InputEvent.Key event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && INTERACT_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && INTERACT_KEY.matches(event.getKeyEvent())) {
             doInteractLogic();
         }
     }

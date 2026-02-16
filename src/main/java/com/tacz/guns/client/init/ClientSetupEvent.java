@@ -17,7 +17,9 @@ import com.tacz.guns.inventory.tooltip.AttachmentItemTooltip;
 import com.tacz.guns.inventory.tooltip.BlockItemTooltip;
 import com.tacz.guns.inventory.tooltip.GunTooltip;
 import com.tacz.guns.item.AmmoBoxItem;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,6 +29,9 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = GunMod.MOD_ID)
 public class ClientSetupEvent {
+
+    public static final KeyMapping.Category TACZ_CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath(GunMod.MOD_ID, "category"));
+
     @SubscribeEvent
     public static void onClientSetup(RegisterKeyMappingsEvent event) {
         // 注册键位
@@ -71,6 +76,5 @@ public class ClientSetupEvent {
         GunItemRendererWrapper.INSTANCE = new GunItemRendererWrapper();
         AmmoItemRenderer.INSTANCE = new AmmoItemRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
         AttachmentItemRenderer.INSTANCE = new AttachmentItemRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
-        GunSmithTableItemRenderer.INSTANCE = new GunSmithTableItemRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
     }
 }

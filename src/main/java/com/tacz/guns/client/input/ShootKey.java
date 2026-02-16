@@ -7,6 +7,7 @@ import com.tacz.guns.api.entity.ShootResult;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.api.item.gun.FireMode;
 import com.tacz.guns.client.gameplay.LocalPlayerSprint;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import com.tacz.guns.client.sound.SoundPlayManager;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,7 @@ public class ShootKey {
             KeyModifier.NONE,
             InputConstants.Type.MOUSE,
             GLFW.GLFW_MOUSE_BUTTON_LEFT,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
     private static boolean lastTimeShootSuccess = false;
 
     @SubscribeEvent
@@ -113,7 +114,7 @@ public class ShootKey {
                         .map(index -> !index.getGunData().getBurstData().isContinuousShoot())
                         .orElse(false);
                 if (fireMode == FireMode.UNKNOWN) {
-                    player.sendSystemMessage(Component.translatable("message.tacz.fire_select.fail"));
+                    player.displayClientMessage(Component.translatable("message.tacz.fire_select.fail"), true);
                 }
                 if (fireMode == FireMode.SEMI || isBurstSemi) {
                     lastTimeShootSuccess = IClientPlayerGunOperator.fromLocalPlayer(player).shoot() == ShootResult.SUCCESS;
@@ -143,7 +144,7 @@ public class ShootKey {
                     .map(index -> !index.getGunData().getBurstData().isContinuousShoot())
                     .orElse(false);
             if (fireMode == FireMode.UNKNOWN) {
-                player.sendSystemMessage(Component.translatable("message.tacz.fire_select.fail"));
+                player.displayClientMessage(Component.translatable("message.tacz.fire_select.fail"), true);
                 return false;
             }
             if (fireMode == FireMode.SEMI || isBurstSemi) {

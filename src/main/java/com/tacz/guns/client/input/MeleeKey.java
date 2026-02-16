@@ -2,6 +2,7 @@ package com.tacz.guns.client.input;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -22,11 +23,11 @@ public class MeleeKey {
             KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_V,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
 
     @SubscribeEvent
     public static void onMeleeKeyPress(InputEvent.Key event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && MELEE_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && MELEE_KEY.matches(event.getKeyEvent())) {
             doMeleeLogic();
         }
     }

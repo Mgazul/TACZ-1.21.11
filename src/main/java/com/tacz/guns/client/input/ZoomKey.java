@@ -2,6 +2,7 @@ package com.tacz.guns.client.input;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import com.tacz.guns.network.message.ClientMessagePlayerZoom;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -24,11 +25,11 @@ public class ZoomKey {
             KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_V,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
 
     @SubscribeEvent
     public static void onZoomKeyPress(InputEvent.Key event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && ZOOM_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && ZOOM_KEY.matches(event.getKeyEvent())) {
             doZoomLogic();
         }
     }

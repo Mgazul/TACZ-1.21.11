@@ -3,6 +3,7 @@ package com.tacz.guns.client.input;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
 import com.tacz.guns.api.item.IGun;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import com.tacz.guns.config.client.KeyConfig;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,7 @@ public class AimKey {
             KeyModifier.NONE,
             InputConstants.Type.MOUSE,
             GLFW.GLFW_MOUSE_BUTTON_RIGHT,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
 
     @SubscribeEvent
     public static void onAimPress(InputEvent.MouseButton.Post event) {

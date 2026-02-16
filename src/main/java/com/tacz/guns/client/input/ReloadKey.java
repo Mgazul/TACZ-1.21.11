@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
 import com.tacz.guns.api.item.IGun;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import com.tacz.guns.config.client.KeyConfig;
 import com.tacz.guns.resource.pojo.data.gun.Bolt;
 import net.minecraft.client.KeyMapping;
@@ -28,11 +29,11 @@ public class ReloadKey {
             KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_R,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
 
     @SubscribeEvent
     public static void onReloadPress(InputEvent.Key event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && RELOAD_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && RELOAD_KEY.matches(event.getKeyEvent())) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player == null || player.isSpectator()) {
                 return;

@@ -3,6 +3,7 @@ package com.tacz.guns.client.input;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.gui.GunRefitScreen;
+import com.tacz.guns.client.init.ClientSetupEvent;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -23,11 +24,11 @@ public class RefitKey {
             KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_Z,
-            "key.category.tacz");
+            ClientSetupEvent.TACZ_CATEGORY);
 
     @SubscribeEvent
     public static void onRefitPress(InputEvent.Key event) {
-        if (event.getAction() == GLFW.GLFW_PRESS && REFIT_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (event.getAction() == GLFW.GLFW_PRESS && REFIT_KEY.matches(event.getKeyEvent())) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player == null || player.isSpectator()) {
                 return;

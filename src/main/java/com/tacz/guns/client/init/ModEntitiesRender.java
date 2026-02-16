@@ -14,6 +14,5 @@ public class ModEntitiesRender {
     @SubscribeEvent
     public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers evt) {
         EntityRenderers.register(EntityKineticBullet.TYPE, EntityBulletRenderer::new);
-        EntityRenderers.register(TargetMinecart.TYPE, TargetMinecartRenderer::new);
     }
 }
