@@ -7,7 +7,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.api.distmarker.Dist;
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 public class ServerMessageGunKill implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ServerMessageGunKill> TYPE = new CustomPacketPayload.Type<>(
-        ResourceLocation.fromNamespaceAndPath(GunMod.MOD_ID, "server_gun_kill")
+        Identifier.fromNamespaceAndPath(GunMod.MOD_ID, "server_gun_kill")
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerMessageGunKill> STREAM_CODEC = StreamCodec.of(
         ServerMessageGunKill::encode,
@@ -36,13 +36,13 @@ public class ServerMessageGunKill implements CustomPacketPayload {
     private final int bulletId;
     private final int killEntityId;
     private final int attackerId;
-    private final ResourceLocation gunId;
-    private final ResourceLocation gunDisplayId;
+    private final Identifier gunId;
+    private final Identifier gunDisplayId;
     private final boolean isHeadShot;
     private final float baseDamage;
     private final float headshotMultiplier;
 
-    public ServerMessageGunKill(int bulletId, int killEntityId, int attackerId, ResourceLocation gunId, ResourceLocation gunDisplayId, float baseDamage, boolean isHeadShot, float headshotMultiplier) {
+    public ServerMessageGunKill(int bulletId, int killEntityId, int attackerId, Identifier gunId, Identifier gunDisplayId, float baseDamage, boolean isHeadShot, float headshotMultiplier) {
         this.bulletId = bulletId;
         this.killEntityId = killEntityId;
         this.attackerId = attackerId;
@@ -57,8 +57,8 @@ public class ServerMessageGunKill implements CustomPacketPayload {
         buf.writeInt(message.bulletId);
         buf.writeInt(message.killEntityId);
         buf.writeInt(message.attackerId);
-        buf.writeResourceLocation(message.gunId);
-        buf.writeResourceLocation(message.gunDisplayId);
+        buf.writeIdentifier(message.gunId);
+        buf.writeIdentifier(message.gunDisplayId);
         buf.writeFloat(message.baseDamage);
         buf.writeBoolean(message.isHeadShot);
         buf.writeFloat(message.headshotMultiplier);
@@ -68,8 +68,8 @@ public class ServerMessageGunKill implements CustomPacketPayload {
         int bulletId = buf.readInt();
         int killEntityId = buf.readInt();
         int attackerId = buf.readInt();
-        ResourceLocation gunId = buf.readResourceLocation();
-        ResourceLocation gunDisplayId = buf.readResourceLocation();
+        Identifier gunId = buf.readIdentifier();
+        Identifier gunDisplayId = buf.readIdentifier();
         float baseDamage = buf.readFloat();
         boolean isHeadShot = buf.readBoolean();
         float headshotMultiplier = buf.readFloat();

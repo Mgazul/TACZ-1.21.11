@@ -6,8 +6,6 @@ import com.tacz.guns.client.input.*;
 import com.tacz.guns.client.renderer.item.AmmoItemRenderer;
 import com.tacz.guns.client.renderer.item.AttachmentItemRenderer;
 import com.tacz.guns.client.renderer.item.GunItemRendererWrapper;
-import com.tacz.guns.client.renderer.item.GunSmithTableItemRenderer;
-import com.tacz.guns.client.resource.ClientAssetsManager;
 import com.tacz.guns.client.tooltip.ClientAmmoBoxTooltip;
 import com.tacz.guns.client.tooltip.ClientAttachmentItemTooltip;
 import com.tacz.guns.client.tooltip.ClientBlockItemTooltip;

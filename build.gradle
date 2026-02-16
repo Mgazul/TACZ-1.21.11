@@ -116,9 +116,9 @@ dependencies {
     jarJar("com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura")
     implementation('org.apache.bcel:bcel:6.6.1')
     jarJar('org.apache.bcel:bcel:6.6.1')
-    compileOnly('curse.maven:controllable-317269:7085426')
-    compileOnly('curse.maven:framework-549225:7263630')
-    compileOnly('curse.maven:irisshaders-455508:7194072')
+    compileOnly('curse.maven:controllable-317269:7411287')
+    compileOnly('curse.maven:framework-549225:7530356')
+    compileOnly('curse.maven:irisshaders-455508:7525081')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

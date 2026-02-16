@@ -13,7 +13,7 @@ import com.tacz.guns.network.message.ServerMessageSyncBaseTimestamp;
 import com.tacz.guns.network.message.event.ServerMessageGunShoot;
 import com.tacz.guns.resource.index.CommonGunIndex;
 import com.tacz.guns.resource.pojo.data.gun.Bolt;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -46,7 +46,7 @@ public class LivingEntityShoot {
         if (!(currentGunItem.getItem() instanceof IGun iGun)) {
             return ShootResult.NOT_GUN;
         }
-        ResourceLocation gunId = iGun.getGunId(currentGunItem);
+        Identifier gunId = iGun.getGunId(currentGunItem);
         Optional<CommonGunIndex> gunIndexOptional = TimelessAPI.getCommonGunIndex(gunId);
         if (gunIndexOptional.isEmpty()) {
             return ShootResult.ID_NOT_EXIST;
@@ -164,7 +164,7 @@ public class LivingEntityShoot {
         if (!(currentGunItem.getItem() instanceof IGun iGun)) {
             return 0;
         }
-        ResourceLocation gunId = iGun.getGunId(currentGunItem);
+        Identifier gunId = iGun.getGunId(currentGunItem);
         Optional<CommonGunIndex> gunIndex = TimelessAPI.getCommonGunIndex(gunId);
         FireMode fireMode = iGun.getFireMode(currentGunItem);
         long interval = timestamp - data.shootTimestamp;

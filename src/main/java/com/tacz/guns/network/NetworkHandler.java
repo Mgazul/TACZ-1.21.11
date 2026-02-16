@@ -6,7 +6,7 @@ import com.tacz.guns.network.message.event.*;
 import com.tacz.guns.network.message.handshake.Acknowledge;
 import com.tacz.guns.network.message.handshake.ServerMessageSyncedEntityDataMapping;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ConfigurationTask;
@@ -102,7 +102,7 @@ public class NetworkHandler {
 
     public static class Task implements ICustomConfigurationTask {
         public static final ConfigurationTask.Type TYPE = new ConfigurationTask.Type(
-            ResourceLocation.fromNamespaceAndPath(GunMod.MOD_ID, "configuration")
+            Identifier.fromNamespaceAndPath(GunMod.MOD_ID, "configuration")
         );
 
         @Override

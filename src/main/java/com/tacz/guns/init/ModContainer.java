@@ -1,7 +1,6 @@
 package com.tacz.guns.init;
 
 import com.tacz.guns.GunMod;
-import com.tacz.guns.inventory.GunSmithTableMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.registries.DeferredHolder;

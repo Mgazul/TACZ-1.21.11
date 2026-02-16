@@ -8,7 +8,7 @@ import com.tacz.guns.api.item.gun.AbstractGunItem;
 import com.tacz.guns.network.NetworkHandler;
 import com.tacz.guns.network.message.event.ServerMessageGunReload;
 import com.tacz.guns.resource.pojo.data.gun.Bolt;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -35,7 +35,7 @@ public class LivingEntityReload {
         if (!(currentGunItem.getItem() instanceof AbstractGunItem gunItem)) {
             return;
         }
-        ResourceLocation gunId = gunItem.getGunId(currentGunItem);
+        Identifier gunId = gunItem.getGunId(currentGunItem);
         TimelessAPI.getCommonGunIndex(gunId).ifPresent(gunIndex -> {
             // 检查是否为背包直读
             if (gunItem.useInventoryAmmo(currentGunItem)) {

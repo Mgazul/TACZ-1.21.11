@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +37,7 @@ public class TargetMinecartRenderer extends MinecartRenderer<TargetMinecart> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TargetMinecart minecart) {
+    public Identifier getTextureLocation(TargetMinecart minecart) {
         return InternalAssetLoader.ENTITY_EMPTY_TEXTURE;
     }
 

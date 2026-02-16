@@ -25,7 +25,7 @@ import com.tacz.guns.util.math.SecondOrderDynamics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -129,7 +129,7 @@ public class CameraSetupEvent {
                 event.setFOV(fov);
                 return;
             }
-            ResourceLocation scopeItemId = iGun.getAttachmentId(stack, AttachmentType.SCOPE);
+            Identifier scopeItemId = iGun.getAttachmentId(stack, AttachmentType.SCOPE);
             if (scopeItemId.equals(DefaultAssets.EMPTY_ATTACHMENT_ID)) {
                 scopeItemId = iGun.getBuiltInAttachmentId(stack, AttachmentType.SCOPE);
             }
@@ -176,7 +176,7 @@ public class CameraSetupEvent {
             if (cacheProperty == null) {
                 return;
             }
-            ResourceLocation gunId = iGun.getGunId(mainHandItem);
+            Identifier gunId = iGun.getGunId(mainHandItem);
             Optional<ClientGunIndex> gunIndexOptional = TimelessAPI.getClientGunIndex(gunId);
             if (gunIndexOptional.isEmpty()) {
                 return;

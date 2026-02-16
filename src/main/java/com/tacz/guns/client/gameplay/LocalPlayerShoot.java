@@ -23,7 +23,7 @@ import com.tacz.guns.sound.SoundManager;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.NeoForge;
@@ -66,7 +66,7 @@ public class LocalPlayerShoot {
         if (!(mainHandItem.getItem() instanceof IGun iGun)) {
             return ShootResult.NOT_GUN;
         }
-        ResourceLocation gunId = iGun.getGunId(mainHandItem);
+        Identifier gunId = iGun.getGunId(mainHandItem);
         Optional<ClientGunIndex> gunIndexOptional = TimelessAPI.getClientGunIndex(gunId);
         GunDisplayInstance display = TimelessAPI.getGunDisplay(mainHandItem).orElse(null);
         if (gunIndexOptional.isEmpty() || display == null) {
@@ -243,7 +243,7 @@ public class LocalPlayerShoot {
         if (iGun == null) {
             return -1;
         }
-        ResourceLocation gunId = iGun.getGunId(mainHandItem);
+        Identifier gunId = iGun.getGunId(mainHandItem);
         Optional<CommonGunIndex> gunIndexOptional = TimelessAPI.getCommonGunIndex(gunId);
         return gunIndexOptional.map(commonGunIndex -> getCoolDown(iGun, mainHandItem, commonGunIndex.getGunData())).orElse(-1L);
     }

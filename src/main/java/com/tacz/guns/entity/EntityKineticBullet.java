@@ -36,7 +36,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -78,9 +78,9 @@ import static com.tacz.guns.api.event.common.GunDamageSourcePart.NON_ARMOR_PIERC
  */
 public class EntityKineticBullet extends Projectile implements IEntityWithComplexSpawn {
     public static final EntityType<EntityKineticBullet> TYPE = EntityType.Builder.<EntityKineticBullet>of(EntityKineticBullet::new, MobCategory.MISC).noSummon().noSave().fireImmune().sized(0.0625F, 0.0625F).clientTrackingRange(5).updateInterval(5).setShouldReceiveVelocityUpdates(false).build(ModEntities.BULLET.getKey());
-    public static final TagKey<EntityType<?>> USE_MAGIC_DAMAGE_ON = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("tacz:use_magic_damage_on"));
-    public static final TagKey<EntityType<?>> USE_VOID_DAMAGE_ON = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("tacz:use_void_damage_on"));
-    public static final TagKey<EntityType<?>> PRETEND_MELEE_DAMAGE_ON = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("tacz:pretend_melee_damage_on"));
+    public static final TagKey<EntityType<?>> USE_MAGIC_DAMAGE_ON = TagKey.create(Registries.ENTITY_TYPE, Identifier.parse("tacz:use_magic_damage_on"));
+    public static final TagKey<EntityType<?>> USE_VOID_DAMAGE_ON = TagKey.create(Registries.ENTITY_TYPE, Identifier.parse("tacz:use_void_damage_on"));
+    public static final TagKey<EntityType<?>> PRETEND_MELEE_DAMAGE_ON = TagKey.create(Registries.ENTITY_TYPE, Identifier.parse("tacz:pretend_melee_damage_on"));
 
     /**
      * 允许其他 mod 使用 persistent data（永久数据） 控制曳光弹的颜色和粗细。<p>
@@ -101,7 +101,7 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
      */
     public static final String TRACER_SIZE_OVERRIDER_KEY = GunMod.MOD_ID + ":tracer_size";
 
-    private ResourceLocation ammoId = DefaultAssets.EMPTY_AMMO_ID;
+    private Identifier ammoId = DefaultAssets.EMPTY_AMMO_ID;
     private int life = 200;
     private float speed = 1;
     private float gravity = 0;
@@ -130,9 +130,9 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
     private float cameraYRot;
     private Vector3f firstPersonRenderOffset;
     // 发射的枪械 ID
-    private ResourceLocation gunId;
+    private Identifier gunId;
     // 枪械display ID
-    private ResourceLocation gunDisplayId;
+    private Identifier gunDisplayId;
     private float armorIgnore;
     private float headShot;
 
@@ -145,12 +145,12 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
         this.setPos(x, y, z);
     }
 
-    public EntityKineticBullet(Level worldIn, LivingEntity throwerIn, ItemStack gunItem, ResourceLocation ammoId, ResourceLocation gunId, boolean isTracerAmmo, GunData gunData, BulletData bulletData) {
+    public EntityKineticBullet(Level worldIn, LivingEntity throwerIn, ItemStack gunItem, Identifier ammoId, Identifier gunId, boolean isTracerAmmo, GunData gunData, BulletData bulletData) {
         this(TYPE, worldIn, throwerIn, gunItem, ammoId, gunId, DefaultAssets.DEFAULT_GUN_DISPLAY_ID, isTracerAmmo, gunData, bulletData);
     }
 
     protected EntityKineticBullet(EntityType<? extends Projectile> type, Level worldIn, LivingEntity throwerIn, ItemStack gunItem,
-                                  ResourceLocation ammoId, ResourceLocation gunId, ResourceLocation gunDisplayId,
+                                  Identifier ammoId, Identifier gunId, Identifier gunDisplayId,
                                   boolean isTracerAmmo, GunData gunData, BulletData bulletData) {
         this(type, throwerIn.getX(), throwerIn.getEyeY() - (double) 0.1F, throwerIn.getZ(), worldIn);
         this.setOwner(throwerIn);
@@ -539,7 +539,7 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
         buffer.writeDouble(getDeltaMovement().z);
         Entity entity = getOwner();
         buffer.writeInt(entity != null ? entity.getId() : 0);
-        buffer.writeResourceLocation(ammoId);
+        buffer.writeIdentifier(ammoId);
         buffer.writeFloat(this.gravity);
         buffer.writeBoolean(this.explosion);
         buffer.writeBoolean(this.igniteEntity);
@@ -551,8 +551,8 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
         buffer.writeFloat(this.friction);
         buffer.writeInt(this.pierce);
         buffer.writeBoolean(this.isTracerAmmo);
-        buffer.writeResourceLocation(this.gunId);
-        buffer.writeResourceLocation(this.gunDisplayId);
+        buffer.writeIdentifier(this.gunId);
+        buffer.writeIdentifier(this.gunDisplayId);
     }
 
     @Override
@@ -564,7 +564,7 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
         if (entity != null) {
             this.setOwner(entity);
         }
-        this.ammoId = additionalData.readResourceLocation();
+        this.ammoId = additionalData.readIdentifier();
         this.gravity = additionalData.readFloat();
         this.explosion = additionalData.readBoolean();
         this.igniteEntity = additionalData.readBoolean();
@@ -576,19 +576,19 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
         this.friction = additionalData.readFloat();
         this.pierce = additionalData.readInt();
         this.isTracerAmmo = additionalData.readBoolean();
-        this.gunId = additionalData.readResourceLocation();
-        this.gunDisplayId = additionalData.readResourceLocation();
+        this.gunId = additionalData.readIdentifier();
+        this.gunDisplayId = additionalData.readIdentifier();
     }
 
-    public ResourceLocation getAmmoId() {
+    public Identifier getAmmoId() {
         return ammoId;
     }
 
-    public ResourceLocation getGunId() {
+    public Identifier getGunId() {
         return gunId;
     }
 
-    public ResourceLocation getGunDisplayId() {
+    public Identifier getGunDisplayId() {
         return gunDisplayId;
     }
 

@@ -1,7 +1,5 @@
 package com.tacz.guns.client.init;
 
-import com.tacz.guns.client.gui.GunSmithTableScreen;
-import com.tacz.guns.inventory.GunSmithTableMenu;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;

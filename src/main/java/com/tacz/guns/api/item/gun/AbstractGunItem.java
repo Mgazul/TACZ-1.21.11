@@ -19,7 +19,7 @@ import com.tacz.guns.util.AttachmentDataUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +44,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
         super(pProperties);
     }
 
-    private static Comparator<Map.Entry<ResourceLocation, CommonGunIndex>> idNameSort() {
+    private static Comparator<Map.Entry<Identifier, CommonGunIndex>> idNameSort() {
         return Comparator.comparingInt(m -> m.getValue().getSort());
     }
 
@@ -121,7 +121,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
      * @return 是否满足换弹条件
      */
     public boolean canReload(LivingEntity shooter, ItemStack gunItem) {
-        ResourceLocation gunId = this.getGunId(gunItem);
+        Identifier gunId = this.getGunId(gunItem);
         CommonGunIndex gunIndex = TimelessAPI.getCommonGunIndex(gunId).orElse(null);
         if (gunIndex == null) {
             return false;
@@ -177,7 +177,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
         if (ammoCount <= 0) {
             return;
         }
-        ResourceLocation gunId = getGunId(gunItem);
+        Identifier gunId = getGunId(gunItem);
         TimelessAPI.getCommonGunIndex(gunId).ifPresent(index -> {
             // 如果使用的是虚拟备弹，返还至虚拟备弹
             if (useDummyAmmo(gunItem)) {
@@ -190,7 +190,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
                 return;
             }
 
-            ResourceLocation ammoId = index.getGunData().getAmmoId();
+            Identifier ammoId = index.getGunData().getAmmoId();
             // 创造模式类型的换弹，只填满子弹总数，不进行任何卸载弹药逻辑
             if (player.isCreative()) {
                 int maxAmmCount = AttachmentDataUtils.getAmmoCountWithAttachment(gunItem, index.getGunData());
@@ -286,8 +286,8 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
         IAttachment iAttachment = IAttachment.getIAttachmentOrNull(attachmentItem);
         IGun iGun = IGun.getIGunOrNull(gun);
         if (iGun != null && iAttachment != null) {
-            ResourceLocation gunId = iGun.getGunId(gun);
-            ResourceLocation attachmentId = iAttachment.getAttachmentId(attachmentItem);
+            Identifier gunId = iGun.getGunId(gun);
+            Identifier attachmentId = iAttachment.getAttachmentId(attachmentItem);
             return AllowAttachmentTagMatcher.match(gunId, attachmentId);
         }
         return false;
@@ -319,7 +319,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public Component getName(@Nonnull ItemStack stack) {
-        ResourceLocation gunId = this.getGunId(stack);
+        Identifier gunId = this.getGunId(stack);
         Optional<ClientGunIndex> gunIndex = TimelessAPI.getClientGunIndex(gunId);
         if (gunIndex.isPresent()) {
             return Component.translatable(gunIndex.get().getName());
@@ -381,7 +381,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
             Optional<CommonGunIndex> optional = TimelessAPI.getCommonGunIndex(this.getGunId(stack));
             if (optional.isPresent()) {
                 CommonGunIndex gunIndex = optional.get();
-                ResourceLocation ammoId = gunIndex.getGunData().getAmmoId();
+                Identifier ammoId = gunIndex.getGunData().getAmmoId();
                 return Optional.of(new GunTooltip(stack, iGun, ammoId, gunIndex));
             }
         }

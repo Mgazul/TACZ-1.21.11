@@ -13,7 +13,7 @@ import com.tacz.guns.network.message.ClientMessagePlayerMelee;
 import com.tacz.guns.resource.pojo.data.attachment.MeleeData;
 import com.tacz.guns.resource.pojo.data.gun.GunDefaultMeleeData;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.NeoForge;
@@ -45,16 +45,16 @@ public class LocalPlayerMelee {
         if (display == null) {
             return;
         }
-        ResourceLocation gunId = iGun.getGunId(mainHandItem);
+        Identifier gunId = iGun.getGunId(mainHandItem);
         // 先检查枪口有没有近战属性
-        ResourceLocation muzzleId = iGun.getAttachmentId(mainHandItem, AttachmentType.MUZZLE);
+        Identifier muzzleId = iGun.getAttachmentId(mainHandItem, AttachmentType.MUZZLE);
         MeleeData muzzleMeleeData = getMeleeData(muzzleId);
         if (muzzleMeleeData != null) {
             this.doMuzzleMelee(display);
             return;
         }
 
-        ResourceLocation stockId = iGun.getAttachmentId(mainHandItem, AttachmentType.STOCK);
+        Identifier stockId = iGun.getAttachmentId(mainHandItem, AttachmentType.STOCK);
         MeleeData stockMeleeData = getMeleeData(stockId);
         if (stockMeleeData != null) {
             this.doStockMelee(display);
@@ -124,7 +124,7 @@ public class LocalPlayerMelee {
     }
 
     @Nullable
-    private MeleeData getMeleeData(ResourceLocation attachmentId) {
+    private MeleeData getMeleeData(Identifier attachmentId) {
         if (DefaultAssets.isEmptyAttachmentId(attachmentId)) {
             return null;
         }

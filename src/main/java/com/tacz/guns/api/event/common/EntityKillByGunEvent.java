@@ -1,6 +1,6 @@
 package com.tacz.guns.api.event.common;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,8 +18,8 @@ public class EntityKillByGunEvent extends Event {
     private final Entity bullet;
     private final @Nullable LivingEntity killedEntity;
     private final @Nullable LivingEntity attacker;
-    private final ResourceLocation gunId;
-    private final ResourceLocation gunDisplayId;
+    private final Identifier gunId;
+    private final Identifier gunDisplayId;
     private final float baseDamage;
     private final DamageSource nonApPartDamageSource;
     private final DamageSource apPartDamageSource;
@@ -28,7 +28,7 @@ public class EntityKillByGunEvent extends Event {
     private final LogicalSide logicalSide;
 
     public EntityKillByGunEvent(Entity bullet, @Nullable LivingEntity hurtEntity, @Nullable LivingEntity attacker,
-                                ResourceLocation gunId, ResourceLocation gunDisplayId, float baseDamage, @Nullable Pair<DamageSource, DamageSource> sources,
+                                Identifier gunId, Identifier gunDisplayId, float baseDamage, @Nullable Pair<DamageSource, DamageSource> sources,
                                 boolean isHeadShot, float headshotMultiplier, LogicalSide logicalSide) {
         this.bullet = bullet;
         this.killedEntity = hurtEntity;
@@ -60,7 +60,7 @@ public class EntityKillByGunEvent extends Event {
         return attacker;
     }
 
-    public ResourceLocation getGunId() {
+    public Identifier getGunId() {
         return gunId;
     }
 
@@ -87,7 +87,7 @@ public class EntityKillByGunEvent extends Event {
         return logicalSide;
     }
 
-    public ResourceLocation getGunDisplayId() {
+    public Identifier getGunDisplayId() {
         return gunDisplayId;
     }
 }

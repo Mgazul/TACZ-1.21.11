@@ -15,7 +15,7 @@ import com.tacz.guns.network.message.ClientMessagePlayerReloadGun;
 import com.tacz.guns.resource.pojo.data.gun.Bolt;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.NeoForge;
@@ -56,7 +56,7 @@ public class LocalPlayerReload {
         if (!(mainHandItem.getItem() instanceof AbstractGunItem gunItem)) {
             return;
         }
-        ResourceLocation gunId = gunItem.getGunId(mainHandItem);
+        Identifier gunId = gunItem.getGunId(mainHandItem);
         GunData gunData = TimelessAPI.getClientGunIndex(gunId).map(ClientGunIndex::getGunData).orElse(null);
         if (gunData == null) {
             return;

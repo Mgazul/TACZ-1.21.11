@@ -7,12 +7,12 @@ import com.tacz.guns.init.ModItems;
 import com.tacz.guns.resource.index.CommonAmmoIndex;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public final class AmmoItemBuilder {
     private int count = 1;
-    private ResourceLocation ammoId = DefaultAssets.DEFAULT_AMMO_ID;
+    private Identifier ammoId = DefaultAssets.DEFAULT_AMMO_ID;
 
     private AmmoItemBuilder() {
     }
@@ -26,7 +26,7 @@ public final class AmmoItemBuilder {
         return this;
     }
 
-    public AmmoItemBuilder setId(ResourceLocation id) {
+    public AmmoItemBuilder setId(Identifier id) {
         this.ammoId = id;
         return this;
     }

@@ -1,7 +1,6 @@
 package com.tacz.guns.client.event;
 
 import com.tacz.guns.client.gui.GunRefitScreen;
-import com.tacz.guns.client.gui.GunSmithTableScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
