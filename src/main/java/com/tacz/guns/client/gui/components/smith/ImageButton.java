@@ -22,7 +22,7 @@ public class ImageButton extends Button {
     }
 
     @Override
-    public void renderWidget(@NotNull GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderContents(@NotNull GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderTexture(gui, this.resourceLocation, this.getX(), this.getY(), this.xTexStart, this.yTexStart, this.yDiffTex, this.width, this.height, 256, 256);
     }
 

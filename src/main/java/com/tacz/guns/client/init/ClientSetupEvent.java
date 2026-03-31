@@ -74,7 +74,7 @@ public class ClientSetupEvent {
 
         Minecraft minecraft = Minecraft.getInstance();
         GunItemRendererWrapper.INSTANCE = new GunItemRendererWrapper();
-        AmmoItemRenderer.INSTANCE = new AmmoItemRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
-        AttachmentItemRenderer.INSTANCE = new AttachmentItemRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        AmmoItemRenderer.INSTANCE = new AmmoItemRenderer();
+        AttachmentItemRenderer.INSTANCE = new AttachmentItemRenderer();
     }
 }

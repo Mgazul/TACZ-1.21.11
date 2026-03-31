@@ -11,6 +11,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -49,7 +50,7 @@ public class ZoomKey {
             }
             IClientPlayerGunOperator operator = IClientPlayerGunOperator.fromLocalPlayer(player);
             if (operator.isAim()) {
-                PacketDistributor.sendToServer(ClientMessagePlayerZoom.INSTANCE);
+                ClientPacketDistributor.sendToServer(ClientMessagePlayerZoom.INSTANCE);
                 return true;
             }
         }
@@ -63,7 +64,7 @@ public class ZoomKey {
         }
         IClientPlayerGunOperator operator = IClientPlayerGunOperator.fromLocalPlayer(player);
         if (operator.isAim()) {
-            PacketDistributor.sendToServer(ClientMessagePlayerZoom.INSTANCE);
+            ClientPacketDistributor.sendToServer(ClientMessagePlayerZoom.INSTANCE);
         }
     }
 }

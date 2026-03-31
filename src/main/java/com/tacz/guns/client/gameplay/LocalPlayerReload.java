@@ -18,6 +18,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -44,7 +45,7 @@ public class LocalPlayerReload {
                 return;
             }
             // 发包通知服务器
-            PacketDistributor.sendToServer(ClientMessagePlayerCancelReload.INSTANCE);
+            ClientPacketDistributor.sendToServer(ClientMessagePlayerCancelReload.INSTANCE);
             // 执行本地取消换弹逻辑
             this.cancelReload(display);
         });
@@ -82,7 +83,7 @@ public class LocalPlayerReload {
                 return;
             }
             // 发包通知服务器
-            PacketDistributor.sendToServer(ClientMessagePlayerReloadGun.INSTANCE);
+            ClientPacketDistributor.sendToServer(ClientMessagePlayerReloadGun.INSTANCE);
             // 执行客户端 reload 相关内容
             this.doReload(gunItem, display, gunData, mainHandItem);
         });

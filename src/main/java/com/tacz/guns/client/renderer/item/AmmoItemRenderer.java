@@ -12,6 +12,7 @@ import com.tacz.guns.client.resource.pojo.TransformScale;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -24,7 +25,7 @@ import java.util.List;
 import static net.minecraft.world.item.ItemDisplayContext.GUI;
 
 
-public class AmmoItemRenderer {
+public class AmmoItemRenderer implements NoDataSpecialModelRenderer {
     public static final AmmoItemRenderer INSTANCE = new AmmoItemRenderer();
     private static final SlotModel SLOT_AMMO_MODEL = new SlotModel();
 

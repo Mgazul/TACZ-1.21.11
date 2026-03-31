@@ -32,8 +32,7 @@ public class ClientEventHandler {
             }
 
             @Override
-            public void render(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack,
-                               MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+            public void render(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
                 // 使用 AmmoItemRenderer 进行渲染
                 AmmoItemRenderer.INSTANCE.renderByItem(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
             }

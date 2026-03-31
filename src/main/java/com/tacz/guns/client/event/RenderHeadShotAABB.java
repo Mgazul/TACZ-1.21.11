@@ -4,8 +4,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.config.util.HeadShotAABBConfigRead;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +21,7 @@ import net.neoforged.neoforge.client.event.RenderLivingEvent;
 public class RenderHeadShotAABB {
     @SubscribeEvent
     public static void onRenderEntity(RenderLivingEvent.Post<?, ?, ?> event) {
-        boolean canRender = Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes();
+        boolean canRender = Minecraft.getInstance().debugEntries.toggleStatus(DebugScreenEntries.ENTITY_HITBOXES);
         if (!canRender) {
             return;
         }
@@ -35,7 +37,7 @@ public class RenderHeadShotAABB {
             // 扩张 0.01，避免和原版显示重合
             aabb = new AABB(-width / 2, eyeHeight - 0.25, -width / 2, width / 2, eyeHeight + 0.25, width / 2).inflate(0.01);
         }
-        VertexConsumer buffer = event.getMultiBufferSource().getBuffer(RenderType.lines());
+        VertexConsumer buffer = event.getMultiBufferSource().getBuffer(RenderTypes.lines());
         LevelRenderer.renderLineBox(event.getPoseStack(), buffer, aabb, 1.0F, 1.0F, 0.0F, 1.0F);
     }
 }

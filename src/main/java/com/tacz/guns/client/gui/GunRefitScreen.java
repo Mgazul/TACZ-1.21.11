@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -158,7 +159,7 @@ public class GunRefitScreen extends Screen {
                     int slotIndex = ((InventoryAttachmentSlot) b).getSlotIndex();
                     SoundPlayManager.playerRefitSound(inventory.getItem(slotIndex), player, SoundManager.INSTALL_SOUND);
                     ClientMessageRefitGun message = new ClientMessageRefitGun(slotIndex, inventory.selected, RefitTransform.getCurrentTransformType());
-                    PacketDistributor.sendToServer(message);
+                    ClientPacketDistributor.sendToServer(message);
                 });
                 this.addRenderableWidget(button);
                 currentY = currentY + SLOT_SIZE;
@@ -243,7 +244,7 @@ public class GunRefitScreen extends Screen {
                         if (freeSlot != -1) {
                             SoundPlayManager.playerRefitSound(attachmentItem, player, SoundManager.UNINSTALL_SOUND);
                             ClientMessageUnloadAttachment message = new ClientMessageUnloadAttachment(inventory.selected, RefitTransform.getCurrentTransformType());
-                            PacketDistributor.sendToServer(message);
+                            ClientPacketDistributor.sendToServer(message);
                         } else {
                             player.sendSystemMessage(Component.translatable("gui.tacz.gun_refit.unload.no_space"));
                         }
@@ -278,7 +279,7 @@ public class GunRefitScreen extends Screen {
             ItemStack gun = player.getMainHandItem();
             if (player.getMainHandItem().getItem() instanceof IGun) {
                 ClientMessageLaserColor message = new ClientMessageLaserColor(gun, player.getInventory().selected);
-                PacketDistributor.sendToServer(message);
+                ClientPacketDistributor.sendToServer(message);
             }
         }
         super.onClose();

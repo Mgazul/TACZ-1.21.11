@@ -49,7 +49,7 @@ public class AttachmentRender implements IFunctionalRenderer {
                         model = lodModel.getLeft();
                         texture = lodModel.getRight();
                     }
-                    RenderType renderType = RenderType.entityCutout(texture);
+                    RenderType renderType = RenderTypes.entityCutout(texture);
                     model.render(attachmentItem, gunItem, poseStack, transformType, renderType, light, overlay);
                 }
             }, () -> {

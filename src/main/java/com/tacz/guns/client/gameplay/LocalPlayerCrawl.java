@@ -7,6 +7,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class LocalPlayerCrawl {
@@ -43,7 +44,7 @@ public class LocalPlayerCrawl {
         TimelessAPI.getClientGunIndex(gunId).ifPresent(gunIndex -> {
             this.isCrawling = isCrawl;
             this.crawCooldownTicks = COOLDOWN_TICKS;
-            PacketDistributor.sendToServer(new ClientMessagePlayerCrawl(isCrawl));
+            ClientPacketDistributor.sendToServer(new ClientMessagePlayerCrawl(isCrawl));
         });
     }
 

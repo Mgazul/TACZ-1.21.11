@@ -23,7 +23,7 @@ public class ResultButton extends Button {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderContents(@NotNull GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
         RenderSystem.enableDepthTest();
 
         if (isSelected) {
