@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-    id 'net.neoforged.moddev' version '2.0.119'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
 version = mod_version
@@ -33,7 +33,7 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     // Specify the version of NeoForge to use.
@@ -116,25 +116,23 @@ dependencies {
     jarJar("com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura")
     implementation('org.apache.bcel:bcel:6.6.1')
     jarJar('org.apache.bcel:bcel:6.6.1')
-    compileOnly('curse.maven:controllable-317269:7411287')
-    compileOnly('curse.maven:framework-549225:7530356')
-    compileOnly('curse.maven:irisshaders-455508:7525081')
+    compileOnly('curse.maven:controllable-317269:7943194')
+    compileOnly('curse.maven:framework-549225:7964506')
+    compileOnly('curse.maven:irisshaders-455508:7867946')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
-    var replaceProperties = [minecraft_version      : minecraft_version,
-                             minecraft_version_range: minecraft_version_range,
-                             neo_version            : neo_version,
-                             neo_version_range      : neo_version_range,
-                             loader_version_range   : loader_version_range,
-                             mod_id                 : mod_id,
-                             mod_name               : mod_name,
-                             mod_license            : mod_license,
-                             mod_version            : mod_version,
-                             mod_authors            : mod_authors,
-                             mod_description        : mod_description]
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+    ]
     inputs.properties replaceProperties
     expand replaceProperties
     from "src/main/templates"

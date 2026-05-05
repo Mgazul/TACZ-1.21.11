@@ -37,7 +37,6 @@ public class AttachmentItemRenderer implements NoDataSpecialModelRenderer {
         this.stack = stack;
     }
 
-
     @Override
     public void submit(ItemDisplayContext itemDisplayContext, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i, int i1, boolean b, int i2) {
         if (stack.getItem() instanceof IAttachment iAttachment) {
