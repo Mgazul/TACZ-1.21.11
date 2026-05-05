@@ -5,6 +5,7 @@ import com.tacz.guns.api.client.animation.statemachine.AnimationStateMachine;
 import com.tacz.guns.api.client.other.KeepingItemRenderer;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
+import com.tacz.guns.client.renderer.item.GunItemRendererWrapper;
 import com.tacz.guns.client.renderer.other.HandRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -47,7 +48,7 @@ public class FirstPersonRenderEvent {
         }
 
         // 渲染相关内容整理到物品的IClientItemExtensions了，这个接口有待进一步抽象
-        if (IClientItemExtensions.of(stack.getItem()).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
+        if (stack.getItem() instanceof IGun && GunItemRendererWrapper.INSTANCE instanceof AnimateGeoItemRenderer<?, ?> renderer) {
             // 如果旧的状态机已经不再使用且未正常退出，使其静默退出
             AnimationStateMachine<?> machine = renderer.getStateMachine(stack);
             if (machine != lastStateMachine) {
@@ -67,7 +68,7 @@ public class FirstPersonRenderEvent {
                 renderer.renderFirstPerson(
                     player, stack, transformType,
                     poseStack == null ? event.getPoseStack() : poseStack,
-                    event.getMultiBufferSource(),
+                    Minecraft.getInstance().renderBuffers().bufferSource(),
                     event.getPackedLight(),
                     event.getPartialTick()
                 );

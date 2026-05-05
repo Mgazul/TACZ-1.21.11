@@ -10,12 +10,9 @@ import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.util.RenderDistance;
 import java.util.function.Consumer;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
@@ -25,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import org.joml.Vector3fc;
 
 public class AttachmentItemRenderer implements NoDataSpecialModelRenderer {
@@ -38,7 +34,7 @@ public class AttachmentItemRenderer implements NoDataSpecialModelRenderer {
     }
 
     @Override
-    public void submit(ItemDisplayContext itemDisplayContext, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i, int i1, boolean b, int i2) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i, int i1, boolean b, int i2) {
         if (stack.getItem() instanceof IAttachment iAttachment) {
             Identifier attachmentId = iAttachment.getAttachmentId(stack);
             poseStack.pushPose();

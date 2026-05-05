@@ -98,8 +98,8 @@ public class EntityBulletRenderer extends EntityRenderer<EntityKineticBullet> {
                     Vector3f offset = bullet.getFirstPersonRenderOffset();
                     if (offset == null) {
                         offset = new Vector3f(GunItemRendererWrapper.muzzleRenderOffset);
-                        bullet.setCameraXRot(camera.getXRot());
-                        bullet.setCameraYRot(camera.getYRot());
+                        bullet.setCameraXRot(camera.xRot());
+                        bullet.setCameraYRot(camera.yRot());
                         bullet.setFirstPersonRenderOffset(offset);
                     }
                     // 按照生存时间减少曳光弹的偏移，避免渲染位置距离落点太远
@@ -140,7 +140,7 @@ public class EntityBulletRenderer extends EntityRenderer<EntityKineticBullet> {
 
     @Override
     public boolean shouldRender(EntityKineticBullet bullet, Frustum camera, double pCamX, double pCamY, double pCamZ) {
-        AABB aabb = bullet.getBoundingBoxForCulling().inflate(0.5);
+        AABB aabb = bullet.getBoundingBox().inflate(0.5);
         if (aabb.hasNaN() || aabb.getSize() == 0) {
             aabb = new AABB(bullet.getX() - 2.0, bullet.getY() - 2.0, bullet.getZ() - 2.0, bullet.getX() + 2.0, bullet.getY() + 2.0, bullet.getZ() + 2.0);
         }

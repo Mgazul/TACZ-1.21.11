@@ -31,13 +31,14 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 public abstract class AbstractGunItem extends Item implements IGun, IAnimationItem {
     protected AbstractGunItem(Properties pProperties) {
@@ -209,7 +210,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
                 for (int i = 0; i <= roundCount; i++) {
                     int count = Math.min(tmpAmmoCount, stackSize);
                     ItemStack ammoItem = AmmoItemBuilder.create().setId(ammoId).setCount(count).build();
-                    ItemHandlerHelper.giveItemToPlayer(player, ammoItem);
+                    player.getInventory().placeItemBackInInventory(ammoItem);
                     tmpAmmoCount -= stackSize;
                 }
                 setCurrentAmmoCount(gunItem, 0);
@@ -224,26 +225,15 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
      * @param needAmmoCount 需要的弹药 (物品) 数量
      * @return 寻找到的弹药 (物品) 数量
      */
-    @Deprecated
-    public int findAndExtractInventoryAmmos(IItemHandler itemHandler, ItemStack gunItem, int needAmmoCount) {
-        return findAndExtractInventoryAmmo(itemHandler, gunItem, needAmmoCount);
-    }
-
-    /**
-     * 枪械寻弹和扣除背包弹药逻辑
-     * @param itemHandler 目标实体的背包
-     * @param gunItem 枪械物品
-     * @param needAmmoCount 需要的弹药 (物品) 数量
-     * @return 寻找到的弹药 (物品) 数量
-     */
-    public int findAndExtractInventoryAmmo(IItemHandler itemHandler, ItemStack gunItem, int needAmmoCount) {
+    public int findAndExtractInventoryAmmo(ResourceHandler<ItemResource> itemHandler, ItemStack gunItem, int needAmmoCount) {
         int cnt = needAmmoCount;
         // 背包检查
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            ItemStack checkAmmoStack = itemHandler.getStackInSlot(i);
+        for (int i = 0; i < itemHandler.size(); i++) {
+            var resource = itemHandler.getResource(i);
+            ItemStack checkAmmoStack = resource.toStack();
             if (checkAmmoStack.getItem() instanceof IAmmo iAmmo && iAmmo.isAmmoOfGun(gunItem, checkAmmoStack)) {
-                ItemStack extractItem = itemHandler.extractItem(i, cnt, false);
-                cnt = cnt - extractItem.getCount();
+                int extractCount = itemHandler.extract(i, resource, cnt, Transaction.openRoot());
+                cnt = cnt - extractCount;
                 if (cnt <= 0) {
                     break;
                 }

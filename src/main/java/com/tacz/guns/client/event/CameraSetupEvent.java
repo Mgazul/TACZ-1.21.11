@@ -14,6 +14,7 @@ import com.tacz.guns.api.item.gun.AbstractGunItem;
 import com.tacz.guns.api.item.nbt.AttachmentItemDataAccessor;
 import com.tacz.guns.api.modifier.ParameterizedCachePair;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
+import com.tacz.guns.client.renderer.item.GunItemRendererWrapper;
 import com.tacz.guns.client.resource.GunDisplayInstance;
 import com.tacz.guns.client.resource.index.ClientGunIndex;
 import com.tacz.guns.config.client.RenderConfig;
@@ -66,7 +67,7 @@ public class CameraSetupEvent {
         }
         ItemStack stack = KeepingItemRenderer.getRenderer().getCurrentItem();
         // 尝试调用物品的自定义相机动画
-        if (IClientItemExtensions.of(stack.getItem()).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
+        if (stack.getItem() instanceof IGun && GunItemRendererWrapper.INSTANCE instanceof AnimateGeoItemRenderer<?, ?> renderer) {
             renderer.applyLevelCameraAnimation(event, stack, player);
         }
 
@@ -83,7 +84,7 @@ public class CameraSetupEvent {
         }
         ItemStack stack = KeepingItemRenderer.getRenderer().getCurrentItem();
         // 尝试调用物品的自定义相机动画
-        if (IClientItemExtensions.of(stack.getItem()).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
+        if (stack.getItem() instanceof IGun && GunItemRendererWrapper.INSTANCE instanceof AnimateGeoItemRenderer<?, ?> renderer) {
             renderer.applyItemInHandCameraAnimation(event, stack, player);
         }
     }

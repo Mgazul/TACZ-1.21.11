@@ -1,5 +1,6 @@
 package com.tacz.guns.client.gui.overlay;
 
+import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tacz.guns.GunMod;
@@ -144,10 +145,9 @@ public class GunHudOverlay {
         poseStack.popMatrix();
 
         // 图标渲染
-        RenderSystem.enableDepthTest();
+        GlStateManager._enableDepthTest();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        GlStateManager._enableBlend();
 
         // 获取图标
         Identifier hudTexture = display.getHUDTexture();

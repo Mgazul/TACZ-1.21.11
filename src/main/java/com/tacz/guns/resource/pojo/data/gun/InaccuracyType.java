@@ -73,7 +73,7 @@ public enum InaccuracyType {
     }
 
     private static boolean isMove(LivingEntity livingEntity) {
-        double distance = Math.abs(livingEntity.walkDist - livingEntity.walkDistO);
+        double distance = livingEntity.moveDist;
         if (livingEntity instanceof Player player) {
             distance = HitboxHelper.getPlayerVelocity(player).length();
         }

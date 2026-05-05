@@ -23,9 +23,11 @@ import com.tacz.guns.client.resource.GunDisplayInstance;
 import com.tacz.guns.client.resource.pojo.TransformScale;
 import com.tacz.guns.util.RenderDistance;
 import com.tacz.guns.util.math.MathUtil;
+import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
@@ -45,6 +47,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import org.joml.Vector3fc;
 
 import static net.minecraft.world.item.ItemDisplayContext.*;
 
@@ -135,7 +138,7 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
                 lastModel = model;
             }
             IClientPlayerGunOperator clientPlayerGunOperator = IClientPlayerGunOperator.fromLocalPlayer(player);
-            float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+            float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
             float aimingProgress = clientPlayerGunOperator.getClientAimingProgress(partialTicks);
             float zoom = iGun.getAimingZoom(stack);
             float multiplier = 1 - aimingProgress + aimingProgress / (float) Math.sqrt(zoom);
@@ -151,7 +154,7 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
         Optional.ofNullable(getModel(stack)).ifPresent(model -> {
             PoseStack poseStack = event.getPoseStack();
             IClientPlayerGunOperator clientPlayerGunOperator = IClientPlayerGunOperator.fromLocalPlayer(player);
-            float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+            float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
             float aimingProgress = clientPlayerGunOperator.getClientAimingProgress(partialTicks);
             float zoom = iGun.getAimingZoom(stack);
             float multiplier = 1 - aimingProgress + aimingProgress / (float) Math.sqrt(zoom);
@@ -354,5 +357,15 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
             }
         }
         poseStack.translate(0, -1.5, 0);
+    }
+
+    @Override
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i, int i1, boolean b, int i2) {
+
+    }
+
+    @Override
+    public void getExtents(Consumer<Vector3fc> consumer) {
+
     }
 }

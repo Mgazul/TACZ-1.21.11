@@ -499,7 +499,7 @@ public class EntityKineticBullet extends Projectile implements IEntityWithComple
      */
     private Pair<DamageSource, DamageSource> createDamageSources(MaybeMultipartEntity parts) {
         DamageSource source1, source2;
-        var hitPartType = parts.hitPart().getType();
+        var hitPartType = parts.hitPart();
         var directCause = hitPartType.is(PRETEND_MELEE_DAMAGE_ON) ? this.getOwner() : this;
         // 给末影人造成伤害
         if (hitPartType.is(USE_MAGIC_DAMAGE_ON)) {

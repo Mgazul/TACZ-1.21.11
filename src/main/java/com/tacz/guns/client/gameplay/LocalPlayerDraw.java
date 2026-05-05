@@ -4,6 +4,7 @@ import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.event.common.GunDrawEvent;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
+import com.tacz.guns.client.renderer.item.GunItemRendererWrapper;
 import com.tacz.guns.client.sound.SoundPlayManager;
 import com.tacz.guns.network.message.ClientMessagePlayerDrawGun;
 import com.tacz.guns.resource.modifier.AttachmentPropertyManager;
@@ -81,7 +82,7 @@ public class LocalPlayerDraw {
     }
 
     private void doPutAway(ItemStack lastItem, long putAwayTime) {
-        if (IClientItemExtensions.of(lastItem.getItem()).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
+        if (lastItem.getItem() instanceof IGun && GunItemRendererWrapper.INSTANCE instanceof AnimateGeoItemRenderer<?, ?> renderer) {
             renderer.tryExit(lastItem, putAwayTime);
         }
         TimelessAPI.getGunDisplay(lastItem).ifPresent(display -> {
@@ -94,7 +95,7 @@ public class LocalPlayerDraw {
     }
 
     private long getDrawTime(ItemStack lastItem, IGun lastGun, long drawTime) {
-        if (IClientItemExtensions.of(lastItem.getItem()).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
+        if (lastItem.getItem() instanceof IGun && GunItemRendererWrapper.INSTANCE instanceof AnimateGeoItemRenderer<?, ?> renderer) {
             long putAwayTime = renderer.getPutAwayTime(lastItem);
             if (drawTime > putAwayTime) {
                 drawTime = putAwayTime;
