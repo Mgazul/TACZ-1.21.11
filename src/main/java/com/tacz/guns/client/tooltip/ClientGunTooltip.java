@@ -18,10 +18,13 @@ import com.tacz.guns.resource.pojo.data.gun.BulletData;
 import com.tacz.guns.resource.pojo.data.gun.ExtraDamage;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import com.tacz.guns.util.AttachmentDataUtils;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Locale;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
@@ -32,10 +35,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Locale;
 
 public class ClientGunTooltip implements ClientTooltipComponent {
     private static final DecimalFormat FORMAT = new DecimalFormat("#.##%");
@@ -74,7 +73,7 @@ public class ClientGunTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(Font font) {
         int height = 0;
         if (shouldShow(GunTooltipPart.DESCRIPTION) && this.desc != null) {
             height += 10 * this.desc.size() + 2;
@@ -309,17 +308,17 @@ public class ClientGunTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font pFont, int pX, int pY, GuiGraphics guiGraphics) {
+    public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
         IGun iGun = IGun.getIGunOrNull(this.gun);
         if (iGun == null) {
             return;
         }
         if (shouldShow(GunTooltipPart.AMMO_INFO)) {
-            int yOffset = pY;
+            int yOffset = y;
             if (shouldShow(GunTooltipPart.DESCRIPTION) && this.desc != null) {
                 yOffset += this.desc.size() * 10 + 2;
             }
-            guiGraphics.renderItem(ammo, pX, yOffset + 4);
+            graphics.item(ammo, x, yOffset + 4);
         }
     }
 

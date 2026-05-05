@@ -8,7 +8,14 @@ import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.api.item.attachment.AttachmentType;
 import com.tacz.guns.client.animation.screen.RefitTransform;
 import com.tacz.guns.client.gui.components.FlatColorButton;
-import com.tacz.guns.client.gui.components.refit.*;
+import com.tacz.guns.client.gui.components.refit.GunAttachmentSlot;
+import com.tacz.guns.client.gui.components.refit.GunPropertyDiagrams;
+import com.tacz.guns.client.gui.components.refit.HSVSliderGroup;
+import com.tacz.guns.client.gui.components.refit.IComponentTooltip;
+import com.tacz.guns.client.gui.components.refit.IStackTooltip;
+import com.tacz.guns.client.gui.components.refit.InventoryAttachmentSlot;
+import com.tacz.guns.client.gui.components.refit.RefitTurnPageButton;
+import com.tacz.guns.client.gui.components.refit.RefitUnloadButton;
 import com.tacz.guns.client.resource.GunDisplayInstance;
 import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.client.sound.SoundPlayManager;
@@ -17,7 +24,7 @@ import com.tacz.guns.network.message.ClientMessageRefitGun;
 import com.tacz.guns.network.message.ClientMessageUnloadAttachment;
 import com.tacz.guns.sound.SoundManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -25,7 +32,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class GunRefitScreen extends Screen {
@@ -108,11 +114,8 @@ public class GunRefitScreen extends Screen {
     }
 
     @Override
-    protected void renderBlurredBackground(GuiGraphics partialTick) { }
-
-    @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
-        super.render(graphics, mouseX, mouseY, pPartialTick);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
 
         if (!HIDE_GUN_PROPERTY_DIAGRAMS) {
             GunPropertyDiagrams.draw(graphics, font, 11, 11);
@@ -246,7 +249,7 @@ public class GunRefitScreen extends Screen {
                             ClientMessageUnloadAttachment message = new ClientMessageUnloadAttachment(inventory.getSelectedSlot(), RefitTransform.getCurrentTransformType());
                             ClientPacketDistributor.sendToServer(message);
                         } else {
-                            player.displayClientMessage(Component.translatable("gui.tacz.gun_refit.unload.no_space"), true);
+                            player.sendSystemMessage(Component.translatable("gui.tacz.gun_refit.unload.no_space"));
                         }
                     }
                 });

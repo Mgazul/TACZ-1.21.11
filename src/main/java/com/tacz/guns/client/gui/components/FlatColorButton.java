@@ -1,14 +1,13 @@
 package com.tacz.guns.client.gui.components;
 
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-
-import java.util.Collections;
-import java.util.List;
 
 public class FlatColorButton extends Button {
     private boolean isSelect = false;
@@ -33,14 +32,14 @@ public class FlatColorButton extends Button {
         return this;
     }
 
-    public void renderToolTip(GuiGraphics graphics, Screen screen, int pMouseX, int pMouseY) {
+    public void renderToolTip(GuiGraphicsExtractor graphics, Screen screen, int pMouseX, int pMouseY) {
         if (this.isHovered && tooltips != null) {
-            graphics.renderComponentTooltip(screen.getMinecraft().font, tooltips, pMouseX, pMouseY);
+            graphics.setComponentTooltipForNextFrame(screen.getMinecraft().font, tooltips, pMouseX, pMouseY);
         }
     }
 
     @Override
-    public void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         Minecraft minecraft = Minecraft.getInstance();
         Font font = minecraft.font;
         if (isSelect) {

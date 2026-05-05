@@ -4,7 +4,7 @@ import com.tacz.guns.GunMod;
 import com.tacz.guns.init.CompatRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineLabel;
@@ -50,11 +50,11 @@ public class ClothConfigScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(gui, pMouseX, pMouseY, pPartialTick);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor gui, int pMouseX, int pMouseY, float pPartialTick) {
+        this.extractBackground(gui, pMouseX, pMouseY, pPartialTick);
         ActiveTextCollector activetextcollector = gui.textRenderer();
         this.message.visitLines(TextAlignment.CENTER, this.width / 2, 80, -1, activetextcollector);
-        super.render(gui, pMouseX, pMouseY, pPartialTick);
+        super.extractRenderState(gui, pMouseX, pMouseY, pPartialTick);
     }
 
     private void openUrl(String url) {

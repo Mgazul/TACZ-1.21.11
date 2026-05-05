@@ -16,17 +16,16 @@ import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.client.resource.pojo.display.LaserConfig;
 import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.util.LaserColorUtil;
+import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 public class BeamRenderer  {
     public static final Identifier LASER_BEAM_TEXTURE = Identifier.fromNamespaceAndPath(GunMod.MOD_ID, "textures/entity/beam.png");
@@ -81,7 +80,7 @@ public class BeamRenderer  {
     private static void stringVertex(float z, float width, VertexConsumer pConsumer, PoseStack.Pose pPose, int r, int g, int b, boolean fadeOut) {
         float halfWidth = width / 2;
         int endAlpha = fadeOut ? 0 : 255;
-        int light = LightTexture.pack(15, 15);
+        int light = LightCoordsUtil.max(15, 15);
     	pConsumer.addVertex(pPose.pose(), -halfWidth, -halfWidth, 0).setColor(r, g, b, 255).setUv(0, 0).setLight(light);
         pConsumer.addVertex(pPose.pose(), -halfWidth, halfWidth, 0).setColor(r, g, b, 255).setUv(0, 1).setLight(light);
         pConsumer.addVertex(pPose.pose(), -halfWidth, halfWidth, z).setColor(r, g, b, endAlpha).setUv(1, 1).setLight(light);

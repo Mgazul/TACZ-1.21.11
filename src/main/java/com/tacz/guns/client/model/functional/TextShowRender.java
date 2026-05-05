@@ -9,8 +9,8 @@ import com.tacz.guns.client.model.papi.PapiManager;
 import com.tacz.guns.client.resource.pojo.display.gun.TextShow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +47,7 @@ public class TextShowRender implements IFunctionalRenderer {
             boolean shadow = textShow.isShadow();
             int color = textShow.getColorInt();
             float scale = textShow.getScale();
-            int packLight = LightTexture.pack(textShow.getTextLight(), textShow.getTextLight());
+            int packLight = LightCoordsUtil.max(textShow.getTextLight(), textShow.getTextLight());
             int width = font.width(text);
             int xOffset;
             switch (textShow.getAlign()) {

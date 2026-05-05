@@ -5,14 +5,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.client.renderer.LightTexture;
+import java.util.Random;
+import javax.annotation.Nullable;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class BedrockPart {
@@ -62,7 +61,7 @@ public class BedrockPart {
         int cubePackedLight = light;
         if (illuminated) {
             // 最大亮度
-            cubePackedLight = LightTexture.pack(15, 15);
+            cubePackedLight = LightCoordsUtil.max(15, 15);
         }
         if (this.visible) {
             if (!this.cubes.isEmpty() || !this.children.isEmpty()) {

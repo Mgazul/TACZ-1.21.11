@@ -17,10 +17,11 @@ import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.resource.pojo.data.gun.Bolt;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import com.tacz.guns.util.AttachmentDataUtils;
+import java.text.DecimalFormat;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.Identifier;
@@ -28,8 +29,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
-
-import java.text.DecimalFormat;
+import org.joml.Matrix3x2fStack;
 
 public class GunHudOverlay {
     private static final Identifier SEMI = Identifier.fromNamespaceAndPath(GunMod.MOD_ID, "textures/hud/fire_mode_semi.png");
@@ -47,7 +47,7 @@ public class GunHudOverlay {
 
     private static final int MAX_AMMO_COUNT = 9999;
 
-    public static void render(GuiGraphics graphics, float partialTick, int width, int height) {
+    public static void render(GuiGraphicsExtractor graphics, float partialTick, int width, int height) {
         if (!RenderConfig.GUN_HUD_ENABLE.get()) {
             return;
         }
@@ -117,30 +117,31 @@ public class GunHudOverlay {
         // 竖线
         graphics.fill(width - 75, height - 43, width - 74, height - 25, 0xFFFFFFFF);
 
-        PoseStack poseStack = graphics.pose();
+
+        Matrix3x2fStack poseStack = graphics.pose();
 
         Font font = mc.font;
 
         // 数字
-        poseStack.pushPose();
-        poseStack.scale(1.5f, 1.5f, 1);
-        graphics.drawString(font, currentAmmoCountText, (width - 70) / 1.5f, (height - 43) / 1.5f, ammoCountColor, false);
-        poseStack.popPose();
+        poseStack.pushMatrix();
+        poseStack.scale(1.5f, 1.5f);
+        graphics.text(font, currentAmmoCountText, (int) ((width - 70) / 1.5f), (int) ((height - 43) / 1.5f), ammoCountColor, false);
+        poseStack.popMatrix();
 
-        poseStack.pushPose();
-        poseStack.scale(0.8f, 0.8f, 1);
-        graphics.drawString(font, inventoryAmmoCountText, (width - 68 + mc.font.width(currentAmmoCountText) * 1.5f) / 0.8f, (height - 43) / 0.8f, inventoryAmmoCountColor, false);
-        poseStack.popPose();
+        poseStack.pushMatrix();
+        poseStack.scale(0.8f, 0.8f);
+        graphics.text(font, inventoryAmmoCountText, (int) ((width - 68 + mc.font.width(currentAmmoCountText) * 1.5f) / 0.8f), (int) ((height - 43) / 0.8f), inventoryAmmoCountColor, false);
+        poseStack.popMatrix();
 
         // 模组版本信息
-        String minecraftVersion = SharedConstants.getCurrentVersion().getName();
+        String minecraftVersion = SharedConstants.getCurrentVersion().name();
         String modVersion = ModList.get().getModFileById(GunMod.MOD_ID).versionString();
         String debugInfo = String.format("%s-%s", minecraftVersion, modVersion);
         // 文本
-        poseStack.pushPose();
-        poseStack.scale(0.5f, 0.5f, 1);
-        graphics.drawString(font, debugInfo, (int) ((width - 70) / 0.5f), (int) ((height - 29f) / 0.5f), 0xffaaaaaa);
-        poseStack.popPose();
+        poseStack.pushMatrix();
+        poseStack.scale(0.5f, 0.5f);
+        graphics.text(font, debugInfo, (int) ((width - 70) / 0.5f), (int) ((height - 29f) / 0.5f), 0xffaaaaaa);
+        poseStack.popMatrix();
 
         // 图标渲染
         RenderSystem.enableDepthTest();

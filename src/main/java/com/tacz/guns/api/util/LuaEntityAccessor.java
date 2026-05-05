@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 public record LuaEntityAccessor(LivingEntity entity) {
     public void sendActionBar(Component message) {
         if (entity instanceof Player player) {
-            player.displayClientMessage(message, true);
+            player.sendOverlayMessage(message);
         }
     }
 

@@ -37,7 +37,7 @@ public class ZoomKey {
 
     @SubscribeEvent
     public static void onZoomMousePress(InputEvent.MouseButton.Post event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && ZOOM_KEY.matchesMouse(event.getButton())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && ZOOM_KEY.isDown()) {
             doZoomLogic();
         }
     }

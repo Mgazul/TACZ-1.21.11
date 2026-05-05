@@ -3,12 +3,11 @@ package com.tacz.guns.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.world.item.ItemDisplayContext;
-
+import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.function.Function;
+import net.minecraft.util.LightCoordsUtil;
+import net.minecraft.world.item.ItemDisplayContext;
 
 /**
  * visible的优先级低于FunctionalBedrockPart，当visible为false的时候，仍然会执行functionalRenderers
@@ -48,7 +47,7 @@ public class FunctionalBedrockPart extends BedrockPart {
         int cubePackedLight = light;
         if (illuminated) {
             // 最大亮度
-            cubePackedLight = LightTexture.pack(15, 15);
+            cubePackedLight = LightCoordsUtil.max(15, 15);
         }
 
         poseStack.pushPose();

@@ -44,7 +44,7 @@ public class ConfigKey {
             HoverEvent hoverEvent = new HoverEvent.ShowText(Component.translatable("gui.tacz.cloth_config_warning.download"));
             MutableComponent component = Component.translatable("gui.tacz.cloth_config_warning.tips").withStyle(style ->
                     style.applyFormat(ChatFormatting.BLUE).applyFormat(ChatFormatting.UNDERLINE).withClickEvent(clickEvent).withHoverEvent(hoverEvent));
-            player.displayClientMessage(component, true);
+            player.sendSystemMessage(component);
         }
     }
 }

@@ -5,9 +5,11 @@ import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.client.resource.ClientAssetsManager;
 import com.tacz.guns.client.resource.pojo.PackInfo;
 import com.tacz.guns.inventory.tooltip.BlockItemTooltip;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.language.I18n;
@@ -16,9 +18,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ClientBlockItemTooltip implements ClientTooltipComponent {
     private final Identifier blockId;
@@ -40,7 +39,7 @@ public class ClientBlockItemTooltip implements ClientTooltipComponent {
 
 
     @Override
-    public int getHeight() {
+    public int getHeight(Font font) {
         return components.size() * 10 + (packInfo != null ? 16 : 0);
     }
 
@@ -68,7 +67,7 @@ public class ClientBlockItemTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics gui) {
+    public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
     }
 
     private void addText() {

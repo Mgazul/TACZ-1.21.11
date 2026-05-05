@@ -35,7 +35,7 @@ public class FireSelectKey {
 
     @SubscribeEvent
     public static void onFireSelectMousePress(InputEvent.MouseButton.Post event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && FIRE_SELECT_KEY.matchesMouse(event.getButton())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && FIRE_SELECT_KEY.isDown()) {
             doFireSelectLogic();
         }
     }

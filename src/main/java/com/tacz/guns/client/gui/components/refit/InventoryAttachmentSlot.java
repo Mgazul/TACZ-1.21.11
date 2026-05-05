@@ -1,15 +1,13 @@
 package com.tacz.guns.client.gui.components.refit;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.tacz.guns.client.gui.GunRefitScreen;
-import net.minecraft.client.gui.GuiGraphics;
+import java.util.function.Consumer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
 
 public class InventoryAttachmentSlot extends Button implements IStackTooltip {
     private final int slotIndex;
@@ -30,14 +28,14 @@ public class InventoryAttachmentSlot extends Button implements IStackTooltip {
     }
 
     @Override
-    public void renderContents(@Nonnull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void extractContents(@NotNull GuiGraphicsExtractor graphics, int pMouseX, int pMouseY, float pPartialTick) {
         int x = getX(), y = getY();
         if (isHoveredOrFocused()) {
             graphics.blit(GunRefitScreen.SLOT_TEXTURE, x, y, 0, 0, width, height, 18, 18);
         } else {
             graphics.blit(GunRefitScreen.SLOT_TEXTURE, x + 1, y + 1, 1, 1, width - 2, height - 2, 18, 18);
         }
-        graphics.renderItem(inventory.getItem(slotIndex), x + 1, y + 1);
+        graphics.item(inventory.getItem(slotIndex), x + 1, y + 1);
     }
 
     public int getSlotIndex() {

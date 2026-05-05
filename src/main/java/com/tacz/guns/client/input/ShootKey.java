@@ -96,7 +96,7 @@ public class ShootKey {
 
     @SubscribeEvent
     public static void semiShoot(InputEvent.MouseButton.Post event) {
-        if (isInGame() && SHOOT_KEY.matchesMouse(event.getButton())) {
+        if (isInGame() && SHOOT_KEY.isDown()) {
             // 松开鼠标，重置 DryFire 状态
             if (event.getAction() == GLFW.GLFW_RELEASE) {
                 SoundPlayManager.resetDryFireSound();
@@ -114,7 +114,7 @@ public class ShootKey {
                         .map(index -> !index.getGunData().getBurstData().isContinuousShoot())
                         .orElse(false);
                 if (fireMode == FireMode.UNKNOWN) {
-                    player.displayClientMessage(Component.translatable("message.tacz.fire_select.fail"), true);
+                    player.sendOverlayMessage(Component.translatable("message.tacz.fire_select.fail"));
                 }
                 if (fireMode == FireMode.SEMI || isBurstSemi) {
                     lastTimeShootSuccess = IClientPlayerGunOperator.fromLocalPlayer(player).shoot() == ShootResult.SUCCESS;
@@ -144,7 +144,7 @@ public class ShootKey {
                     .map(index -> !index.getGunData().getBurstData().isContinuousShoot())
                     .orElse(false);
             if (fireMode == FireMode.UNKNOWN) {
-                player.displayClientMessage(Component.translatable("message.tacz.fire_select.fail"), true);
+                player.sendOverlayMessage(Component.translatable("message.tacz.fire_select.fail"));
                 return false;
             }
             if (fireMode == FireMode.SEMI || isBurstSemi) {

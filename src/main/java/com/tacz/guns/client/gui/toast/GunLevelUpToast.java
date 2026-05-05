@@ -1,7 +1,8 @@
 package com.tacz.guns.client.gui.toast;
 
+import javax.annotation.Nullable;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.network.chat.Component;
@@ -9,8 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
 
 @OnlyIn(Dist.CLIENT)
 public class GunLevelUpToast implements Toast {
@@ -34,8 +34,7 @@ public class GunLevelUpToast implements Toast {
 
     }
 
-    @NotNull
     @Override
-    public void render(@NotNull GuiGraphics gui, Font toastComponent, long timeSinceLastVisible) {
+    public void extractRenderState(@NotNull GuiGraphicsExtractor gui, @NonNull Font toastComponent, long timeSinceLastVisible) {
     }
 }

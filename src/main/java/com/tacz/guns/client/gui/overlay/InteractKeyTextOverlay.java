@@ -7,7 +7,7 @@ import com.tacz.guns.config.util.InteractKeyConfigRead;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class InteractKeyTextOverlay {
 
-    public static void render(GuiGraphics graphics, float partialTick, int width, int height) {
+    public static void render(GuiGraphicsExtractor graphics, float partialTick, int width, int height) {
         if (RenderConfig.DISABLE_INTERACT_HUD_TEXT.get()) {
             return;
         }
@@ -45,7 +45,7 @@ public class InteractKeyTextOverlay {
         }
     }
 
-    private static void renderBlockText(GuiGraphics graphics, int width, int height, BlockHitResult blockHitResult, LocalPlayer player, Minecraft mc) {
+    private static void renderBlockText(GuiGraphicsExtractor graphics, int width, int height, BlockHitResult blockHitResult, LocalPlayer player, Minecraft mc) {
         BlockPos blockPos = blockHitResult.getBlockPos();
         BlockState block = player.level().getBlockState(blockPos);
         if (InteractKeyConfigRead.canInteractBlock(block)) {
@@ -53,16 +53,16 @@ public class InteractKeyTextOverlay {
         }
     }
 
-    private static void renderEntityText(GuiGraphics graphics, int width, int height, EntityHitResult entityHitResult, Minecraft mc) {
+    private static void renderEntityText(GuiGraphicsExtractor graphics, int width, int height, EntityHitResult entityHitResult, Minecraft mc) {
         Entity entity = entityHitResult.getEntity();
         if (InteractKeyConfigRead.canInteractEntity(entity)) {
             renderText(graphics, width, height, mc.font);
         }
     }
 
-    private static void renderText(GuiGraphics graphics, int width, int height, Font font) {
+    private static void renderText(GuiGraphicsExtractor graphics, int width, int height, Font font) {
         String keyName = InteractKey.INTERACT_KEY.getTranslatedKeyMessage().getString();
         Component title = Component.translatable("gui.tacz.interact_key.text.desc", StringUtils.capitalize(keyName));
-        graphics.drawString(font, title, (int) ((width - font.width(title)) / 2.0f), (int) (height / 2.0f - 25), ChatFormatting.YELLOW.getColor(), false);
+        graphics.text(font, title, (int) ((width - font.width(title)) / 2.0f), (int) (height / 2.0f - 25), ChatFormatting.YELLOW.getColor(), false);
     }
 }

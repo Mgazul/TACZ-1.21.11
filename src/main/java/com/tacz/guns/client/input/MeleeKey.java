@@ -34,7 +34,7 @@ public class MeleeKey {
 
     @SubscribeEvent
     public static void onMeleeMousePress(InputEvent.MouseButton.Post event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && MELEE_KEY.matchesMouse(event.getButton())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && MELEE_KEY.isDown()) {
             doMeleeLogic();
         }
     }

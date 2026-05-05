@@ -1,8 +1,6 @@
 package com.tacz.guns.client.event;
 
-import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.tacz.guns.GunMod;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.client.animation.statemachine.AnimationStateContext;
@@ -17,7 +15,7 @@ import com.tacz.guns.config.client.RenderConfig;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
@@ -42,7 +40,7 @@ public class RenderCrosshairEvent {
     /**
      * 当玩家手上拿着枪时，播放特定动画、或瞄准时需要隐藏准心
      */
-    public static void onRenderCrosshair(GuiGraphics graphics, Window window, DeltaTracker delta, CallbackInfo ci) {
+    public static void onRenderCrosshair(GuiGraphicsExtractor graphics, Window window, DeltaTracker delta, CallbackInfo ci) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             return;
@@ -95,7 +93,7 @@ public class RenderCrosshairEvent {
         isRefitScreen = Minecraft.getInstance().screen instanceof GunRefitScreen;
     }
 
-    private static void renderCrosshair(GuiGraphics graphics, Window window) {
+    private static void renderCrosshair(GuiGraphicsExtractor graphics, Window window) {
         Options options = Minecraft.getInstance().options;
         // 越肩视角可以强制显示准星
         if (!options.getCameraType().isFirstPerson()) {
@@ -121,7 +119,7 @@ public class RenderCrosshairEvent {
         graphics.blit(location, (int) x, (int) y, 0, 0, 16, 16, 16, 16);
     }
 
-    private static void renderHitMarker(GuiGraphics graphics, Window window) {
+    private static void renderHitMarker(GuiGraphicsExtractor graphics, Window window) {
         long remainHitTime = System.currentTimeMillis() - hitTimestamp;
         long remainKillTime = System.currentTimeMillis() - killTimestamp;
         long remainHeadShotTime = System.currentTimeMillis() - headShotTimestamp;

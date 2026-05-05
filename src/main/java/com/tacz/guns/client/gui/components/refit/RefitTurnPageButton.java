@@ -1,16 +1,14 @@
 package com.tacz.guns.client.gui.components.refit;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.tacz.guns.client.gui.GunRefitScreen;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.network.chat.Component;
-
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class RefitTurnPageButton extends Button implements IComponentTooltip {
     private final boolean isUpPage;
@@ -21,7 +19,7 @@ public class RefitTurnPageButton extends Button implements IComponentTooltip {
     }
 
     @Override
-    public void renderContents(@Nonnull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void extractContents(@NotNull GuiGraphicsExtractor graphics, int pMouseX, int pMouseY, float pPartialTick) {
         int x = getX(), y = getY();
         int yOffset = isUpPage ? 0 : 80;
         if (isHoveredOrFocused()) {

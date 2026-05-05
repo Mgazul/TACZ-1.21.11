@@ -6,7 +6,7 @@ import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.config.client.RenderConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +15,7 @@ public class KillAmountOverlay {
     private static long killTimestamp = -1L;
     private static int killAmount = 0;
 
-    public static void render(GuiGraphics graphics, float partialTick, int width, int height) {
+    public static void render(GuiGraphicsExtractor graphics, float partialTick, int width, int height) {
         if (!RenderConfig.KILL_AMOUNT_ENABLE.get()) {
             return;
         }
@@ -51,18 +51,10 @@ public class KillAmountOverlay {
         }
         int color = Mth.hsvToRgb(hue, 0.75f, 1) + (alpha << 24);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-
-        PoseStack poseStack = graphics.pose();
-
-        poseStack.pushPose();
-        {
-            poseStack.scale(0.5f, 0.5f, 1);
-            graphics.drawString(mc.font, text, (int) (width - fontWith / 2.0f), (height - 45) * 2 - 1, color);
-        }
-        poseStack.popPose();
-        RenderSystem.disableBlend();
+        graphics.pose().pushMatrix();
+        graphics.pose().scale(0.5f, 0.5f);
+        graphics.text(mc.font, text, (int) (width - fontWith / 2.0f), (height - 45) * 2 - 1, color);
+        graphics.pose().popMatrix();
     }
 
     public static void markTimestamp() {

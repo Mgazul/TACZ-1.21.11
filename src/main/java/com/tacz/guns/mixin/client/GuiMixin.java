@@ -9,7 +9,7 @@ import com.tacz.guns.client.gui.overlay.KillAmountOverlay;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,12 +24,12 @@ public abstract class GuiMixin {
     @Shadow public abstract int getGuiTicks();
 
     @Inject(method = "renderHotbarAndDecorations", at = @At("HEAD"), cancellable = true)
-    private void renderHotbarAndDecorations(GuiGraphics graphics, DeltaTracker delta, CallbackInfo ci) {
+    private void renderHotbarAndDecorations(GuiGraphicsExtractor graphics, DeltaTracker delta, CallbackInfo ci) {
         PreventsHotbarEvent.onRenderHotbarEvent(ci);
     }
 
     @Inject(method = "renderItemHotbar", at = @At("HEAD"))
-    private void renderItemHotbar(GuiGraphics graphics, DeltaTracker delta, CallbackInfo ci) {
+    private void renderItemHotbar(GuiGraphicsExtractor graphics, DeltaTracker delta, CallbackInfo ci) {
         float partialTick = delta.getGameTimeDeltaPartialTick(false);
         GunHudOverlay.render(graphics, partialTick, graphics.guiWidth(), graphics.guiHeight());
         HeatBarOverlay.render(graphics, getGuiTicks(), partialTick, graphics.guiWidth(), graphics.guiHeight());
@@ -38,7 +38,7 @@ public abstract class GuiMixin {
     }
 
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    private void renderCrosshair(GuiGraphics p_282828_, DeltaTracker p_343490_, CallbackInfo ci) {
+    private void renderCrosshair(GuiGraphicsExtractor p_282828_, DeltaTracker p_343490_, CallbackInfo ci) {
         RenderCrosshairEvent.onRenderCrosshair(p_282828_, minecraft.getWindow(), p_343490_, ci);
     }
 }

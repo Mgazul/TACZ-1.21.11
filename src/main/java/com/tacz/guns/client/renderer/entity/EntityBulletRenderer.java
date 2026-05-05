@@ -10,15 +10,17 @@ import com.tacz.guns.client.resource.GunDisplayInstance;
 import com.tacz.guns.client.resource.InternalAssetLoader;
 import com.tacz.guns.config.client.RenderConfig;
 import com.tacz.guns.entity.EntityKineticBullet;
+import java.util.Objects;
+import java.util.Optional;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -31,9 +33,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-
-import java.util.Objects;
-import java.util.Optional;
 
 public class EntityBulletRenderer extends EntityRenderer<EntityKineticBullet> {
     public EntityBulletRenderer(EntityRendererProvider.Context pContext) {
@@ -63,7 +62,7 @@ public class EntityBulletRenderer extends EntityRenderer<EntityKineticBullet> {
                 poseStack.pushPose();
                 poseStack.translate(0, 1.5, 0);
                 poseStack.scale(-1, -1, 1);
-                ammoEntityModel.render(poseStack, ItemDisplayContext.GROUND, RenderTypes.itemEntityTranslucentCull(textureLocation), packedLight, OverlayTexture.NO_OVERLAY);
+                ammoEntityModel.render(poseStack, ItemDisplayContext.GROUND, RenderTypes.entityTranslucentCullItemTarget(textureLocation), packedLight, OverlayTexture.NO_OVERLAY);
                 poseStack.popPose();
             }
 

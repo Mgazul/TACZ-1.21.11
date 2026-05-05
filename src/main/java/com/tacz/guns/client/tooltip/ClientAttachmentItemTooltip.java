@@ -13,10 +13,14 @@ import com.tacz.guns.client.resource.ClientAssetsManager;
 import com.tacz.guns.client.resource.pojo.PackInfo;
 import com.tacz.guns.inventory.tooltip.AttachmentItemTooltip;
 import com.tacz.guns.resource.pojo.data.attachment.AttachmentData;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,11 +33,6 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class ClientAttachmentItemTooltip implements ClientTooltipComponent {
     private static final Cache<Identifier, List<ItemStack>> CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.SECONDS).build();
@@ -76,7 +75,7 @@ public class ClientAttachmentItemTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(Font font) {
         if (!Screen.hasShiftDown()) {
             return components.size() * 10 + 28;
         }
@@ -121,20 +120,20 @@ public class ClientAttachmentItemTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics gui) {
+    public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
         if (!Screen.hasShiftDown()) {
             return;
         }
         int minY = components.size() * 10 + 3;
         int maxX = getWidth(font);
-        gui.fill(mouseX, mouseY + minY, mouseX + maxX, mouseY + minY + 11, 0x8F00b0ff);
-        gui.drawString(font, support, mouseX + 2, mouseY + minY + 2, 0xe3f2fd);
+        graphics.fill(x, y + minY, x + maxX, y + minY + 11, 0x8F00b0ff);
+        graphics.text(font, support, x + 2, y + minY + 2, 0xe3f2fd);
 
         for (int i = 0; i < showGuns.size(); i++) {
             ItemStack stack = showGuns.get(i);
-            int x = i % 16 * 16 + 2;
-            int y = i / 16 * 18 + minY + 15;
-            gui.renderItem(stack, mouseX + x, mouseY + y);
+            int x1 = i % 16 * 16 + 2;
+            int y1 = i / 16 * 18 + minY + 15;
+            graphics.item(stack, x + x1, y + y1);
         }
     }
 

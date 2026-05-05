@@ -7,7 +7,6 @@ import com.tacz.guns.client.resource.pojo.display.block.BlockDisplay;
 import com.tacz.guns.client.resource.pojo.model.BedrockModelPOJO;
 import com.tacz.guns.client.resource.pojo.model.BedrockVersion;
 import com.tacz.guns.resource.pojo.BlockIndexPOJO;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.Identifier;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +14,6 @@ public class ClientBlockIndex {
     private BedrockModel model;
     private Identifier texture;
     private String name;
-    private ItemTransforms transforms;
     private String tooltipKey;
 
     public static ClientBlockIndex getInstance(BlockIndexPOJO pojo) {
@@ -24,7 +22,6 @@ public class ClientBlockIndex {
         BlockDisplay display = checkDisplay(pojo, index);
         checkModel(display, index);
         checkName(pojo, index);
-        checkTransforms(display, index);
         return index;
     }
 
@@ -69,11 +66,6 @@ public class ClientBlockIndex {
         index.texture = display.getModelTexture();
     }
 
-    private static void checkTransforms(BlockDisplay display, ClientBlockIndex index) {
-        Preconditions.checkArgument(display.getTransforms() != null, "missing transforms");
-        index.transforms = display.getTransforms();
-    }
-
     public BedrockModel getModel() {
         return model;
     }
@@ -86,9 +78,6 @@ public class ClientBlockIndex {
         return name;
     }
 
-    public ItemTransforms getTransforms() {
-        return transforms;
-    }
 
     public String getTooltipKey() {
         return tooltipKey;

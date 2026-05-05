@@ -41,7 +41,7 @@ public class InteractKey {
 
     @SubscribeEvent
     public static void onInteractMousePress(InputEvent.MouseButton.Post event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && INTERACT_KEY.matchesMouse(event.getButton())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && INTERACT_KEY.isDown()) {
             doInteractLogic();
         }
     }

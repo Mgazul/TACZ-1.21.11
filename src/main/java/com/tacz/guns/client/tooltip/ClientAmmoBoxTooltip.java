@@ -3,7 +3,7 @@ package com.tacz.guns.client.tooltip;
 import com.tacz.guns.api.item.IAmmoBox;
 import com.tacz.guns.inventory.tooltip.AmmoBoxTooltip;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
@@ -27,7 +27,7 @@ public class ClientAmmoBoxTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(Font font) {
         return 28;
     }
 
@@ -43,7 +43,7 @@ public class ClientAmmoBoxTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font pFont, int pX, int pY, GuiGraphics pGuiGraphics) {
-        pGuiGraphics.renderItem(ammo, pX, pY + 5);
+    public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
+        graphics.item(ammo, x, y + 5);
     }
 }
