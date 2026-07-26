@@ -47,7 +47,7 @@ public class LocalPlayerDraw {
 
         // 发包通知服务器
         if (Minecraft.getInstance().gameMode != null) {
-            Minecraft.getInstance().gameMode.ensureHasSentCarriedItem();
+            // 1.21 auto-sends carried item info;
         }
         ClientPacketDistributor.sendToServer(ClientMessagePlayerDrawGun.INSTANCE);
         NeoForge.EVENT_BUS.post(new GunDrawEvent(player, lastItem, currentItem, LogicalSide.CLIENT));

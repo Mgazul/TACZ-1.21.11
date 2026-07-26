@@ -98,14 +98,14 @@ public class InteractKey {
         BlockPos blockPos = blockHitResult.getBlockPos();
         BlockState block = player.level().getBlockState(blockPos);
         if (InteractKeyConfigRead.canInteractBlock(block)) {
-            mc.startUseItem();
+            // mc.startUseItem() -- TODO 1.21;
         }
     }
 
     private static void interactEntity(EntityHitResult entityHitResult, Minecraft mc) {
         Entity entity = entityHitResult.getEntity();
         if (InteractKeyConfigRead.canInteractEntity(entity)) {
-            mc.startUseItem();
+            // mc.startUseItem() -- TODO 1.21;
         }
     }
 }
