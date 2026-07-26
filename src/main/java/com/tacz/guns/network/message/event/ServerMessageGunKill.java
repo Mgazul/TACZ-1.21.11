@@ -80,7 +80,7 @@ public class ServerMessageGunKill implements CustomPacketPayload {
         context.enqueueWork(() -> onKill(message));
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void onKill(ServerMessageGunKill message) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {

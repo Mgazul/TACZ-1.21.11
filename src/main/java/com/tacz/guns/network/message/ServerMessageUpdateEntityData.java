@@ -46,7 +46,7 @@ public class ServerMessageUpdateEntityData implements CustomPacketPayload {
         context.enqueueWork(() -> onHandle(message));
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void onHandle(ServerMessageUpdateEntityData message) {
         Level level = Minecraft.getInstance().level;
         if (level == null) {

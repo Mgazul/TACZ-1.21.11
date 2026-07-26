@@ -58,7 +58,7 @@ public class EffectiveRangeModifier implements IAttachmentModifier<Modifier, Flo
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public List<DiagramsData> getPropertyDiagramsData(ItemStack gunItem, GunData gunData, AttachmentCacheProperty cacheProperty) {
         // 必要数据获取
         float modifiedDistance = cacheProperty.getCache(EffectiveRangeModifier.ID);
@@ -92,7 +92,7 @@ public class EffectiveRangeModifier implements IAttachmentModifier<Modifier, Flo
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public int getDiagramsDataSize() {
         return 1;
     }

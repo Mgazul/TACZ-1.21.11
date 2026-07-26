@@ -32,7 +32,7 @@ public class ServerMessageRefreshRefitScreen implements CustomPacketPayload {
         context.enqueueWork(ServerMessageRefreshRefitScreen::updateScreen);
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void updateScreen() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && Minecraft.getInstance().gui.screen() instanceof GunRefitScreen screen) {

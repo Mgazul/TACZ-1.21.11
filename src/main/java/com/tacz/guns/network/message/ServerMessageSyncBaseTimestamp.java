@@ -40,7 +40,7 @@ public class ServerMessageSyncBaseTimestamp implements CustomPacketPayload {
         context.reply(ClientMessageSyncBaseTimestamp.INSTANCE);
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void updateBaseTimestamp(long timestamp) {
         LocalPlayer player = Objects.requireNonNull(Minecraft.getInstance().player);
         LocalPlayerDataHolder dataHolder = IClientPlayerGunOperator.fromLocalPlayer(player).getDataHolder();

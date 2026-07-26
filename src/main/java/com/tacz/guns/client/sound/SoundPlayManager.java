@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
+
 public class SoundPlayManager {
     /**
      * 用于阻止连发时，反复播放 DryFire 音效

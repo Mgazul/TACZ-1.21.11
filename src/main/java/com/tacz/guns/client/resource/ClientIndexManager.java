@@ -24,7 +24,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import java.util.Map;
 import java.util.Set;
 
-@OnlyIn(Dist.CLIENT)
+
 public class ClientIndexManager {
     public static final Map<Identifier, GunDisplayInstance> GUN_DISPLAY = Maps.newHashMap();
     public static final Map<Identifier, ClientGunIndex> GUN_INDEX = Maps.newHashMap();

@@ -39,7 +39,7 @@ public class AmmoItem extends Item implements AmmoItemDataAccessor {
 
     @Override
     @Nonnull
-    @OnlyIn(Dist.CLIENT)
+
     public Component getName(@Nonnull ItemStack stack) {
         Identifier ammoId = this.getAmmoId(stack);
         Optional<ClientAmmoIndex> ammoIndex = TimelessAPI.getClientAmmoIndex(ammoId);
@@ -58,7 +58,7 @@ public class AmmoItem extends Item implements AmmoItemDataAccessor {
         return stacks;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public void appendHoverText(ItemStack p_270235_, Item.TooltipContext p_339644_, TooltipDisplay p_400204_, Consumer<Component> p_400127_, TooltipFlag p_270170_) {
         Identifier ammoId = this.getAmmoId(p_270235_);
         TimelessAPI.getClientAmmoIndex(ammoId).ifPresent(index -> {

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 /**
  * 延迟执行的工具类
  */
-@OnlyIn(Dist.CLIENT)
+
 public final class DelayedTask {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public static LinkedList<BooleanSupplier> SUPPLIERS = Lists.newLinkedList();

@@ -50,13 +50,13 @@ public class AimInaccuracyModifier implements IAttachmentModifier<Map<Inaccuracy
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public List<DiagramsData> getPropertyDiagramsData(ItemStack gunItem, GunData gunData, AttachmentCacheProperty cacheProperty) {
         return List.of();
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public int getDiagramsDataSize() {
         return 0;
     }

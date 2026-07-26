@@ -67,7 +67,7 @@ public class ArmorIgnoreModifier implements IAttachmentModifier<Modifier, Float>
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public List<DiagramsData> getPropertyDiagramsData(ItemStack gunItem, GunData gunData, AttachmentCacheProperty cacheProperty) {
         // 必要数据获取
         IGun iGun = Objects.requireNonNull(IGun.getIGunOrNull(gunItem));
@@ -100,7 +100,7 @@ public class ArmorIgnoreModifier implements IAttachmentModifier<Modifier, Float>
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public int getDiagramsDataSize() {
         return 1;
     }

@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 客户端枪械操纵者
  * 目前仅用于 LocalPlayer
  */
-@OnlyIn(Dist.CLIENT)
+
 public interface IClientPlayerGunOperator {
     class OperatorRegistry {
         private static final Map<LocalPlayer, IClientPlayerGunOperator> OPERATOR_MAP = new ConcurrentHashMap<>();

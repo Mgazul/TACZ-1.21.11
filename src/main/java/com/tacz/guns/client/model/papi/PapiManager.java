@@ -9,7 +9,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import java.util.Map;
 import java.util.function.Function;
 
-@OnlyIn(Dist.CLIENT)
+
 public final class PapiManager {
     private static final Map<String, Function<ItemStack, String>> PAPI = Maps.newHashMap();
 

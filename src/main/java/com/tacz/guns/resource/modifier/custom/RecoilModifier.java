@@ -84,7 +84,7 @@ public class RecoilModifier implements IAttachmentModifier<Pair<Modifier, Modifi
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public List<DiagramsData> getPropertyDiagramsData(ItemStack gunItem, GunData gunData, AttachmentCacheProperty cacheProperty) {
         ParameterizedCachePair<Float, Float> propertyCache = cacheProperty.getCache(RecoilModifier.ID);
         GunRecoil recoil = gunData.getRecoil();
@@ -117,7 +117,7 @@ public class RecoilModifier implements IAttachmentModifier<Pair<Modifier, Modifi
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public int getDiagramsDataSize() {
         return 2;
     }

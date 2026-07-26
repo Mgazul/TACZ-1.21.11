@@ -48,7 +48,7 @@ import java.util.function.BiFunction;
 /**
  * 经过处理和校验的枪械显示数据
  */
-@OnlyIn(Dist.CLIENT)
+
 public class GunDisplayInstance {
     private String thirdPersonAnimation = "empty";
     private BedrockGunModel gunModel;

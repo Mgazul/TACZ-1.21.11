@@ -57,12 +57,12 @@ public class AmmoBoxItem extends Item implements AmmoBoxItemDataAccessor {
         super(properties);
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static int getColor(ItemStack stack, int tintIndex) {
         return tintIndex > 0 ? -1 : DyedItemColor.getOrDefault(stack, 0xff727d6b);
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static float getStatue(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
         int openStatue = OPEN;
         int ammoLevel = IRON_LEVEL;

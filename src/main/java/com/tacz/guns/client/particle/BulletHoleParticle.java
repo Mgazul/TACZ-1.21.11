@@ -175,7 +175,7 @@ public class BulletHoleParticle extends SingleQuadParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static class Provider implements ParticleProvider<BulletHoleOption> {
         public Provider() {
         }

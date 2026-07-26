@@ -81,7 +81,7 @@ public class ServerMessageGunHurt implements CustomPacketPayload {
         context.enqueueWork(() -> onHurt(message));
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void onHurt(ServerMessageGunHurt message) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {

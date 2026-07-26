@@ -38,7 +38,7 @@ public class AttachmentItem extends Item implements AttachmentItemDataAccessor {
 
     @Override
     @Nonnull
-    @OnlyIn(Dist.CLIENT)
+
     public Component getName(@Nonnull ItemStack stack) {
         Identifier attachmentId = this.getAttachmentId(stack);
         Optional<ClientAttachmentIndex> attachmentIndex = TimelessAPI.getClientAttachmentIndex(attachmentId);

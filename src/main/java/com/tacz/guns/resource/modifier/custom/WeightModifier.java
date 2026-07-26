@@ -58,7 +58,7 @@ public class WeightModifier implements IAttachmentModifier<Modifier, Float> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public List<DiagramsData> getPropertyDiagramsData(ItemStack gunItem, GunData gunData, AttachmentCacheProperty cacheProperty) {
         float weight = gunData.getWeight() ;
         float modifiedValue = cacheProperty.<Float>getCache(WeightModifier.ID);
@@ -78,7 +78,7 @@ public class WeightModifier implements IAttachmentModifier<Modifier, Float> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+
     public int getDiagramsDataSize() {
         return 1;
     }

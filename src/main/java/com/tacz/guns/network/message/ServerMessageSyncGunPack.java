@@ -48,7 +48,7 @@ public class ServerMessageSyncGunPack implements CustomPacketPayload {
         return cache;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void doSync(ServerMessageSyncGunPack message) {
         CommonNetworkCache.INSTANCE.fromNetwork(message.cache);
         // 通知客户端重新构建ClientIndex

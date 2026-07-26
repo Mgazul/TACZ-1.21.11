@@ -13,7 +13,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-@OnlyIn(Dist.CLIENT)
+
 public class ClientGunIndex {
     private String name;
     private GunData gunData;

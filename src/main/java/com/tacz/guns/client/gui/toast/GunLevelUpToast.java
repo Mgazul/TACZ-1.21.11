@@ -12,7 +12,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
-@OnlyIn(Dist.CLIENT)
+
 public class GunLevelUpToast implements Toast {
     private final Component title;
     private final Component subTitle;

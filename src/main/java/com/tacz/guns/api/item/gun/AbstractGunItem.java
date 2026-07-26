@@ -303,7 +303,7 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
      */
     @Override
     @Nonnull
-    @OnlyIn(Dist.CLIENT)
+
     public Component getName(@Nonnull ItemStack stack) {
         Identifier gunId = this.getGunId(stack);
         Optional<ClientGunIndex> gunIndex = TimelessAPI.getClientGunIndex(gunId);

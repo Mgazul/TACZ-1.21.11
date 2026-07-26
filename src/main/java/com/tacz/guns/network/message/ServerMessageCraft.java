@@ -37,7 +37,6 @@ public class ServerMessageCraft implements CustomPacketPayload {
         context.enqueueWork(() -> updateScreen(message.menuId));
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static void updateScreen(int containerId) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && player.containerMenu.containerId == containerId && // TODO: 26.2 - GunSmithTableScreen removed

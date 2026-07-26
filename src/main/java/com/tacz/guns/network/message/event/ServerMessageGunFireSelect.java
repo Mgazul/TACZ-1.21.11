@@ -45,7 +45,7 @@ public class ServerMessageGunFireSelect implements CustomPacketPayload {
         context.enqueueWork(() -> doClientEvent(message));
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void doClientEvent(ServerMessageGunFireSelect message) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {

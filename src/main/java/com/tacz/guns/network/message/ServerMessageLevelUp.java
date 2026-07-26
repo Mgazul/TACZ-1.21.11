@@ -41,7 +41,7 @@ public class ServerMessageLevelUp implements CustomPacketPayload {
         context.enqueueWork(() -> onLevelUp(message));
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void onLevelUp(ServerMessageLevelUp message) {
         int level = message.getLevel();
         ItemStack gun = message.getGun();

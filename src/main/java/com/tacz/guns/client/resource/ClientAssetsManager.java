@@ -52,7 +52,7 @@ import java.util.function.Consumer;
  * 客户端资源管理器<br/>
  * 所有枪包资源缓存在此
  */
-@OnlyIn(Dist.CLIENT)
+
 public enum ClientAssetsManager {
     INSTANCE;
     public static final Gson GSON = new GsonBuilder()
@@ -182,7 +182,7 @@ public enum ClientAssetsManager {
         return packInfo.getData(namespace.getNamespace());
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static void reloadAllPack() {
         try {
             Minecraft.getInstance().reloadResourcePacks().get();

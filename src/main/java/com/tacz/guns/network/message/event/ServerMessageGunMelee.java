@@ -45,7 +45,7 @@ public class ServerMessageGunMelee implements CustomPacketPayload {
         context.enqueueWork(() -> doClientEvent(message));
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private static void doClientEvent(ServerMessageGunMelee message) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {
