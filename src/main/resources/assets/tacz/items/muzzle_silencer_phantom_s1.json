@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:attachment/slot/muzzle_silencer_phantom_s1"
-    }
+    "model": "tacz:item/muzzle_silencer_phantom_s1"
   }
 }

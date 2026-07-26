@@ -1,9 +1,9 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/generated",
-    "model": {
-      "type": "tacz:ammo"
+    "type": "minecraft:model",
+    "model": "minecraft:item/generated",
+    "textures": {
+      "layer0": "tacz:ammo/slot/9mm"
     }
   }
 }

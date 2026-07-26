@@ -1,9 +1,9 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/generated",
-    "model": {
-      "type": "tacz:attachment"
+    "type": "minecraft:model",
+    "model": "minecraft:item/generated",
+    "textures": {
+      "layer0": "tacz:attachment/slot/sight_sro_dot"
     }
   }
 }

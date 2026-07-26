@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:attachment/slot/sight_552"
-    }
+    "model": "tacz:item/sight_552"
   }
 }

@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:attachment/slot/grip_rk1_b25u"
-    }
+    "model": "tacz:item/grip_rk1_b25u"
   }
 }

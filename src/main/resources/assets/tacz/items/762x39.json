@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:ammo/slot/762x39"
-    }
+    "model": "tacz:item/762x39"
   }
 }

@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:attachment/slot/oem_stock_tactical"
-    }
+    "model": "tacz:item/oem_stock_tactical"
   }
 }

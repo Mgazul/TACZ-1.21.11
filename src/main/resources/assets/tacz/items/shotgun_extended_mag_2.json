@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:attachment/slot/shotgun_extended_mag_2"
-    }
+    "model": "tacz:item/shotgun_extended_mag_2"
   }
 }

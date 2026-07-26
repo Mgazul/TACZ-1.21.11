@@ -1,9 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/generated",
-    "textures": {
-      "layer0": "tacz:attachment/slot/scope_lpvo_1_6"
-    }
+    "model": "tacz:item/scope_lpvo_1_6"
   }
 }
