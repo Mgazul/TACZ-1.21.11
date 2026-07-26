@@ -9,7 +9,6 @@ import com.tacz.guns.client.model.papi.PapiManager;
 import com.tacz.guns.client.resource.pojo.display.gun.TextShow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -61,9 +60,13 @@ public class TextShowRender implements IFunctionalRenderer {
             poseStack2.last().pose().mul(pose);
             poseStack2.scale(2 / 300f * scale, -2 / 300f * scale, -2 / 300f);
 
-            MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-            font.drawInBatch(text, -xOffset, -font.lineHeight / 2f, color, shadow, poseStack2.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, packLight);
-            bufferSource.endBatch();
+            VertexConsumer vertexConsumer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+                com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+            );
+            // TODO: 26.2 - Font.drawInBatch() removed, use GuiGraphicsExtractor.text()
+            // font.drawInBatch(text, -xOffset, -font.lineHeight / 2f, color, shadow, poseStack2.last().pose(), vertexConsumer, Font.DisplayMode.NORMAL, 0, packLight);
         });
     }
 }

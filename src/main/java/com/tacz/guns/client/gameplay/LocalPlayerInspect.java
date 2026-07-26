@@ -26,9 +26,6 @@ public class LocalPlayerInspect {
         ItemStack mainHandItem = player.getMainHandItem();
 
         if (!(mainHandItem.getItem() instanceof IGun iGun)) {
-            if (IClientItemExtensions.of(mainHandItem).getCustomRenderer() instanceof AnimateGeoItemRenderer<?,?> renderer) {
-                renderer.triggerAnimation(mainHandItem, GunAnimationConstant.INPUT_INSPECT);
-            }
             return;
         }
         // 检查状态锁

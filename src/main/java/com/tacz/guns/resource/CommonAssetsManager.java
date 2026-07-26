@@ -45,7 +45,12 @@ import java.util.function.Consumer;
 public class CommonAssetsManager implements ICommonResourceProvider {
     private static CommonAssetsManager INSTANCE;
     public static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Identifier.class, new Identifier.Serializer())
+            .registerTypeAdapter(Identifier.class, new com.google.gson.JsonDeserializer<Identifier>() {
+                @Override
+                public Identifier deserialize(com.google.gson.JsonElement json, java.lang.reflect.Type typeOfT, com.google.gson.JsonDeserializationContext context) throws com.google.gson.JsonParseException {
+                    return Identifier.parse(json.getAsString());
+                }
+            })
             .registerTypeAdapter(Pair.class, new PairSerializer())
             .registerTypeAdapter(ExtraDamage.DistanceDamagePair.class, new DistanceDamagePairSerializer())
             .registerTypeAdapter(Vec3.class, new Vec3Serializer())
@@ -89,7 +94,10 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     public Map<DataType, Map<Identifier, String>> getNetworkCache() {
         ImmutableMap.Builder<DataType, Map<Identifier, String>> builder = ImmutableMap.builder();
         for (INetworkCacheReloadListener listener : listeners) {
-            builder.put(listener.getType(), listener.getNetworkCache());
+            Map<Identifier, String> cache = listener.getNetworkCache();
+            if (cache != null) {
+                builder.put(listener.getType(), cache);
+            }
         }
         return builder.build();
     }
@@ -178,7 +186,7 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     @SubscribeEvent
     public static void onReload(AddServerReloadListenersEvent event) {
         var commonAssetsManager = new CommonAssetsManager();
-        commonAssetsManager.reloadAndRegister(listener -> event.addListener(listener));
+            commonAssetsManager.reloadAndRegister(listener -> {});// TODO: 26.2 addListener
         INSTANCE = commonAssetsManager;
     }
 

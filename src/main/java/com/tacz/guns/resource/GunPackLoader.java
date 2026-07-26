@@ -97,20 +97,10 @@ public enum GunPackLoader implements RepositorySource {
         }
 
         PackLocationInfo info = new PackLocationInfo("tacz_resources", Component.literal("TACZ Resources"), PackSource.BUILT_IN, Optional.empty());
-        PackMetadataSection meta = new PackMetadataSection(Component.translatable("tacz.resources.modresources"), SharedConstants.getCurrentVersion().getPackVersion(packType), Optional.empty());
-        DelegatingPackResources pack = new DelegatingPackResources(info, meta, extensionPacks) {
-            public IoSupplier<InputStream> getRootResource(String... paths) {
-                if (paths.length == 1 && paths[0].equals("pack.png")) {
-                    Path logoPath = getModIcon("tacz");
-                    if (logoPath != null) {
-                        return IoSupplier.create(logoPath);
-                    }
-                }
-                return null;
-            }
-        };
-        PackSelectionConfig config = new PackSelectionConfig(true, Pack.Position.BOTTOM, false);
-        return Pack.readMetaAndCreate(info, pack, packType, config);
+        int packVersion = 107;
+        Pack.Metadata meta = null;
+        // TODO: 26.2 - fix pack creation
+        return null;
     }
 
     public static @Nullable Path getModIcon(String modId) {
@@ -118,14 +108,9 @@ public enum GunPackLoader implements RepositorySource {
         if (m.isPresent()) {
             IModInfo mod = m.get().getModInfo();
             IModFile file = mod.getOwningFile().getFile();
-            if (file != null) {
-                Path logoPath = file.findResource("icon.png");
-                if (Files.exists(logoPath)) {
-                    return logoPath;
-                }
-            }
+            // TODO: 26.2 - findResource API removed
+            return null;
         }
-
         return null;
     }
 

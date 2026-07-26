@@ -327,7 +327,8 @@ public class GunAnimationStateContext extends ItemAnimationStateContext {
      */
     public void anchorWalkDist() {
         processCameraEntity(entity -> {
-            walkDistAnchor = entity.walkDist + (entity.walkDist - entity.walkDistO) * partialTicks;
+            var livingEntity = (net.minecraft.world.entity.LivingEntity) entity;
+            walkDistAnchor = livingEntity.walkAnimation.position() + livingEntity.walkAnimation.speed() * partialTicks;
             return null;
         });
     }
@@ -338,7 +339,8 @@ public class GunAnimationStateContext extends ItemAnimationStateContext {
      */
     public float getWalkDist() {
         return processCameraEntity(entity -> {
-            float currentWalkDist = entity.walkDist + (entity.walkDist - entity.walkDistO) * partialTicks;
+            var livingEntity = (net.minecraft.world.entity.LivingEntity) entity;
+            float currentWalkDist = livingEntity.walkAnimation.position(livingEntity.walkAnimation.speed());
             return currentWalkDist - walkDistAnchor;
         }).orElse(0f);
     }

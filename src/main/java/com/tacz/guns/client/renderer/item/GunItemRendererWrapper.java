@@ -26,7 +26,6 @@ import com.tacz.guns.util.math.MathUtil;
 import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -166,7 +165,7 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
     }
 
     @Override
-    public void renderFirstPerson(LocalPlayer player, ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource,
+    public void renderFirstPerson(LocalPlayer player, ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, com.mojang.blaze3d.vertex.VertexConsumer bufferSource,
                                   int light, float partialTick) {
         if (!(stack.getItem() instanceof IGun)) {
             return;
@@ -255,7 +254,7 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
 
 
     @Override
-    public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemDisplayContext transformType, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource pBuffer,
+    public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemDisplayContext transformType, @Nonnull PoseStack poseStack, @Nonnull com.mojang.blaze3d.vertex.VertexConsumer pBuffer,
                              int pPackedLight, int pPackedOverlay) {
         if (!(stack.getItem() instanceof IGun)) {
             return;
@@ -274,7 +273,11 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
             if (transformType == GUI) {
                 poseStack.translate(0.5, 1.5, 0.5);
                 poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-                VertexConsumer buffer = pBuffer.getBuffer(RenderTypes.entityTranslucent(gunIndex.getSlotTexture()));
+                VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                    com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+                    com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+                );
                 SLOT_GUN_MODEL.renderToBuffer(poseStack, buffer, pPackedLight, pPackedOverlay);
                 return;
             }
@@ -304,7 +307,11 @@ public class GunItemRendererWrapper extends AnimateGeoItemRenderer<BedrockGunMod
             // 没有这个 gunID，渲染个错误材质提醒别人
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-            VertexConsumer buffer = pBuffer.getBuffer(RenderTypes.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
+            VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+                com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+            );
             SLOT_GUN_MODEL.renderToBuffer(poseStack, buffer, pPackedLight, pPackedOverlay);
         });
         poseStack.popPose();

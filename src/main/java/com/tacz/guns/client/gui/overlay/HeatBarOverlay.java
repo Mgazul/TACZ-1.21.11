@@ -67,15 +67,8 @@ public class HeatBarOverlay {
                                boolean locked, int tickCount) {
         int barColor = getHeatColor(heatPercentage, locked, tickCount);
         pGraphics.fill(w / 2 - 30, h / 2 + 30, w / 2 - 30 + (int) (heatPercentage * 60), h / 2 + 34, barColor);
-        if (locked) {
-            if (tickCount % 20 < 10) {
-                pGraphics.setColor(1, 0.1f, 0.1f, 1);
-            } else {
-                pGraphics.setColor(1, 1, 0.1f, 1);
-            }
-        }
-        pGraphics.blit(HEATBASE, w / 2 - 64, h / 2 - 44, 0, 0, 128, 128, 128, 128);
-        pGraphics.setColor(1, 1, 1, 1);
+        int tintColor = locked && tickCount % 20 < 10 ? 0xFFFF4C4C : -1;
+        pGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, HEATBASE, w / 2 - 64, h / 2 - 44, 0, 0, 128, 128, 128, 128, tintColor);
 
         Font font = Minecraft.getInstance().fontFilterFishy;
         String percentString = locked ? "!OVERHEAT!" : HEAT_FORMAT_PERCENT.format(heatPercentage);
@@ -91,9 +84,9 @@ public class HeatBarOverlay {
         if (percent < 0.4) return 0x9FFFFFFF;
         int color;
         if (percent <= 0.65) {
-            color = ARGB.lerp(percent * 4 - 1.6f, 0x9FFFFFFF, 0x9FFFFF00);
+            color = ARGB.srgbLerp(percent * 4 - 1.6f, 0x9FFFFFFF, 0x9FFFFF00);
         } else {
-            color = ARGB.lerp((percent-0.65f) / 0.35f, 0x9FFFFF00, 0x9FFF0000);
+            color = ARGB.srgbLerp((percent-0.65f) / 0.35f, 0x9FFFFF00, 0x9FFF0000);
         }
         return color;
     }

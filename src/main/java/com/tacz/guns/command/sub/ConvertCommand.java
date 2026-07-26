@@ -19,7 +19,8 @@ public class ConvertCommand {
     }
 
     private static int convert(CommandContext<CommandSourceStack> context) {
-        if (FMLEnvironment.dist == Dist.CLIENT) PackConvertor.convert(context.getSource());
+        // TODO: 26.2 - Dist check
+        if (true) PackConvertor.convert(context.getSource());
         return Command.SINGLE_SUCCESS;
     }
 }

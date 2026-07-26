@@ -21,7 +21,7 @@ public class ModDamageTypes {
 
     public static class Sources {
         private static Holder.Reference<DamageType> getHolder(RegistryAccess access, ResourceKey<DamageType> damageTypeKey) {
-            return access.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(damageTypeKey);
+            return (Holder.Reference<DamageType>) access.lookupOrThrow(net.minecraft.core.registries.Registries.DAMAGE_TYPE).get(damageTypeKey).orElseThrow();
         }
 
         public static DamageSource bullet(RegistryAccess access, Entity bullet, Entity shooter, boolean ignoreArmor) {

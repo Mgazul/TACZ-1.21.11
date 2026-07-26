@@ -27,11 +27,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class AmmoItem extends Item implements AmmoItemDataAccessor {
-    public AmmoItem() {
-        super(new Properties());
+    public AmmoItem(net.minecraft.world.item.Item.Properties properties) {
+        super(properties);
     }
 
-    @Override
     public void verifyComponentsAfterLoad(@NotNull ItemStack stack) {
         TimelessAPI.getCommonAmmoIndex(this.getAmmoId(stack)).map(CommonAmmoIndex::getStackSize).ifPresent(maxStackSize ->
             stack.set(DataComponents.MAX_STACK_SIZE, maxStackSize)

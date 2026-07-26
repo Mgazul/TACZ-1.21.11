@@ -11,7 +11,6 @@ import com.tacz.guns.client.model.IFunctionalRenderer;
 import com.tacz.guns.client.renderer.item.AttachmentItemRenderer;
 import com.tacz.guns.util.RenderDistance;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
@@ -54,8 +53,12 @@ public class AttachmentRender implements IFunctionalRenderer {
                 }
             }, () -> {
                 // 没有对应的 attachmentIndex，渲染黑紫材质以提醒
-                MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-                VertexConsumer buffer = bufferSource.getBuffer(RenderTypes.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
+                RenderType missType = RenderTypes.entityTranslucent(MissingTextureAtlasSprite.getLocation());
+                VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                    missType.primitiveTopology(),
+                    missType.format()
+                );
                 AttachmentItemRenderer.SLOT_ATTACHMENT_MODEL.renderToBuffer(poseStack, buffer, light, overlay);
             });
         }

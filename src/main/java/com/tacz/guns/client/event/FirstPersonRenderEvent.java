@@ -1,4 +1,5 @@
 package com.tacz.guns.client.event;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import com.tacz.guns.GunMod;
 import com.tacz.guns.api.client.animation.statemachine.AnimationStateMachine;
@@ -65,14 +66,19 @@ public class FirstPersonRenderEvent {
 
             GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
             HandRenderer.INSTANCE.renderSolid((poseStack) -> {
+                VertexConsumer bufferBuilder = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(1024),
+                    com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+                    com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+                );
                 renderer.renderFirstPerson(
                     player, stack, transformType,
                     poseStack == null ? event.getPoseStack() : poseStack,
-                    Minecraft.getInstance().renderBuffers().bufferSource(),
+                    bufferBuilder,
                     event.getPackedLight(),
                     event.getPartialTick()
                 );
-            }, event.getPartialTick(), gameRenderer.getMainCamera(), gameRenderer);
+            }, event.getPartialTick(), gameRenderer.mainCamera(), gameRenderer);
             event.setCanceled(true);
         }
     }

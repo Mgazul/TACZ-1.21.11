@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class ProjectileExplosion extends Explosion {
+public class ProjectileExplosion implements Explosion {
     private static final ExplosionDamageCalculator DEFAULT_CONTEXT = new ExplosionDamageCalculator();
     private final Level level;
     private final double x;
@@ -43,9 +43,10 @@ public class ProjectileExplosion extends Explosion {
     private final Entity owner;
     private final Entity exploder;
     private final ExplosionDamageCalculator damageCalculator;
+    private final Explosion.BlockInteraction blockInteraction;
+    private final DamageSource damageSource;
 
     public ProjectileExplosion(Level level, Entity owner, Entity exploder, @Nullable DamageSource source, @Nullable ExplosionDamageCalculator damageCalculator, double x, double y, double z, float power, float radius, boolean knockback, Explosion.BlockInteraction mode) {
-        super(level, exploder, source, damageCalculator, x, y, z, radius, AmmoConfig.EXPLOSIVE_AMMO_FIRE.get(), mode, ParticleTypes.EXPLOSION_EMITTER, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
         this.level = level;
         this.x = x;
         this.y = y;
@@ -56,9 +57,10 @@ public class ProjectileExplosion extends Explosion {
         this.exploder = exploder;
         this.damageCalculator = damageCalculator == null ? DEFAULT_CONTEXT : damageCalculator;
         this.knockback = knockback;
+        this.blockInteraction = mode;
+        this.damageSource = source != null ? source : level.damageSources().explosion(exploder, owner instanceof LivingEntity le ? le : null);
     }
 
-    @Override
     public void explode() {
         this.level.gameEvent(this.exploder, GameEvent.EXPLODE, BlockPos.containing(this.x, this.y, this.z));
         Set<BlockPos> set = Sets.newHashSet();
@@ -75,7 +77,7 @@ public class ProjectileExplosion extends Explosion {
                         d0 /= d3;
                         d1 /= d3;
                         d2 /= d3;
-                        float f = this.radius * (0.7F + this.level.random.nextFloat() * 0.6F);
+                        float f = this.radius * (0.7F + this.level.getRandom().nextFloat() * 0.6F);
                         double blockX = this.x;
                         double blockY = this.y;
                         double blockZ = this.z;
@@ -106,7 +108,6 @@ public class ProjectileExplosion extends Explosion {
             }
         }
 
-        this.getToBlow().addAll(set);
         float radius = this.radius;
         int minX = Mth.floor(this.x - (double) radius - 1.0D);
         int maxX = Mth.floor(this.x + (double) radius + 1.0D);
@@ -116,7 +117,7 @@ public class ProjectileExplosion extends Explosion {
         int maxZ = Mth.floor(this.z + (double) radius + 1.0D);
         radius *= 2;
         List<Entity> entities = this.level.getEntities(this.exploder, new AABB(minX, minY, minZ, maxX, maxY, maxZ));
-        EventHooks.onExplosionDetonate(this.level, this, entities, radius);
+        // TODO: 26.2 - EventHooks.onExplosionDetonate requires ServerExplosion
         Vec3 explosionPos = new Vec3(this.x, this.y, this.z);
 
         for (Entity entity : entities) {
@@ -193,10 +194,54 @@ public class ProjectileExplosion extends Explosion {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(deltaX * damage * multiplier, deltaY * damage * multiplier, deltaZ * damage * multiplier));
                 if (entity instanceof Player player) {
                     if (!player.isSpectator() && (!player.isCreative() || !player.getAbilities().flying)) {
-                        this.getHitPlayers().put(player, new Vec3(deltaX * damage * multiplier, deltaY * damage * multiplier, deltaZ * damage * multiplier));
+                        // TODO: 26.2 - getHitPlayers() not in Explosion interface
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public net.minecraft.server.level.ServerLevel level() {
+        return (net.minecraft.server.level.ServerLevel) this.level;
+    }
+
+    @Override
+    public Explosion.BlockInteraction getBlockInteraction() {
+        return this.blockInteraction;
+    }
+
+    @Override
+    @javax.annotation.Nullable
+    public net.minecraft.world.entity.LivingEntity getIndirectSourceEntity() {
+        if (this.owner instanceof net.minecraft.world.entity.LivingEntity living) return living;
+        if (this.exploder instanceof net.minecraft.world.entity.projectile.Projectile projectile && projectile.getOwner() instanceof net.minecraft.world.entity.LivingEntity living) return living;
+        return null;
+    }
+
+    @Override
+    @javax.annotation.Nullable
+    public net.minecraft.world.entity.Entity getDirectSourceEntity() {
+        return this.exploder;
+    }
+
+    @Override
+    public float radius() {
+        return this.radius;
+    }
+
+    @Override
+    public Vec3 center() {
+        return new Vec3(this.x, this.y, this.z);
+    }
+
+    @Override
+    public boolean canTriggerBlocks() {
+        return true;
+    }
+
+    @Override
+    public boolean shouldAffectBlocklikeEntities() {
+        return this.blockInteraction.shouldAffectBlocklikeEntities();
     }
 }

@@ -21,6 +21,8 @@ import net.neoforged.neoforge.client.event.RenderLivingEvent;
 public class RenderHeadShotAABB {
     @SubscribeEvent
     public static void onRenderEntity(RenderLivingEvent.Post<?, ?, ?> event) {
+        // TODO: 26.2 - event.getEntity() removed, renderLineBox removed
+        /*
         boolean canRender = Minecraft.getInstance().debugEntries.toggleStatus(DebugScreenEntries.ENTITY_HITBOXES);
         if (!canRender) {
             return;
@@ -37,7 +39,10 @@ public class RenderHeadShotAABB {
             // 扩张 0.01，避免和原版显示重合
             aabb = new AABB(-width / 2, eyeHeight - 0.25, -width / 2, width / 2, eyeHeight + 0.25, width / 2).inflate(0.01);
         }
-        VertexConsumer buffer = event.getMultiBufferSource().getBuffer(RenderTypes.lines());
-        LevelRenderer.renderLineBox(event.getPoseStack(), buffer, aabb, 1.0F, 1.0F, 0.0F, 1.0F);
+        // TODO: 26.2 - use event.getSubmitNodeCollector() instead of MultiBufferSource
+        event.getSubmitNodeCollector().submitCustomGeometry(event.getPoseStack(), RenderTypes.lines(), (pose, buffer) -> {
+            LevelRenderer.renderLineBox(event.getPoseStack(), buffer, aabb, 1.0F, 1.0F, 0.0F, 1.0F);
+        });
+        */
     }
 }

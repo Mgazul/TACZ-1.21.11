@@ -9,7 +9,6 @@ import com.tacz.guns.client.model.BedrockAmmoModel;
 import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
 import com.tacz.guns.client.resource.pojo.TransformScale;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
@@ -29,6 +28,15 @@ public class AmmoItemRenderer implements NoDataSpecialModelRenderer {
     public static final AmmoItemRenderer INSTANCE = new AmmoItemRenderer();
     private static final SlotModel SLOT_AMMO_MODEL = new SlotModel();
 
+
+    @Override
+    public void submit(PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector submitNodeCollector, int light, int overlay, boolean outline, int color) {
+    }
+
+    @Override
+    public void getExtents(java.util.function.Consumer<org.joml.Vector3fc> consumer) {
+        consumer.accept(new org.joml.Vector3f(0, 0, 0));
+    }
 
     private static void applyPositioningNodeTransform(List<BedrockPart> nodePath, PoseStack poseStack, Vector3f scale) {
         if (nodePath == null) {
@@ -53,7 +61,7 @@ public class AmmoItemRenderer implements NoDataSpecialModelRenderer {
         poseStack.translate(0, -1.5, 0);
     }
 
-    public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemDisplayContext transformType, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
+    public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemDisplayContext transformType, @Nonnull PoseStack poseStack, @Nonnull Object pBuffer, int pPackedLight, int pPackedOverlay) {
         if (!(stack.getItem() instanceof IAmmo iAmmo)) {
             return;
         }
@@ -67,7 +75,7 @@ public class AmmoItemRenderer implements NoDataSpecialModelRenderer {
             if (transformType == GUI || ammoModel == null || modelTexture == null) {
                 poseStack.translate(0.5, 1.5, 0.5);
                 poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-                VertexConsumer buffer = pBuffer.getBuffer(RenderTypes.entityTranslucent(ammoIndex.getSlotTextureLocation()));
+                com.mojang.blaze3d.vertex.VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(new com.mojang.blaze3d.vertex.ByteBufferBuilder(256), com.mojang.blaze3d.PrimitiveTopology.TRIANGLES, com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
                 SLOT_AMMO_MODEL.renderToBuffer(poseStack, buffer, pPackedLight, pPackedOverlay);
                 return;
             }
@@ -87,7 +95,7 @@ public class AmmoItemRenderer implements NoDataSpecialModelRenderer {
             // 没有这个 ammoID，渲染个错误材质提醒别人
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-            VertexConsumer buffer = pBuffer.getBuffer(RenderTypes.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
+            com.mojang.blaze3d.vertex.VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(new com.mojang.blaze3d.vertex.ByteBufferBuilder(256), com.mojang.blaze3d.PrimitiveTopology.TRIANGLES, com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
             SLOT_AMMO_MODEL.renderToBuffer(poseStack, buffer, pPackedLight, pPackedOverlay);
         });
         poseStack.popPose();

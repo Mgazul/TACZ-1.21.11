@@ -36,7 +36,7 @@ public class Serializers {
 
         @Override
         public Boolean read(HolderLookup.Provider provider, Tag tag) {
-            return ((ByteTag) tag).getAsByte() != 0;
+            return ((ByteTag) tag).byteValue() != 0;
         }
     };
 
@@ -58,7 +58,7 @@ public class Serializers {
 
         @Override
         public Byte read(HolderLookup.Provider provider, Tag tag) {
-            return ((ByteTag) tag).getAsByte();
+            return ((ByteTag) tag).byteValue();
         }
     };
 
@@ -80,7 +80,7 @@ public class Serializers {
 
         @Override
         public Short read(HolderLookup.Provider provider, Tag tag) {
-            return ((ShortTag) tag).getAsShort();
+            return ((ShortTag) tag).shortValue();
         }
     };
 
@@ -102,7 +102,7 @@ public class Serializers {
 
         @Override
         public Integer read(HolderLookup.Provider provider, Tag tag) {
-            return ((IntTag) tag).getAsInt();
+            return ((IntTag) tag).intValue();
         }
     };
 
@@ -124,7 +124,7 @@ public class Serializers {
 
         @Override
         public Long read(HolderLookup.Provider provider, Tag tag) {
-            return ((LongTag) tag).getAsLong();
+            return ((LongTag) tag).longValue();
         }
     };
 
@@ -146,7 +146,7 @@ public class Serializers {
 
         @Override
         public Float read(HolderLookup.Provider provider, Tag tag) {
-            return ((FloatTag) tag).getAsFloat();
+            return ((FloatTag) tag).floatValue();
         }
     };
 
@@ -168,7 +168,7 @@ public class Serializers {
 
         @Override
         public Double read(HolderLookup.Provider provider, Tag tag) {
-            return ((DoubleTag) tag).getAsDouble();
+            return ((DoubleTag) tag).doubleValue();
         }
     };
 
@@ -190,7 +190,7 @@ public class Serializers {
 
         @Override
         public Character read(HolderLookup.Provider provider, Tag tag) {
-            return (char) ((IntTag) tag).getAsInt();
+            return (char) ((IntTag) tag).intValue();
         }
     };
 
@@ -212,7 +212,7 @@ public class Serializers {
 
         @Override
         public String read(HolderLookup.Provider provider, Tag tag) {
-            return tag.getAsString();
+            return tag.asString().orElse("");
         }
     };
 
@@ -256,7 +256,7 @@ public class Serializers {
 
         @Override
         public BlockPos read(HolderLookup.Provider provider, Tag tag) {
-            return BlockPos.of(((LongTag) tag).getAsLong());
+            return BlockPos.of(((LongTag) tag).longValue());
         }
     };
 
@@ -282,7 +282,7 @@ public class Serializers {
         @Override
         public UUID read(HolderLookup.Provider provider, Tag tag) {
             CompoundTag compound = (CompoundTag) tag;
-            return new UUID(compound.getLong("Most"), compound.getLong("Least"));
+            return new UUID(compound.getLong("Most").orElse(0L), compound.getLong("Least").orElse(0L));
         }
     };
 
@@ -294,17 +294,18 @@ public class Serializers {
 
         @Override
         public ItemStack read(FriendlyByteBuf buf) {
-            return buf.readJsonWithCodec(ItemStack.CODEC);
+            // TODO: 26.2 - need RegistryFriendlyByteBuf for ItemStreamCodec
+            return ItemStack.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, buf.readNbt()).getOrThrow();
         }
 
         @Override
         public Tag write(HolderLookup.Provider provider, ItemStack value) {
-            return value.save(provider, new CompoundTag());
+            return ItemStack.CODEC.encodeStart(provider.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), value).getOrThrow();
         }
 
         @Override
         public ItemStack read(HolderLookup.Provider provider, Tag tag) {
-            return ItemStack.parseOptional(provider, (CompoundTag) tag);
+            return ItemStack.CODEC.parse(provider.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), (CompoundTag) tag).getOrThrow();
         }
     };
 
@@ -326,7 +327,7 @@ public class Serializers {
 
         @Override
         public Identifier read(HolderLookup.Provider provider, Tag tag) {
-            return Identifier.tryParse(tag.getAsString());
+            return Identifier.tryParse(tag.asString().orElse(""));
         }
     };
 }

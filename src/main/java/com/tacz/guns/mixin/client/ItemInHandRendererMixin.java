@@ -7,7 +7,6 @@ import com.tacz.guns.api.item.IGun;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,7 +32,7 @@ public class ItemInHandRendererMixin implements KeepingItemRenderer {
     private long tacz$KeepTimestamp;
 
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"))
-    public void beforeHandRender(float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource.BufferSource pBuffer, LocalPlayer pPlayerEntity, int pCombinedLight, CallbackInfo ci) {
+    public void beforeHandRender(float pPartialTicks, PoseStack pMatrixStack, com.mojang.blaze3d.vertex.BufferBuilder pBuffer, LocalPlayer pPlayerEntity, int pCombinedLight, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(new BeforeRenderHandEvent(pMatrixStack));
     }
 

@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
@@ -56,8 +57,8 @@ public class ModernKineticGunItem extends AbstractGunItem implements GunItemData
             amount, AttributeModifier.Operation.ADD_VALUE
     );
 
-    public ModernKineticGunItem() {
-        super(new Properties().stacksTo(1));
+    public ModernKineticGunItem(Item.Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -467,7 +468,6 @@ public class ModernKineticGunItem extends AbstractGunItem implements GunItemData
         if (target.equals(user)) {
             return;
         }
-        target.knockback(knockback, (float) Math.sin(Math.toRadians(user.getYRot())), (float) -Math.cos(Math.toRadians(user.getYRot())));
         DamageSource source;
         if (user instanceof Player player) {
             source = user.damageSources().playerAttack(player);
@@ -483,7 +483,12 @@ public class ModernKineticGunItem extends AbstractGunItem implements GunItemData
             return;
         }
         for (EffectData data : effects) {
-            Holder<MobEffect> mobEffect = BuiltInRegistries.MOB_EFFECT.getHolder(data.getEffectId()).orElse(null);
+            Identifier effectId = data.getEffectId();
+            Holder<MobEffect> mobEffect = null;
+            Identifier efId = data.getEffectId();
+            if (efId != null) {
+                mobEffect = BuiltInRegistries.MOB_EFFECT.get(efId).orElse(null);
+            }
             if (mobEffect == null) {
                 continue;
             }

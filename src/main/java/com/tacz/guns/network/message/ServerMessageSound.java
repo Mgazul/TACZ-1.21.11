@@ -15,7 +15,8 @@ public class ServerMessageSound implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ServerMessageSound> TYPE = new CustomPacketPayload.Type<>(
         Identifier.fromNamespaceAndPath(GunMod.MOD_ID, "server_sound")
     );
-    public static final StreamCodec<RegistryFriendlyByteBuf, ServerMessageSound> STREAM_CODEC = NeoForgeStreamCodecs.composite(
+    // TODO: 26.2 - NeoForgeStreamCodecs removed, need proper StreamCodec
+    public static final StreamCodec<RegistryFriendlyByteBuf, ServerMessageSound> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.INT, ServerMessageSound::getEntityId,
         Identifier.STREAM_CODEC, ServerMessageSound::getGunId,
         Identifier.STREAM_CODEC, ServerMessageSound::getGunDisplayId,

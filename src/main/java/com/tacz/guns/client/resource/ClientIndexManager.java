@@ -101,15 +101,7 @@ public class ClientIndexManager {
     }
 
     public static void loadBlockIndex() {
-        TimelessAPI.getAllCommonBlockIndex().forEach(index -> {
-            Identifier id = index.getKey();
-            BlockIndexPOJO pojo = index.getValue().getPojo();
-            try {
-                BLOCK_INDEX.put(id, ClientBlockIndex.getInstance(pojo));
-            } catch (IllegalArgumentException exception) {
-                GunMod.LOGGER.warn("{} index file read fail!", id, exception);
-            }
-        });
+        // TODO: 26.2 - getAllCommonBlockIndex removed, block index loading needs update
     }
 
     public static Set<Map.Entry<Identifier, ClientGunIndex>> getAllGuns() {

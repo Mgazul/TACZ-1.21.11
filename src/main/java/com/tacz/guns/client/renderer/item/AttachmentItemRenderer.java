@@ -10,7 +10,6 @@ import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.util.RenderDistance;
 import java.util.function.Consumer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -27,10 +26,21 @@ import org.joml.Vector3fc;
 public class AttachmentItemRenderer implements NoDataSpecialModelRenderer {
     public static AttachmentItemRenderer INSTANCE;
     public static final SlotModel SLOT_ATTACHMENT_MODEL = new SlotModel();
-    public final ItemStack stack;
+    public ItemStack stack;
+    private ItemDisplayContext displayContext;
 
-    public AttachmentItemRenderer(ItemStack stack) {
+    public AttachmentItemRenderer() {
+        this.stack = ItemStack.EMPTY;
+    }
+
+    public void setItemAndContext(ItemStack stack, ItemDisplayContext context) {
         this.stack = stack;
+        this.displayContext = context;
+    }
+
+    @Override
+    public void getExtents(java.util.function.Consumer<org.joml.Vector3fc> consumer) {
+        consumer.accept(new org.joml.Vector3f(0, 0, 0));
     }
 
     @Override
@@ -39,33 +49,38 @@ public class AttachmentItemRenderer implements NoDataSpecialModelRenderer {
             Identifier attachmentId = iAttachment.getAttachmentId(stack);
             poseStack.pushPose();
             TimelessAPI.getClientAttachmentIndex(attachmentId).ifPresentOrElse(attachmentIndex -> {
-                // GUI 特殊渲染
-                if (itemDisplayContext == ItemDisplayContext.GUI) {
+                if (displayContext == ItemDisplayContext.GUI) {
                     poseStack.translate(0.5, 1.5, 0.5);
                     poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-                    VertexConsumer buffer = submitNodeCollector.getBuffer(RenderTypes.entityTranslucent(attachmentIndex.getSlotTexture()));
+                    VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                        new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                        com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+                        com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+                    );
                     SLOT_ATTACHMENT_MODEL.renderToBuffer(poseStack, buffer, i, i1);
                     return;
                 }
                 poseStack.translate(0.5, 2, 0.5);
-                // 反转模型
                 poseStack.scale(-1, -1, 1);
-                if (itemDisplayContext == ItemDisplayContext.FIXED) {
+                if (displayContext == ItemDisplayContext.FIXED) {
                     poseStack.mulPose(Axis.YN.rotationDegrees(90f));
                 }
-                this.renderDefaultAttachment(itemDisplayContext, poseStack, submitNodeCollector, i, i1, attachmentIndex);
+                this.renderDefaultAttachment(displayContext, poseStack, null, i, i1, attachmentIndex);
             }, () -> {
-                // 没有这个 attachmentId，渲染黑紫材质以提醒
                 poseStack.translate(0.5, 1.5, 0.5);
                 poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-                VertexConsumer buffer = submitNodeCollector.getBuffer(RenderTypes.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
+                VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                    com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+                    com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+                );
                 SLOT_ATTACHMENT_MODEL.renderToBuffer(poseStack, buffer, i, i1);
             });
             poseStack.popPose();
         }
     }
 
-    private void renderDefaultAttachment(@NotNull ItemDisplayContext transformType, @NotNull PoseStack poseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay, ClientAttachmentIndex attachmentIndex) {
+    private void renderDefaultAttachment(@NotNull ItemDisplayContext transformType, @NotNull PoseStack poseStack, @org.jetbrains.annotations.Nullable com.mojang.blaze3d.vertex.VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, ClientAttachmentIndex attachmentIndex) {
         BedrockAttachmentModel model = attachmentIndex.getAttachmentModel();
         Identifier texture = attachmentIndex.getModelTexture();
         // 有模型？正常渲染
@@ -87,13 +102,9 @@ public class AttachmentItemRenderer implements NoDataSpecialModelRenderer {
             if (transformType == ItemDisplayContext.FIXED) {
                 poseStack.mulPose(Axis.YP.rotationDegrees(90));
             }
-            VertexConsumer buffer = pBuffer.getBuffer(RenderTypes.entityTranslucent(attachmentIndex.getSlotTexture()));
+            VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(new com.mojang.blaze3d.vertex.ByteBufferBuilder(256), com.mojang.blaze3d.PrimitiveTopology.TRIANGLES, com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
             SLOT_ATTACHMENT_MODEL.renderToBuffer(poseStack, buffer, pPackedLight, pPackedOverlay);
         }
     }
 
-    @Override
-    public void getExtents(Consumer<Vector3fc> consumer) {
-
-    }
 }

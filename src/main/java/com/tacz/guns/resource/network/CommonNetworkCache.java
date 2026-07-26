@@ -110,6 +110,7 @@ public enum CommonNetworkCache implements ICommonResourceProvider {
                 case GUN_INDEX:
                 case AMMO_INDEX:
                 case ATTACHMENT_INDEX:
+                // TODO: 26.2
                 case BLOCK_INDEX:
                     delayed.put(entry.getKey(), entry.getValue());
                     break;

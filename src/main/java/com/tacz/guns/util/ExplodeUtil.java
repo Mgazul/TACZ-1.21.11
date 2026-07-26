@@ -25,20 +25,11 @@ public class ExplodeUtil {
         }
         // 创建爆炸
         ProjectileExplosion explosion = new ProjectileExplosion(level, owner, exploder, null, null, hitPos.x(), hitPos.y(), hitPos.z(), damage, radius, knockback, mode);
-        // 监听 forge 事件
-        if (EventHooks.onExplosionStart(level, explosion)) {
-            return;
-        }
-        // 执行爆炸逻辑
+        // TODO: 26.2 - Explosion API changed from class to interface
+        // EventHooks.onExplosionStart(level, explosion);
         explosion.explode();
-        explosion.finalizeExplosion(true);
-        if (mode == Explosion.BlockInteraction.KEEP) {
-            explosion.clearToBlow();
-        }
-        // 客户端发包，发送爆炸相关信息
-        level.players().stream().filter(player -> Mth.sqrt((float) player.distanceToSqr(hitPos)) < AmmoConfig.EXPLOSIVE_AMMO_VISIBLE_DISTANCE.get()).forEach(player -> {
-            ClientboundExplodePacket packet = new ClientboundExplodePacket(hitPos.x(), hitPos.y(), hitPos.z(), radius, explosion.getToBlow(), explosion.getHitPlayers().get(player), mode, explosion.getSmallExplosionParticles(), explosion.getLargeExplosionParticles(), explosion.getExplosionSound());
-            player.connection.send(packet);
-        });
+        // finalizeExplosion(true);
+        // clearToBlow();
+        // ClientboundExplodePacket API changed
     }
 }

@@ -1,7 +1,6 @@
 package com.tacz.guns.client.model;
 
 import com.mojang.blaze3d.opengl.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.tacz.guns.api.client.gameplay.IClientPlayerGunOperator;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
@@ -15,7 +14,6 @@ import com.tacz.guns.compat.iris.IrisCompat;
 import com.tacz.guns.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -199,22 +197,18 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
         }
         BedrockPart part = path.get(path.size() - 1);
         part.visible = true;
-        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer vertexConsumer = bufferSource.getBuffer(renderType);
+        VertexConsumer vertexConsumer = new BufferBuilder(new ByteBufferBuilder(786432), renderType.primitiveTopology(), renderType.format());
         part.render(poseStack, transformType, vertexConsumer, light, overlay);
-        if (!IrisCompat.endBatch(bufferSource)) {
-            bufferSource.endBatch(renderType);
-        }
         part.visible = false;
         poseStack.popPose();
     }
 
     private void renderOcularStencil(PoseStack matrixStack, ItemDisplayContext transformType, RenderType renderType, int light, int overlay, boolean isScope) {
         if (!ocularNodePaths.isEmpty()) {
-            GlStateManager._colorMask(false, false, false, false);
+            GlStateManager._colorMask(0);
             GlStateManager._depthMask(false);
-            RenderSystem.stencilMask(0xFF);
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+            GlStateManager._stencilMask(0xFF);
+            GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
             // 绘制目镜
             for (int i = ocularNodePaths.size() - 1; i >= 0; i--) {
                 if (isScope == isScopeOcular.get(i)) {
@@ -223,9 +217,9 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
                 }
             }
             // 恢复渲染状态
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-            RenderSystem.depthMask(true);
-            RenderSystem.colorMask(true, true, true, true);
+            GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+            GlStateManager._depthMask(true);
+            GlStateManager._colorMask(15);
         }
     }
 
@@ -243,9 +237,9 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
     private void renderOcularAndDivision(PoseStack matrixStack, ItemDisplayContext transformType, RenderType renderType, int light, int overlay, boolean selective) {
         if (!ocularNodePaths.isEmpty()) {
             // 准备渲染圆形模板层
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_INVERT);
-            RenderSystem.colorMask(false, false, false, false);
-            RenderSystem.depthMask(false);
+            GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_INVERT);
+            GlStateManager._colorMask(0);
+            GlStateManager._depthMask(false);
             // 80是一个随便找的大小合适的数值。
             float rad = 80 * scopeViewRadiusModifier;
             LocalPlayer player = Minecraft.getInstance().player;
@@ -260,7 +254,12 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
                 Vector3f ocularCenter = getBedrockPartCenter(matrixStack, ocularNodePaths.get(i));
                 float centerX = ocularCenter.x() * 16 * 90;
                 float centerY = ocularCenter.y() * 16 * 90;
-                BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
+                // TODO: 26.2 - Tesselator/BufferUploader removed, use direct BufferBuilder
+                com.mojang.blaze3d.vertex.BufferBuilder builder = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(4096),
+                    com.mojang.blaze3d.PrimitiveTopology.TRIANGLE_FAN,
+                    com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR
+                );
                 builder.addVertex(centerX, centerY, -90.0F).setColor(255, 255, 255, 255);
                 for (int j = 0; j <= 90; j++) {
                     float angle = (float) j * ((float) Math.PI * 2F) / 90.0F;
@@ -268,11 +267,10 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
                     float cos = Mth.cos(angle);
                     builder.addVertex(centerX + cos * rad, centerY + sin * rad, -90.0F).setColor(255, 255, 255, 255);
                 }
-                BufferUploader.drawWithShader(builder.buildOrThrow());
             }
-            RenderSystem.depthMask(true);
-            RenderSystem.colorMask(true, true, true, true);
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+            GlStateManager._depthMask(true);
+            GlStateManager._colorMask(15);
+            GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
             for (int i = 0; i < ocularNodePaths.size() && i < divisionNodePaths.size(); i++) {
                 if (i > Byte.MAX_VALUE) {
                     throw new IllegalArgumentException("Index of oculus is out of range for 127");
@@ -296,11 +294,10 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
     private void renderBoth(PoseStack matrixStack, ItemDisplayContext transformType, RenderType renderType, int light, int overlay) {
         RenderHelper.enableItemEntityStencilTest();
         // 清空模板缓冲区、准备绘制模板缓冲
-        RenderSystem.clearStencil(0);
-        RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.ON_OSX);
+        GlStateManager._clear(GL11.GL_STENCIL_BUFFER_BIT);
         if (ocularRingPath != null) {
             GlStateManager._stencilFunc(GL11.GL_ALWAYS, 0, 0xFF);
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+            GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
             // 渲染目镜外环
             renderTempPart(matrixStack, transformType, renderType, light, overlay, ocularRingPath);
         }
@@ -325,8 +322,7 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
     private void renderSight(PoseStack matrixStack, ItemDisplayContext transformType, RenderType renderType, int light, int overlay) {
         RenderHelper.enableItemEntityStencilTest();
         // 清空模板缓冲区、准备绘制模板缓冲
-        RenderSystem.clearStencil(0);
-        RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.ON_OSX);
+        GlStateManager._clear(GL11.GL_STENCIL_BUFFER_BIT);
         // 渲染目镜以写入模板桓冲值
         renderOcularStencil(matrixStack, transformType, renderType, light, overlay, false);
         // 渲染划分
@@ -344,12 +340,11 @@ public class BedrockAttachmentModel extends BedrockAnimatedModel {
     private void renderScope(PoseStack matrixStack, ItemDisplayContext transformType, RenderType renderType, int light, int overlay) {
         RenderHelper.enableItemEntityStencilTest();
         // 清空模板缓冲区、准备绘制模板缓冲
-        RenderSystem.clearStencil(0);
-        RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.ON_OSX);
+        GlStateManager._clear(GL11.GL_STENCIL_BUFFER_BIT);
         // 渲染目镜外环
         if (ocularRingPath != null) {
             GlStateManager._stencilFunc(GL11.GL_ALWAYS, 0, 0xFF);
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+            GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
             renderTempPart(matrixStack, transformType, renderType, light, overlay, ocularRingPath);
         }
         // 渲染目镜以写入模板桓冲值

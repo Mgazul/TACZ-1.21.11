@@ -2,7 +2,6 @@ package com.tacz.guns.compat.iris;
 
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
-import net.minecraft.client.renderer.MultiBufferSource;
 
 public class IrisCompatInner {
     public static boolean isPackInUseQuick() {
@@ -11,9 +10,5 @@ public class IrisCompatInner {
 
     public static boolean isRenderShadow() {
         return ShadowRenderingState.areShadowsCurrentlyBeingRendered();
-    }
-
-    public static boolean endBatch(MultiBufferSource.BufferSource bufferSource) {
-        return false;
     }
 }

@@ -63,6 +63,6 @@ public class InteractKeyTextOverlay {
     private static void renderText(GuiGraphicsExtractor graphics, int width, int height, Font font) {
         String keyName = InteractKey.INTERACT_KEY.getTranslatedKeyMessage().getString();
         Component title = Component.translatable("gui.tacz.interact_key.text.desc", StringUtils.capitalize(keyName));
-        graphics.text(font, title, (int) ((width - font.width(title)) / 2.0f), (int) (height / 2.0f - 25), ChatFormatting.YELLOW.getColor(), false);
+        graphics.text(font, title, (int) ((width - font.width(title)) / 2.0f), (int) (height / 2.0f - 25), 0xFFFF55, false);
     }
 }

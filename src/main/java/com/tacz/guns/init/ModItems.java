@@ -16,14 +16,14 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(GunMod.MOD_ID);
 
-    public static DeferredItem<ModernKineticGunItem> MODERN_KINETIC_GUN = ITEMS.register("modern_kinetic_gun", ModernKineticGunItem::new);
+    public static DeferredItem<ModernKineticGunItem> MODERN_KINETIC_GUN = ITEMS.registerItem("modern_kinetic_gun", ModernKineticGunItem::new, p -> p.stacksTo(1));
 
-//    public static RegistryObject<ThrowableItem> M67 = ITEMS.register("m67", ThrowableItem::new);
+//    public static RegistryObject<ThrowableItem> M67 = ITEMS.registerItem("m67", ThrowableItem::new);
 
-    public static DeferredItem<Item> AMMO = ITEMS.register("ammo", AmmoItem::new);
-    public static DeferredItem<AttachmentItem> ATTACHMENT = ITEMS.register("attachment", AttachmentItem::new);
+    public static DeferredItem<Item> AMMO = ITEMS.registerItem("ammo", AmmoItem::new);
+    public static DeferredItem<AttachmentItem> ATTACHMENT = ITEMS.registerItem("attachment", AttachmentItem::new, p -> p.stacksTo(1));
 
-    public static DeferredItem<Item> AMMO_BOX = ITEMS.register("ammo_box", AmmoBoxItem::new);
+    public static DeferredItem<Item> AMMO_BOX = ITEMS.registerItem("ammo_box", AmmoBoxItem::new, p -> p.stacksTo(1));
 
     @SubscribeEvent
     public static void onItemRegister(RegisterEvent event) {

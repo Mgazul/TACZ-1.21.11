@@ -16,7 +16,6 @@ import com.tacz.guns.compat.iris.IrisCompat;
 import com.tacz.guns.resource.modifier.custom.SilenceModifier;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
@@ -71,8 +70,6 @@ public class MuzzleFlashRender implements IFunctionalRenderer {
             float scaleTime = TIME_RANGE / 2.0f;
             scale = time < scaleTime ? (scale * (time / scaleTime)) : scale;
             muzzleFlashStartMark = false;
-            MultiBufferSource multiBufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-
             // 推送到指定位置
             PoseStack poseStack2 = new PoseStack();
             poseStack2.last().normal().mul(muzzleFlashNormal);
@@ -85,7 +82,12 @@ public class MuzzleFlashRender implements IFunctionalRenderer {
                 poseStack2.mulPose(Axis.ZP.rotationDegrees(muzzleFlashRandomRotate));
                 poseStack2.translate(0, -1, 0);
                 RenderType renderTypeBg = RenderTypes.entityTranslucent(muzzleFlash.getTexture());
-                MUZZLE_FLASH_MODEL.renderToBuffer(poseStack2, multiBufferSource.getBuffer(renderTypeBg), light, overlay);
+                VertexConsumer bgConsumer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                    renderTypeBg.primitiveTopology(),
+                    renderTypeBg.format()
+                );
+                MUZZLE_FLASH_MODEL.renderToBuffer(poseStack2, bgConsumer, light, overlay);
             }
             poseStack2.popPose();
 
@@ -96,7 +98,12 @@ public class MuzzleFlashRender implements IFunctionalRenderer {
                 poseStack2.mulPose(Axis.ZP.rotationDegrees(muzzleFlashRandomRotate));
                 poseStack2.translate(0, -0.9, 0);
                 RenderType renderTypeLight = RenderTypes.energySwirl(muzzleFlash.getTexture(), 1, 1);
-                MUZZLE_FLASH_MODEL.renderToBuffer(poseStack2, multiBufferSource.getBuffer(renderTypeLight), light, overlay);
+                VertexConsumer lightConsumer = new com.mojang.blaze3d.vertex.BufferBuilder(
+                    new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+                    renderTypeLight.primitiveTopology(),
+                    renderTypeLight.format()
+                );
+                MUZZLE_FLASH_MODEL.renderToBuffer(poseStack2, lightConsumer, light, overlay);
             }
             poseStack2.popPose();
         }

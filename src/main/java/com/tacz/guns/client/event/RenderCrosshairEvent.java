@@ -90,7 +90,7 @@ public class RenderCrosshairEvent {
     @SubscribeEvent
     public static void onRenderTick(RenderFrameEvent.Pre event) {
         // 奇迹的是，RenderGameOverlayEvent.PreLayer 事件中，screen 还未被赋值...
-        isRefitScreen = Minecraft.getInstance().screen instanceof GunRefitScreen;
+        isRefitScreen = Minecraft.getInstance().gui.screen() instanceof GunRefitScreen;
     }
 
     private static void renderCrosshair(GuiGraphicsExtractor graphics, Window window) {
@@ -99,7 +99,8 @@ public class RenderCrosshairEvent {
         if (!options.getCameraType().isFirstPerson()) {
             return;
         }
-        if (options.hideGui) {
+        // TODO: 26.2 - options.hideGui removed
+        if (false) {
             return;
         }
         MultiPlayerGameMode gameMode = Minecraft.getInstance().gameMode;

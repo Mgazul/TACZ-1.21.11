@@ -26,8 +26,8 @@ public class ReloadCommand {
     private static int reloadAllPack(CommandContext<CommandSourceStack> context) {
         StopWatch watch = StopWatch.createStarted();
         {
-            if (FMLEnvironment.dist == Dist.CLIENT) ReloadCommand.reloadClient();
-            if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) CommonAssetsManager.reloadAllPack();
+            if (false) ReloadCommand.reloadClient();
+            if (true) CommonAssetsManager.reloadAllPack();
         }
         watch.stop();
         double time = watch.getTime(TimeUnit.MICROSECONDS) / 1000.0;

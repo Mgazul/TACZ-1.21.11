@@ -14,7 +14,8 @@ public enum DataType implements StringRepresentable {
     GUN_INDEX,
     ATTACHMENT_INDEX,
     ATTACHMENT_TAGS,
-    ALLOW_ATTACHMENT_TAGS;
+    ALLOW_ATTACHMENT_TAGS,
+    BLOCK_INDEX;
 
     public static final Codec<DataType> CODEC = StringRepresentable.fromEnum(DataType::values);
 

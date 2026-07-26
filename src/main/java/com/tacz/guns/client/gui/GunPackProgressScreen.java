@@ -33,7 +33,7 @@ public class GunPackProgressScreen extends Screen implements HttpUtil.DownloadPr
     @Override
     public void extractRenderState(@NotNull GuiGraphicsExtractor gui, int mouseX, int mouseY, float partialTick) {
         if (this.stop) {
-            this.getMinecraft().setScreen(null);
+            this.getMinecraft().gui.setScreen(null);
         } else {
             this.extractBackground(gui, mouseX, mouseY, partialTick);
             if (this.header != null) {

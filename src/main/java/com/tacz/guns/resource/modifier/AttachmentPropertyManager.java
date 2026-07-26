@@ -61,7 +61,8 @@ public class AttachmentPropertyManager {
             // 发布事件
             AttachmentPropertyEvent event = new AttachmentPropertyEvent(shooter, gunItem, cacheProperty);
             ChangeGunPropertyEvent.internalOnAttachmentPropertyEvent(event);
-            event.postEventToKubeJS(event);
+            // TODO: 26.2 - KubeJS integration removed
+        //event.postEventToKubeJS(event);
             NeoForge.EVENT_BUS.post(new AttachmentPropertyEvent(shooter, gunItem, cacheProperty));
             // 更新实体的缓存对象
             IGunOperator.fromLivingEntity(shooter).updateCacheProperty(cacheProperty);

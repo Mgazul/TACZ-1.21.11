@@ -1,12 +1,13 @@
 package com.tacz.guns.client.model.bedrock;
 
+import com.mojang.blaze3d.PrimitiveTopology;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tacz.guns.client.model.IFunctionalRenderer;
 import com.tacz.guns.client.resource.pojo.model.*;
-import com.tacz.guns.compat.iris.IrisCompat;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec2;
@@ -353,17 +354,18 @@ public class BedrockModel {
     }
 
     public void render(PoseStack matrixStack, ItemDisplayContext transformType, RenderType renderType, int light, int overlay, float red, float green, float blue, float alpha) {
-        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer builder = bufferSource.getBuffer(renderType);
+        VertexConsumer builder;
+        if (renderType != null) {
+            builder = new BufferBuilder(new ByteBufferBuilder(786432), renderType.primitiveTopology(), renderType.format());
+        } else {
+            builder = new BufferBuilder(new ByteBufferBuilder(786432), com.mojang.blaze3d.PrimitiveTopology.TRIANGLES, com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
+        }
 
         matrixStack.pushPose();
         for (BedrockPart model : shouldRender) {
             model.render(matrixStack, transformType, builder, light, overlay, red, green, blue, alpha);
         }
         matrixStack.popPose();
-        if (!IrisCompat.endBatch(bufferSource)) {
-            bufferSource.endBatch(renderType);
-        }
 
         for (IFunctionalRenderer renderer : delegateRenderers) {
             renderer.render(matrixStack, builder, transformType, light, overlay);

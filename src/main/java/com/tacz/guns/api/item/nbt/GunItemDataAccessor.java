@@ -339,7 +339,7 @@ public interface GunItemDataAccessor extends IGun {
             if (provider == null) {
                 attachmentTag = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, attachment).getOrThrow();
             } else {
-                attachmentTag = attachment.saveOptional(provider);
+                attachmentTag = ItemStack.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), attachment).getOrThrow();
             }
             tag.put(key, attachmentTag);
         }));
@@ -352,7 +352,7 @@ public interface GunItemDataAccessor extends IGun {
         }
         gun.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(tag -> {
             String key = GUN_ATTACHMENT_BASE + type.name();
-            tag.put(key, ItemStack.EMPTY.saveOptional(provider));
+            tag.put(key, ItemStack.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), ItemStack.EMPTY).getOrThrow());
         }));
     }
 

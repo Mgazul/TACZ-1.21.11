@@ -36,8 +36,10 @@ public class ClientMessageCraft implements CustomPacketPayload {
     public static void handle(ClientMessageCraft message, IPayloadContext context) {
         context.enqueueWork(() -> {
             ServerPlayer entity = (ServerPlayer) context.player();
-            if (entity.containerMenu.containerId == message.menuId && entity.containerMenu instanceof GunSmithTableMenu menu) {
-                menu.doCraft(message.recipeId, entity);
+            // TODO: 26.2 - GunSmithTableMenu class not found
+            if (entity.containerMenu.containerId == message.menuId) {
+                // TODO: 26.2
+            //menu.doCraft(message.recipeId, entity);
             }
         });
     }

@@ -91,9 +91,6 @@ public class CameraSetupEvent {
 
     @SubscribeEvent
     public static void applyScopeMagnification(ViewportEvent.ComputeFov event) {
-        if (!event.usedConfiguredFov()) {
-            return; // 只修改世界渲染的 fov，因此如果是手部渲染 fov 事件，则返回
-        }
         Entity entity = event.getCamera().entity();
         if (entity instanceof LivingEntity livingEntity) {
             ItemStack stack = KeepingItemRenderer.getRenderer().getCurrentItem();
@@ -119,9 +116,6 @@ public class CameraSetupEvent {
 
     @SubscribeEvent
     public static void applyGunModelFovModifying(ViewportEvent.ComputeFov event) {
-        if (event.usedConfiguredFov()) {
-            return; // 只修改手部物品的 fov，因此如果是世界渲染 fov 事件，则返回
-        }
         Entity entity = event.getCamera().entity();
         if (entity instanceof LivingEntity livingEntity) {
             ItemStack stack = KeepingItemRenderer.getRenderer().getCurrentItem();

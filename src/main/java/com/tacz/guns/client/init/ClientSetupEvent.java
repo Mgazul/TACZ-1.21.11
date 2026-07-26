@@ -62,19 +62,16 @@ public class ClientSetupEvent {
         // 注册自己的的硬编码第三人称动画
         event.enqueueWork(ThirdPersonManager::registerDefault);
 
-        // 注册颜色
-        event.enqueueWork(() -> Minecraft.getInstance().getItemColors().register(AmmoBoxItem::getColor, ModItems.AMMO_BOX.get()));
-
-        // 注册变种
-        // noinspection deprecation
-        event.enqueueWork(() -> ItemProperties.register(ModItems.AMMO_BOX.get(), AmmoBoxItem.PROPERTY_NAME, AmmoBoxItem::getStatue));
+        // TODO: 26.2 - getItemColors() removed, ItemProperties.register() removed
+        // event.enqueueWork(() -> Minecraft.getInstance().getItemColors().register(AmmoBoxItem::getColor, ModItems.AMMO_BOX.get()));
+        // event.enqueueWork(() -> ItemProperties.register(ModItems.AMMO_BOX.get(), AmmoBoxItem.PROPERTY_NAME, AmmoBoxItem::getStatue));
 
         // 与 Controllable 的兼容
         event.enqueueWork(ControllableCompat::init);
 
-        Minecraft minecraft = Minecraft.getInstance();
-        GunItemRendererWrapper.INSTANCE = new GunItemRendererWrapper();
-        AmmoItemRenderer.INSTANCE = new AmmoItemRenderer();
-        AttachmentItemRenderer.INSTANCE = new AttachmentItemRenderer();
+        // TODO: 26.2 - Item renderer initialization needs to use SpecialRenderer system
+        // GunItemRendererWrapper.INSTANCE = new GunItemRendererWrapper();
+        // AmmoItemRenderer.INSTANCE = new AmmoItemRenderer();
+        // AttachmentItemRenderer.INSTANCE = new AttachmentItemRenderer();
     }
 }

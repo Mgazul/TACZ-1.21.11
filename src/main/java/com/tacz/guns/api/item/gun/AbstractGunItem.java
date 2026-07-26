@@ -7,7 +7,6 @@ import com.tacz.guns.api.item.*;
 import com.tacz.guns.api.item.attachment.AttachmentType;
 import com.tacz.guns.api.item.builder.AmmoItemBuilder;
 import com.tacz.guns.api.item.builder.GunItemBuilder;
-import com.tacz.guns.client.renderer.item.GunItemRendererWrapper;
 import com.tacz.guns.client.resource.index.ClientGunIndex;
 import com.tacz.guns.entity.shooter.ShooterDataHolder;
 import com.tacz.guns.inventory.tooltip.GunTooltip;
@@ -30,11 +29,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
@@ -344,22 +340,15 @@ public abstract class AbstractGunItem extends Item implements IGun, IAnimationIt
     /**
      * 阻止玩家手臂挥动
      */
-    @SuppressWarnings("removal")
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand  hand) {
         return true;
     }
 
-    @SuppressWarnings("removal")
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return GunItemRendererWrapper.INSTANCE;
-            }
-        });
-    }
+    /**
+     * TODO: 26.2 - 自定义物品渲染已迁移到 SpecialRenderer 系统
+     * initializeClient(Consumer<IClientItemExtensions>) 已从 Item 类移除
+     */
 
     /**
      * 获取在 Tooltip 中渲染的图片

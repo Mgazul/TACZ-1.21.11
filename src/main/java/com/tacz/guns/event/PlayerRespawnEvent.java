@@ -4,6 +4,7 @@ import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.config.common.GunConfig;
 import com.tacz.guns.item.ModernKineticGunScriptAPI;
 import com.tacz.guns.resource.pojo.data.gun.FeedType;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -15,8 +16,9 @@ public class PlayerRespawnEvent {
         // 重生自动换弹
         if (!GunConfig.AUTO_RELOAD_WHEN_RESPAWN.get()) return;
 
-        var player = event.getEntity();
-        player.getInventory().items.forEach(itemStack -> {
+        var player = (net.minecraft.world.entity.player.Player) event.getEntity();
+        var inv = player.getInventory();
+        for (int i = 0; i < inv.getContainerSize(); i++) { ItemStack itemStack = inv.getItem(i); {
             if (!(itemStack.getItem() instanceof IGun)) return;
 
             var api = new ModernKineticGunScriptAPI();
@@ -41,6 +43,6 @@ public class PlayerRespawnEvent {
                 int consumedAmount = api.consumeAmmoFromPlayer(isFuel ? 1 : needAmmoCount);
                 api.putAmmoInMagazine(isFuel ? (needAmmoCount * consumedAmount) : consumedAmount);
             }
-        });
+        }}
     }
 }

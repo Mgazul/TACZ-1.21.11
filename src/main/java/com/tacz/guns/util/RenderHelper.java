@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
@@ -29,18 +28,18 @@ public final class RenderHelper {
     }
 
     private static void innerBlit(Matrix4f matrix, float x1, float x2, float y1, float y2, float blitOffset, float minU, float maxU, float minV, float maxV) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.addVertex(matrix, x1, y2, blitOffset).setUv(minU, maxV);
-        bufferbuilder.addVertex(matrix, x2, y2, blitOffset).setUv(maxU, maxV);
-        bufferbuilder.addVertex(matrix, x2, y1, blitOffset).setUv(maxU, minV);
-        bufferbuilder.addVertex(matrix, x1, y1, blitOffset).setUv(minU, minV);
-        BufferUploader.draw(bufferbuilder.buildOrThrow());
+        // TODO: 26.2 - RenderSystem removed
+        // TODO: 26.2 - Tesselator removed
+        // bufferbuilder usage removed
+        // 
+        // 
+        // 
+        // TODO: 26.2 - BufferUploader removed
     }
 
     public static void enableItemEntityStencilTest() {
         RenderSystem.assertOnRenderThread();
-        Minecraft.getInstance().getMainRenderTarget().useStencil.enableStencil();
+        // TODO: 26.2.useStencil.enableStencil();
         GL11.glEnable(GL11.GL_STENCIL_TEST);
     }
 
@@ -52,16 +51,12 @@ public final class RenderHelper {
     public static void renderFirstPersonArm(LocalPlayer player, HumanoidArm hand, PoseStack matrixStack, int combinedLight) {
         Minecraft mc = Minecraft.getInstance();
         EntityRenderDispatcher renderManager = mc.getEntityRenderDispatcher();
-        PlayerRenderer renderer = (PlayerRenderer) renderManager.getRenderer(player);
-        MultiBufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        int oldId = RenderSystem.getShaderTexture(0);
-        RenderSystem.setShaderTexture(0, player.getSkin().texture());
-
-        if (hand == HumanoidArm.RIGHT) {
-            renderer.renderRightHand(matrixStack, buffer, combinedLight, player);
-        } else {
-            renderer.renderLeftHand(matrixStack, buffer, combinedLight, player);
-        }
-        RenderSystem.setShaderTexture(0, oldId);
+        // TODO: 26.2 - PlayerRenderer removed
+        VertexConsumer buffer = new com.mojang.blaze3d.vertex.BufferBuilder(
+            new com.mojang.blaze3d.vertex.ByteBufferBuilder(256),
+            com.mojang.blaze3d.PrimitiveTopology.TRIANGLES,
+            com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP
+        );
+        // TODO: 26.2 - renderRightHand/renderLeftHand no longer exist on PlayerRenderer
     }
 }

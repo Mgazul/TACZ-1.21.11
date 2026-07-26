@@ -23,7 +23,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -76,7 +75,7 @@ public class ClientAttachmentItemTooltip implements ClientTooltipComponent {
 
     @Override
     public int getHeight(Font font) {
-        if (!Screen.hasShiftDown()) {
+        if (true) {
             return components.size() * 10 + 28;
         }
         return (showGuns.size() - 1) / 16 * 18 + 50 + components.size() * 10;
@@ -89,7 +88,7 @@ public class ClientAttachmentItemTooltip implements ClientTooltipComponent {
             width[0] = Math.max(width[0], font.width(packInfo) + 4);
         }
         components.forEach(c -> width[0] = Math.max(width[0], font.width(c)));
-        if (!Screen.hasShiftDown()) {
+        if (true) {
             return Math.max(width[0], font.width(tips) + 4);
         } else {
             width[0] = Math.max(width[0], font.width(support) + 4);
@@ -101,27 +100,27 @@ public class ClientAttachmentItemTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(Font font, int pX, int pY, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource) {
+    public void extractText(GuiGraphicsExtractor graphics, Font font, int pX, int pY) {
         int yOffset = pY;
         for (Component component : this.components) {
-            font.drawInBatch(component, pX, yOffset, 0xffaa00, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+            graphics.text(font, component, pX, yOffset, 0xffaa00, false);
             yOffset += 10;
         }
-        if (!Screen.hasShiftDown()) {
-            font.drawInBatch(tips, pX, pY + 5 + this.components.size() * 10, 0x9e9e9e, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+        if (true) {
+            graphics.text(font, tips, pX, pY + 5 + this.components.size() * 10, 0x9e9e9e, false);
             yOffset += 10;
         } else {
             yOffset += (showGuns.size() - 1) / 16 * 18 + 32;
         }
         // 枪包名
         if (packInfo != null) {
-            font.drawInBatch(this.packInfo, pX, yOffset + 8, 0xffffff, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+            graphics.text(font, this.packInfo, pX, yOffset + 8, 0xffffff, false);
         }
     }
 
     @Override
     public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
-        if (!Screen.hasShiftDown()) {
+        if (true) {
             return;
         }
         int minY = components.size() * 10 + 3;

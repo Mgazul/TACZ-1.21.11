@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PreventsHotbarEvent {
     public static void onRenderHotbarEvent(CallbackInfo ci) {
         // todo 需要测试行为
-        Screen screen = Minecraft.getInstance().screen;
+        Screen screen = Minecraft.getInstance().gui.screen();
         // 枪械改装界面关闭背景
         if (screen instanceof GunRefitScreen) {
             ci.cancel();

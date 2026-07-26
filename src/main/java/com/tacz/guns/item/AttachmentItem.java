@@ -32,8 +32,8 @@ import java.util.function.Consumer;
 import static com.tacz.guns.util.datafixer.AttachmentIdFix.updateAttachmentIdInTag;
 
 public class AttachmentItem extends Item implements AttachmentItemDataAccessor {
-    public AttachmentItem() {
-        super(new Properties().stacksTo(1));
+    public AttachmentItem(net.minecraft.world.item.Item.Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -67,13 +67,8 @@ public class AttachmentItem extends Item implements AttachmentItemDataAccessor {
     }
 
     @SuppressWarnings("removal")
-    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return AttachmentItemRenderer.INSTANCE;
-            }
         });
     }
 
@@ -94,9 +89,7 @@ public class AttachmentItem extends Item implements AttachmentItemDataAccessor {
         return Optional.of(new AttachmentItemTooltip(this.getAttachmentId(stack), this.getType(stack), stack));
     }
 
-    @Override
     public void verifyComponentsAfterLoad(ItemStack stack) {
-        super.verifyComponentsAfterLoad(stack);
         stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(this::verifyTagAfterLoad));
     }
 

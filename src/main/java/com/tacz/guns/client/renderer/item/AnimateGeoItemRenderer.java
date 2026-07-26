@@ -12,7 +12,6 @@ import com.tacz.guns.client.model.bedrock.BedrockPart;
 import com.tacz.guns.util.math.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
@@ -199,7 +198,7 @@ public abstract class AnimateGeoItemRenderer<M extends BedrockAnimatedModel, CTX
     /**
      * 渲染第一人称，暂时只用于玩家，入口参见 {@link com.tacz.guns.client.event.FirstPersonRenderEvent}
      */
-    public void renderFirstPerson(LocalPlayer player, ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource,
+    public void renderFirstPerson(LocalPlayer player, ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, com.mojang.blaze3d.vertex.VertexConsumer bufferSource,
                                   int light, float partialTick) {
         M model = getModel(stack);
         if (model != null) {
@@ -243,8 +242,7 @@ public abstract class AnimateGeoItemRenderer<M extends BedrockAnimatedModel, CTX
     }
 
     @ParametersAreNonnullByDefault
-    @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource,
+    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, com.mojang.blaze3d.vertex.VertexConsumer bufferSource,
                              int light, int overlay) {
         if (ctx.firstPerson()) return;
         M model = getModel(stack);

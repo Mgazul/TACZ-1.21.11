@@ -6,9 +6,8 @@ import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.resource.pojo.display.gun.LayerGunShow;
 import com.tacz.guns.util.math.MathUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,12 +17,12 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class HumanoidOffhandRender {
-    public static void renderGun(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    public static void renderGun(LivingEntity entity, PoseStack matrixStack, com.mojang.blaze3d.vertex.VertexConsumer buffer, int packedLight) {
         renderOffhandGun(entity, matrixStack, buffer, packedLight);
         renderHotbarGun(entity, matrixStack, buffer, packedLight);
     }
 
-    private static void renderOffhandGun(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    private static void renderOffhandGun(LivingEntity entity, PoseStack matrixStack, com.mojang.blaze3d.vertex.VertexConsumer buffer, int packedLight) {
         ItemStack itemStack = entity.getOffhandItem();
         if (itemStack.isEmpty()) {
             return;
@@ -38,7 +37,7 @@ public class HumanoidOffhandRender {
         });
     }
 
-    private static void renderHotbarGun(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    private static void renderHotbarGun(LivingEntity entity, PoseStack matrixStack, com.mojang.blaze3d.vertex.VertexConsumer buffer, int packedLight) {
         if (!(entity instanceof Player player)) {
             return;
         }
@@ -52,7 +51,7 @@ public class HumanoidOffhandRender {
         }
     }
 
-    private static void renderHotbarGun(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int packedLight, ItemStack itemStack, int inventoryIndex) {
+    private static void renderHotbarGun(LivingEntity entity, PoseStack matrixStack, com.mojang.blaze3d.vertex.VertexConsumer buffer, int packedLight, ItemStack itemStack, int inventoryIndex) {
         if (itemStack.isEmpty()) {
             return;
         }
@@ -73,8 +72,8 @@ public class HumanoidOffhandRender {
         });
     }
 
-    private static void renderGunItem(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int packedLight, ItemStack itemStack, LayerGunShow offhandShow) {
-        ItemModelResolver renderer = Minecraft.getInstance().getItemModelResolver();
+    private static void renderGunItem(LivingEntity entity, PoseStack matrixStack, com.mojang.blaze3d.vertex.VertexConsumer buffer, int packedLight, ItemStack itemStack, LayerGunShow offhandShow) {
+        ItemModelResolver resolver = Minecraft.getInstance().getItemModelResolver();
         Vector3f pos = offhandShow.getPos();
         Vector3f rotate = offhandShow.getRotate();
         Vector3f scale = offhandShow.getScale();
@@ -84,7 +83,10 @@ public class HumanoidOffhandRender {
         Quaternionf rotation = new Quaternionf();
         MathUtil.toQuaternion((float) Math.toRadians(rotate.x), (float) Math.toRadians(rotate.y), (float) Math.toRadians(rotate.z), rotation);
         matrixStack.mulPose(rotation);
-        renderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, buffer, entity.level(), entity.getId());
+        // TODO: 26.2 - renderStatic removed, use ItemStackRenderState
+        ItemStackRenderState renderState = new ItemStackRenderState();
+        resolver.updateForLiving(renderState, itemStack, ItemDisplayContext.FIXED, entity);
+        // renderState.render(matrixStack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
         matrixStack.popPose();
     }
 }

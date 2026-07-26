@@ -1,7 +1,6 @@
 package com.tacz.guns.client.gui.overlay;
 
 import com.mojang.blaze3d.opengl.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tacz.guns.GunMod;
 import com.tacz.guns.api.TimelessAPI;
@@ -24,7 +23,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -146,22 +144,19 @@ public class GunHudOverlay {
 
         // 图标渲染
         GlStateManager._enableDepthTest();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        GlStateManager._enableBlend();
+        GlStateManager._enableBlend(0);
 
         // 获取图标
         Identifier hudTexture = display.getHUDTexture();
         @Nullable Identifier hudEmptyTexture = display.getHudEmptyTexture();
 
-        if (ammoCount <= 0 || overheatLocked) {
-            if (hudEmptyTexture == null) {
-                RenderSystem.setShaderColor(1, 0.3f, 0.3f, 1);
-            } else {
-                hudTexture = hudEmptyTexture;
-            }
+        boolean tintRed = ammoCount <= 0 || overheatLocked;
+        if (tintRed && hudEmptyTexture != null) {
+            hudTexture = hudEmptyTexture;
         }
-        // 渲染枪械图标
-        graphics.blit(hudTexture, width - 117, height - 44, 0, 0, 39, 13, 39, 13);
+        // 渲染枪械图标（用 ARGB 颜色控制染色）
+        int tintColor = tintRed && hudEmptyTexture == null ? 0xFFFF4C4C : -1;
+        graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, hudTexture, width - 117, height - 44, 0, 0, 39, 13, 39, 13, tintColor);
 
         // 渲染开火模式图标
         FireMode fireMode = IGun.getMainHandFireMode(player);
@@ -170,8 +165,7 @@ public class GunHudOverlay {
             case BURST -> BURST;
             default -> SEMI;
         };
-        RenderSystem.setShaderColor(1, 1, 1, 1);
-        graphics.blit(fireModeTexture, (int) (width - 68.5 + mc.font.width(currentAmmoCountText) * 1.5), height - 38, 0, 0, 10, 10, 10, 10);
+        graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, fireModeTexture, (int) (width - 68.5 + mc.font.width(currentAmmoCountText) * 1.5), height - 38, 0, 0, 10, 10, 10, 10);
     }
 
     private static void handleCacheCount(LocalPlayer player, ItemStack stack, GunData gunData, IGun iGun, boolean useInventoryAmmo) {

@@ -1,6 +1,5 @@
 package com.tacz.guns.client.model.functional;
 
-import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -19,8 +18,8 @@ import com.tacz.guns.util.LaserColorUtil;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -34,8 +33,12 @@ public class BeamRenderer  {
         if (stack == null || !transformType.firstPerson() && !(transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)) {
             return;
         }
-        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer builder = bufferSource.getBuffer(LaserBeamRenderState.getLaserBeam());
+        RenderType laserType = LaserBeamRenderState.getLaserBeam();
+        VertexConsumer builder = new com.mojang.blaze3d.vertex.BufferBuilder(
+            new com.mojang.blaze3d.vertex.ByteBufferBuilder(786432),
+            laserType.primitiveTopology(),
+            laserType.format()
+        );
         poseStack.pushPose();
         {
             for (int i = 0; i < path.size(); ++i) {
@@ -80,7 +83,7 @@ public class BeamRenderer  {
         float halfWidth = width / 2;
         int endAlpha = fadeOut ? 0 : 255;
         int light = LightCoordsUtil.max(15, 15);
-    	pConsumer.addVertex(pPose.pose(), -halfWidth, -halfWidth, 0).setColor(r, g, b, 255).setUv(0, 0).setLight(light);
+        pConsumer.addVertex(pPose.pose(), -halfWidth, -halfWidth, 0).setColor(r, g, b, 255).setUv(0, 0).setLight(light);
         pConsumer.addVertex(pPose.pose(), -halfWidth, halfWidth, 0).setColor(r, g, b, 255).setUv(0, 1).setLight(light);
         pConsumer.addVertex(pPose.pose(), -halfWidth, halfWidth, z).setColor(r, g, b, endAlpha).setUv(1, 1).setLight(light);
         pConsumer.addVertex(pPose.pose(), -halfWidth, -halfWidth, z).setColor(r, g, b, endAlpha).setUv(1, 0).setLight(light);
@@ -101,37 +104,11 @@ public class BeamRenderer  {
         pConsumer.addVertex(pPose.pose(), halfWidth, -halfWidth, z).setColor(r, g, b, endAlpha).setUv(1, 0).setLight(light);
     }
 
-    public static class LaserBeamRenderState extends RenderStateShard {
-    	
-        public LaserBeamRenderState(String pName, Runnable pSetupState, Runnable pClearState) {
-			super(pName, pSetupState, pClearState);
-		}
+    public static class LaserBeamRenderState {
+        private static final RenderType LASER_BEAM = RenderTypes.entityTranslucentEmissive(LASER_BEAM_TEXTURE);
 
-        protected static final RenderStateShard.TransparencyStateShard  LIGHTNING_ADDITIVE_TRANSPARENCY = new RenderStateShard.TransparencyStateShard(
-                "lightning_transparency", () -> {
-                    RenderSystem.enableBlend();
-                    RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-                            GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                }, () -> {
-                    RenderSystem.disableBlend();
-                    RenderSystem.defaultBlendFunc();
-                });
-
-        protected static final RenderType LASER_BEAM = RenderType.create("laser_beam", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
-                VertexFormat.Mode.QUADS, 256, true, true,
-                RenderType.CompositeState.builder()
-                        .setShaderState(RenderStateShard.POSITION_COLOR_TEX_LIGHTMAP_SHADER)
-                        .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-                        .setTransparencyState(LIGHTNING_ADDITIVE_TRANSPARENCY)
-                        .setOutputState(ITEM_ENTITY_TARGET)
-                        .setLightmapState(LIGHTMAP)
-                        .setWriteMaskState(COLOR_DEPTH_WRITE)
-                        .setCullState(NO_CULL)
-                        .setTextureState(new RenderStateShard.TextureStateShard(LASER_BEAM_TEXTURE, false, false))
-                        .createCompositeState(false));
-    	
         public static RenderType getLaserBeam() {
             return LASER_BEAM;
         }
-	}
+    }
 }

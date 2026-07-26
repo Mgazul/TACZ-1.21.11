@@ -17,7 +17,7 @@ public class ServerPlayNetHandlerMixin {
     public ServerPlayer player;
 
     @Inject(method = "handlePlayerAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;stopUsingItem()V"))
-    public void applySwapOffhandDraw(ServerboundPlayerActionPacket packetIn, CallbackInfo ci) {
+    public void applySwapOffhandDraw(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
         player.inventoryMenu.broadcastChanges();
         NetworkHandler.sendToClientPlayer(ServerMessageSwapItem.INSTANCE, player);
     }
