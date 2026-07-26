@@ -7,16 +7,38 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * 客户端枪械操纵者
  * 目前仅用于 LocalPlayer
  */
 @OnlyIn(Dist.CLIENT)
 public interface IClientPlayerGunOperator {
+    class OperatorRegistry {
+        private static final Map<LocalPlayer, IClientPlayerGunOperator> OPERATOR_MAP = new ConcurrentHashMap<>();
+
+        public static void register(LocalPlayer player, IClientPlayerGunOperator operator) {
+            OPERATOR_MAP.put(player, operator);
+        }
+
+        public static void unregister(LocalPlayer player) {
+            OPERATOR_MAP.remove(player);
+        }
+
+        public static IClientPlayerGunOperator get(LocalPlayer player) {
+            return OPERATOR_MAP.get(player);
+        }
+    }
+
     /**
      * LocalPlayer 通过 Mixin 的方式实现了这个接口
      */
     static IClientPlayerGunOperator fromLocalPlayer(LocalPlayer player) {
+        IClientPlayerGunOperator op = OperatorRegistry.get(player);
+        if (op != null) return op;
+        // Fallback to direct cast (works when Mixin applies correctly)
         return (IClientPlayerGunOperator) player;
     }
 

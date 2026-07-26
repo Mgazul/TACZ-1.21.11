@@ -96,11 +96,23 @@ public enum GunPackLoader implements RepositorySource {
             extensionPacks.add(packResources);
         }
 
+        if (extensionPacks.isEmpty()) return null;
+
         PackLocationInfo info = new PackLocationInfo("tacz_resources", Component.literal("TACZ Resources"), PackSource.BUILT_IN, Optional.empty());
-        int packVersion = 107;
-        Pack.Metadata meta = null;
-        // TODO: 26.2 - fix pack creation
-        return null;
+        PackResources primaryResources = extensionPacks.get(0);
+        List<PackResources> overlays = extensionPacks.subList(1, extensionPacks.size());
+        CompositePackResources composite = new CompositePackResources(primaryResources, overlays);
+        Pack.ResourcesSupplier supplier = new Pack.ResourcesSupplier() {
+            @Override
+            public PackResources openPrimary(PackLocationInfo loc) {
+                return composite;
+            }
+            @Override
+            public PackResources openFull(PackLocationInfo loc, Pack.Metadata metadata) {
+                return composite;
+            }
+        };
+        return Pack.readMetaAndCreate(info, supplier, packType, new PackSelectionConfig(true, Pack.Position.BOTTOM, false));
     }
 
     public static @Nullable Path getModIcon(String modId) {

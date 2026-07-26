@@ -16,7 +16,6 @@ public class ReloadResourceEvent {
         if (BLOCK_ATLAS_TEXTURE.equals(event.getAtlas().location())) {
             // InternalAssetLoader 需要加载一些默认的动画、模型，需要先于枪包加载。
             InternalAssetLoader.onResourceReload();
-//            ClientReloadManager.reloadAllPack();
         }
     }
 }

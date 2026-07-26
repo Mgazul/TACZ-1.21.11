@@ -5,12 +5,12 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.stream.JsonReader;
 import com.tacz.guns.GunMod;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.GsonHelper;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -38,7 +38,9 @@ public class ResourceScanner {
             Identifier resourcelocation1 = filetoidconverter.fileToId(resourcelocation);
 
             try (Reader reader = entry.getValue().openAsReader()) {
-                JsonElement jsonelement = GsonHelper.fromJson(pGson, reader, JsonElement.class);
+                JsonReader jsonReader = new JsonReader(reader);
+                jsonReader.setLenient(true);
+                JsonElement jsonelement = pGson.fromJson(jsonReader, JsonElement.class);
                 JsonElement jsonelement1 = output.put(resourcelocation1, jsonelement);
                 if (jsonelement1 != null) {
                     throw new IllegalStateException("Duplicate data file ignored with ID " + resourcelocation1);
@@ -66,7 +68,9 @@ public class ResourceScanner {
 
             for (Resource resource : entry.getValue()) {
                 try (Reader reader = resource.openAsReader()) {
-                    JsonElement jsonelement = GsonHelper.fromJson(pGson, reader, JsonElement.class);
+                    JsonReader jsonReader = new JsonReader(reader);
+                    jsonReader.setLenient(true);
+                    JsonElement jsonelement = pGson.fromJson(jsonReader, JsonElement.class);
                     List<JsonElement> list = output.computeIfAbsent(resourcelocation1, k -> Lists.newArrayList());
                     list.add(jsonelement);
                 } catch (IllegalArgumentException | IOException | JsonParseException jsonparseexception) {

@@ -2,6 +2,7 @@ package com.tacz.guns.client.init;
 
 import com.tacz.guns.GunMod;
 import com.tacz.guns.api.client.other.ThirdPersonManager;
+import com.tacz.guns.resource.GunPackLoader;
 import com.tacz.guns.client.input.*;
 import com.tacz.guns.client.renderer.item.AmmoItemRenderer;
 import com.tacz.guns.client.renderer.item.AttachmentItemRenderer;
@@ -62,16 +63,20 @@ public class ClientSetupEvent {
         // 注册自己的的硬编码第三人称动画
         event.enqueueWork(ThirdPersonManager::registerDefault);
 
-        // TODO: 26.2 - getItemColors() removed, ItemProperties.register() removed
-        // event.enqueueWork(() -> Minecraft.getInstance().getItemColors().register(AmmoBoxItem::getColor, ModItems.AMMO_BOX.get()));
-        // event.enqueueWork(() -> ItemProperties.register(ModItems.AMMO_BOX.get(), AmmoBoxItem.PROPERTY_NAME, AmmoBoxItem::getStatue));
-
         // 与 Controllable 的兼容
         event.enqueueWork(ControllableCompat::init);
 
-        // TODO: 26.2 - Item renderer initialization needs to use SpecialRenderer system
-        // GunItemRendererWrapper.INSTANCE = new GunItemRendererWrapper();
-        // AmmoItemRenderer.INSTANCE = new AmmoItemRenderer();
-        // AttachmentItemRenderer.INSTANCE = new AttachmentItemRenderer();
+        // 注册客户端数据管理器到资源重载系统
+        event.enqueueWork(() -> {
+            GunMod.LOGGER.info("Registering client resource reload listeners...");
+            var resourceManager = (net.minecraft.server.packs.resources.ReloadableResourceManager) Minecraft.getInstance().getResourceManager();
+            com.tacz.guns.client.resource.ClientAssetsManager.INSTANCE.reloadAndRegister(
+                listener -> {
+                    GunMod.LOGGER.info("  - Client listener: {}", listener.getClass().getSimpleName());
+                    resourceManager.registerReloadListener(listener);
+                }
+            );
+            GunMod.LOGGER.info("Client resource reload listeners registered");
+        });
     }
 }

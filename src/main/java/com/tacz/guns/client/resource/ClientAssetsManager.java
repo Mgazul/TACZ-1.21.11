@@ -114,10 +114,12 @@ public enum ClientAssetsManager {
 
     @Nullable
     public GunDisplay getGunDisplay(Identifier id) {
+        if (gunDisplay == null) return null;
         return gunDisplay.getData(id);
     }
 
     public Set<Map.Entry<Identifier, GunDisplay>> getGunDisplays() {
+        if (gunDisplay == null) return Set.of();
         return gunDisplay.getAllData().entrySet();
     }
 
@@ -168,7 +170,7 @@ public enum ClientAssetsManager {
 
     @Nullable
     public PackInfo getPackInfo(@Nullable Identifier namespace) {
-        if (namespace == null) {
+        if (namespace == null || packInfo == null) {
             return null;
         }
         return packInfo.getData(namespace.getNamespace());

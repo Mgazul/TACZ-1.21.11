@@ -31,8 +31,8 @@ public class ItemInHandRendererMixin implements KeepingItemRenderer {
     @Unique
     private long tacz$KeepTimestamp;
 
-    @Inject(method = "renderHandsWithItems", at = @At("HEAD"))
-    public void beforeHandRender(float pPartialTicks, PoseStack pMatrixStack, com.mojang.blaze3d.vertex.BufferBuilder pBuffer, LocalPlayer pPlayerEntity, int pCombinedLight, CallbackInfo ci) {
+    @Inject(method = "submitHandsWithItems", at = @At("HEAD"))
+    public void beforeHandRender(float pPartialTicks, PoseStack pMatrixStack, net.minecraft.client.renderer.SubmitNodeCollector submitNodeCollector, LocalPlayer pPlayerEntity, int pCombinedLight, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(new BeforeRenderHandEvent(pMatrixStack));
     }
 

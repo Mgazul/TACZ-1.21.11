@@ -17,6 +17,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LocalPlayerMixin implements IClientPlayerGunOperator {
     private final @Unique LocalPlayer tac$player = (LocalPlayer) (Object) this;
     private final @Unique LocalPlayerDataHolder tac$data = new LocalPlayerDataHolder(tac$player);
+    private @Unique boolean tac$registered = false;
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onTickCheckRegister(CallbackInfo ci) {
+        if (!tac$registered) {
+            IClientPlayerGunOperator.OperatorRegistry.register(tac$player, this);
+            tac$registered = true;
+        }
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void onTickTail(CallbackInfo ci) {
+        IClientPlayerGunOperator.OperatorRegistry.register(tac$player, this);
+    }
     private final @Unique LocalPlayerAim tac$aim = new LocalPlayerAim(tac$data, tac$player);
     private final @Unique LocalPlayerCrawl tac$crawl = new LocalPlayerCrawl(tac$player);
     private final @Unique LocalPlayerBolt tac$bolt = new LocalPlayerBolt(tac$data, tac$player);

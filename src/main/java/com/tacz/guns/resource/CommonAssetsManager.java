@@ -186,7 +186,15 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     @SubscribeEvent
     public static void onReload(AddServerReloadListenersEvent event) {
         var commonAssetsManager = new CommonAssetsManager();
-            commonAssetsManager.reloadAndRegister(listener -> {});// TODO: 26.2 addListener
+        commonAssetsManager.reloadAndRegister(listener -> {
+            String name = listener.getClass().getSimpleName().toLowerCase(java.util.Locale.ROOT);
+            if (listener instanceof com.tacz.guns.resource.manager.INetworkCacheReloadListener ncrl) {
+                name = ncrl.getType().getSerializedName().toLowerCase(java.util.Locale.ROOT);
+            }
+            com.tacz.guns.GunMod.LOGGER.info("Registering server reload listener: {}", name);
+            event.addListener(net.minecraft.resources.Identifier.fromNamespaceAndPath("tacz", name), listener);
+        });
+        com.tacz.guns.GunMod.LOGGER.info("CommonAssetsManager instance created, listeners registered");
         INSTANCE = commonAssetsManager;
     }
 
