@@ -154,6 +154,7 @@
   "tacz.attachment.scope_retro_2x.name": "§9Retro 3x Scope",
   "tacz.attachment.scope_aug_default.name": "AUG Builtin Scope",
   "tacz.attachment.sight_srs_02.name": "Trijicon SRS-02 Reflex Sight",
+  "tacz.attachment.sight_p90.name": "P90 Reflex Sight",
   "tacz.attachment.sight_okp7.name": "OKP-7 Sight",
   "tacz.attachment.sight_acro_rifle.name": "Aimpoint ACRO P-1 Sight Rised",
   "tacz.attachment.sight_acro_pistol.name": "Aimpoint ACRO P-1 Sight",
@@ -173,6 +174,7 @@
   "tacz.attachment.laser_compact": "§aMilitech Compact Laser",
   "tacz.attachment.laser_lopro":"§5Lopro Tactical Laser",
   "tacz.attachment.laser_nightstick":"§aNightstick Compact laser",
+  "tacz.attachment.laser_peq15": "§2PEQ-15 Laser Module",
 
   "tacz.attachment.extended_mag_1.name": "Heavy Ammo Extended Mag",
   "tacz.attachment.extended_mag_2.name": "§9Heavy Ammo Extended Mag",

@@ -373,6 +373,26 @@ public class BedrockModel {
         delegateRenderers = new ArrayList<>();
     }
 
+    /**
+     * 使用外部传入的 VertexConsumer 渲染模型，用于 1.21 的 SpecialModelRenderer submit() 方法。
+     */
+    public void renderWithConsumer(PoseStack matrixStack, ItemDisplayContext transformType, VertexConsumer builder, int light, int overlay) {
+        renderWithConsumer(matrixStack, transformType, builder, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    public void renderWithConsumer(PoseStack matrixStack, ItemDisplayContext transformType, VertexConsumer builder, int light, int overlay, float red, float green, float blue, float alpha) {
+        matrixStack.pushPose();
+        for (BedrockPart model : shouldRender) {
+            model.render(matrixStack, transformType, builder, light, overlay, red, green, blue, alpha);
+        }
+        matrixStack.popPose();
+
+        for (IFunctionalRenderer renderer : delegateRenderers) {
+            renderer.render(matrixStack, builder, transformType, light, overlay);
+        }
+        delegateRenderers = new ArrayList<>();
+    }
+
     protected List<BedrockPart> getPath(@Nullable ModelRendererWrapper rendererWrapper) {
         if (rendererWrapper == null) {
             return null;

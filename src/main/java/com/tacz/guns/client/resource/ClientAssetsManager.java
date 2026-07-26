@@ -56,6 +56,12 @@ import java.util.function.Consumer;
 public enum ClientAssetsManager {
     INSTANCE;
     public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Identifier.class, new com.google.gson.JsonDeserializer<Identifier>() {
+                @Override
+                public Identifier deserialize(com.google.gson.JsonElement json, java.lang.reflect.Type typeOfT, com.google.gson.JsonDeserializationContext context) throws com.google.gson.JsonParseException {
+                    return Identifier.parse(json.getAsString());
+                }
+            })
             .registerTypeAdapter(CubesItem.class, new CubesItem.Deserializer())
             .registerTypeAdapter(Vector3f.class, new Vector3fSerializer())
             .registerTypeAdapter(CommonTransformObject.class, new CommonTransformObject.Serializer())

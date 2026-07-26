@@ -308,6 +308,68 @@ public class BedrockGunModel extends BedrockAnimatedModel {
         //RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.ON_OSX);
     }
 
+    /**
+     * 供 1.21 SpecialModelRenderer submit() 使用，用外部 VertexConsumer 渲染此枪械模型。
+     * 与 {@link #render(PoseStack, ItemStack, ItemDisplayContext, RenderType, int, int)} 逻辑相同，
+     * 但使用外部传入的 VertexConsumer（来自 submitCustomGeometry）而非内部创建 BufferBuilder。
+     */
+    public void renderWithConsumer(PoseStack matrixStack, ItemStack gunItem, ItemDisplayContext transformType, RenderType renderType, int light, int overlay, com.mojang.blaze3d.vertex.VertexConsumer externalConsumer) {
+        IGun iGun = IGun.getIGunOrNull(gunItem);
+        if (iGun == null) {
+            return;
+        }
+        currentGunItem = gunItem;
+        currentExtendMagLevel = 0;
+        adapterToRender.clear();
+        for (AttachmentType type : AttachmentType.values()) {
+            if (type == AttachmentType.NONE) continue;
+            ItemStack attachmentItem = iGun.getAttachment(Minecraft.getInstance().level.registryAccess(), gunItem, type);
+            if (attachmentItem.isEmpty()) {
+                attachmentItem = iGun.getBuiltinAttachment(gunItem, type);
+            }
+            currentAttachmentItem.put(type, attachmentItem);
+            IAttachment attachment = IAttachment.getIAttachmentOrNull(attachmentItem);
+            if (attachment != null) {
+                TimelessAPI.getClientAttachmentIndex(attachment.getAttachmentId(attachmentItem)).ifPresent(index -> {
+                    if (type == AttachmentType.EXTENDED_MAG) {
+                        currentExtendMagLevel = index.getData().getExtendedMagLevel();
+                    }
+                    if (index.getAdapterNodeName() != null) {
+                        adapterToRender.add(index.getAdapterNodeName());
+                    }
+                });
+            }
+        }
+        if (laserBeamPaths != null) {
+            BeamRenderer.renderLaserBeam(gunItem, matrixStack, transformType, laserBeamPaths);
+        }
+        ItemStack attachmentItem = currentAttachmentItem.get(AttachmentType.SCOPE);
+        IAttachment iAttachment = IAttachment.getIAttachmentOrNull(attachmentItem);
+        if (scopePosPath != null && attachmentItem != null && !attachmentItem.isEmpty()) {
+            matrixStack.pushPose();
+            for (BedrockPart bedrockPart : scopePosPath) {
+                bedrockPart.translateAndRotateAndScale(matrixStack);
+            }
+            AttachmentRender.renderAttachment(attachmentItem, currentGunItem, matrixStack, transformType, light, overlay);
+            matrixStack.popPose();
+            if (iAttachment != null) {
+                Optional<ClientAttachmentIndex> attachmentIndex = TimelessAPI.getClientAttachmentIndex(iAttachment.getAttachmentId(attachmentItem));
+                attachmentIndex.ifPresent(index -> {
+                    if (index.isScope() && index.isSight()) {
+                        RenderHelper.enableItemEntityStencilTest();
+                        GlStateManager._stencilFunc(GL11.GL_GREATER, 127, 0xFF);
+                    } else if (index.isScope()) {
+                        RenderHelper.enableItemEntityStencilTest();
+                        GlStateManager._stencilFunc(GL11.GL_EQUAL, 0, 0xFF);
+                    }
+                });
+            }
+        }
+        GlStateManager._stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        super.renderWithConsumer(matrixStack, transformType, externalConsumer, light, overlay);
+        RenderHelper.disableItemEntityStencilTest();
+    }
+
     @Nullable
     private IFunctionalRenderer ammoHiddenRender(BedrockPart bedrockPart, Predicate<IGun> predicate) {
         IGun iGun = IGun.getIGunOrNull(currentGunItem);
